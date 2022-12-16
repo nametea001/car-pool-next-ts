@@ -1,0 +1,54 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
+
+
+.img-profile {
+  height: 1.9rem;
+  width: auto;
+}
+
+.login{
+  width: 30%;
+  margin-left: 35%;
+  margin-right: 35%;
+  margin-top: 40px;
+}
+
+
+.login .head{
+  width: 100%;
+  text-align: center;
+}
+
+.login .input-login{
+margin-left: 3vh;
+}
+
+.text-center{
+  text-align: center;
+}
+
