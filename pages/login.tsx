@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 function Login() {
   // bageUsername
@@ -34,31 +34,19 @@ function Login() {
   // login fail
   const [stateloginWarning, setStateLoginWarning] = useState(true);
   let showloginWarning = stateloginWarning ? "d-none" : "";
+
+  const { data: session } = useSession();
+
   // loginSubmit
   const router = useRouter();
   async function loginSubmit(e: any) {
     e.preventDefault();
-    const url = `http://localhost:3000/api/login`;
-    const postData = {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    };
-    const res = await fetch(url, postData);
-    let data: any;
-    try {
-      setStateLoginWarning((stateloginWarning) => true);
-
-      data = await res.json();
-    } catch (err) {
-      // console.log(err);
-      data = null;
-      setStateLoginWarning((stateloginWarning) => false);
-    }
-    if (data) {
+    const data: any = await signIn("credentials", {
+      redirect: false,
+      username: username,
+      password: password,
+    });
+    if (data.ok && data.status === 200) {
       // login success
       router.push("/home");
     }
@@ -122,15 +110,6 @@ function Login() {
             </button>
           </div>
         </form>
-
-        <button
-          type="button"
-          onClick={() => {
-            signIn("username", { usernmae: username });
-          }}
-        >
-          ss
-        </button>
       </div>
     </>
   );

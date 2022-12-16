@@ -25,20 +25,25 @@ export class UserReposotory {
       //   )
       // );
       // return obj
-      const user = await this.prisma.users.findFirst({
-        where: {
-          username: `${username}`,
-        },
-        select: {
-          username: true,
-          password: true,
-          first_name: true,
-          last_name: true,
-          email: true,
-          user_role_id: true,
-          locale: true,
-        },
-      });
+      let user: any;
+      try {
+        user = await this.prisma.users.findFirst({
+          where: {
+            username: `${username}`,
+          },
+          select: {
+            username: true,
+            password: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            user_role_id: true,
+            locale: true,
+          },
+        });
+      } catch {
+        user = null;
+      }
 
       this.prisma.$disconnect();
       // const saltRounds = 10;
