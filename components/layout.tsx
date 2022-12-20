@@ -38,7 +38,7 @@ function Layout({ children, title = "Test", userName = "No" }: Props) {
     // e.preventDefault();
     // console.log("SS");
     await signOut();
-    // router.push("/login");
+    router.push("/");
   }
   return (
     <>
