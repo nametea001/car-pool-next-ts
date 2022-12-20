@@ -1,21 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   // const url = req.nextUrl.clone();
-
-  // index rediect
-  if (req.nextUrl.pathname === "/") {
-    req.nextUrl.pathname = "/login";
-    return NextResponse.redirect(req.nextUrl);
-  }
-  // logout controll
-  if (req.nextUrl.pathname === "/logout") {
+  const session = await getToken({
+    req: req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  if (!session) {
     req.nextUrl.pathname = "/login";
     return NextResponse.redirect(req.nextUrl);
   }
 }
 
 export const config = {
-  matcher: ["/", "/login", "/logout", "/home"],
+  matcher: [],
 };

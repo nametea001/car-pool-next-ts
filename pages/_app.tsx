@@ -24,7 +24,6 @@ export default function MyApp({
     require("bootstrap/dist/js/bootstrap.min.js");
   }, []);
   const getLayout = Component.getLayout ?? ((page) => page);
-
   return getLayout(
     <SessionProvider session={session}>
       <Component {...pageProps} />

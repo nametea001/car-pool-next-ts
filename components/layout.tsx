@@ -1,6 +1,8 @@
 import React, { ReactNode, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 // fontasesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,13 +10,15 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import * as IconSolid from "@fortawesome/free-solid-svg-icons";
 import * as IconRegular from "@fortawesome/free-regular-svg-icons";
-
 config.autoAddCss = false;
+
+// type props
 type Props = {
   children: ReactNode;
   title?: string;
+  userName?: string;
 };
-function Layout({ children, title = "Test" }: Props) {
+function Layout({ children, title = "Test", userName = "No" }: Props) {
   // sidebar
   const [stateSideBar, setStateSideBar] = useState(false);
   let sideBarDnone = stateSideBar ? "d-none" : "";
@@ -28,6 +32,14 @@ function Layout({ children, title = "Test" }: Props) {
     setStateShowMesterDetail((stateShowMesterDetail) => !stateShowMesterDetail);
   }
 
+  // session
+  const router = useRouter();
+  async function Logout(e: any) {
+    // e.preventDefault();
+    // console.log("SS");
+    await signOut();
+    // router.push("/login");
+  }
   return (
     <>
       <Head>
@@ -99,7 +111,7 @@ function Layout({ children, title = "Test" }: Props) {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="me-3 text-dark fw-bolder">User</span>
+                  <span className="me-3 text-dark fw-bolder">{userName}</span>
                   <img className="img-profile " src="img/undraw_profile.svg" />
                 </a>
                 <ul
@@ -112,25 +124,25 @@ function Layout({ children, title = "Test" }: Props) {
                         icon={IconSolid.faAddressCard}
                         size="lg"
                       />
-                      <span> โปรไฟล์</span>
+                      <span> Profile</span>
                     </a>
                   </li>
                   <li>
                     <a className="dropdown-item">
                       <FontAwesomeIcon icon={IconSolid.faGear} size="lg" />
                       <i className="fa-solid fa-gear" />
-                      <span> ตั้งค่า</span>
+                      <span> Setting</span>
                     </a>
                   </li>
                   <li>
-                    <Link className="dropdown-item" href="/logout">
+                    <a className="dropdown-item" onClick={Logout}>
                       <i className="fa-solid fa-arrow-right-from-bracket" />
                       <FontAwesomeIcon
                         icon={IconSolid.faArrowRightFromBracket}
                         size="lg"
                       />
-                      <span> ออกจากระบบ</span>
-                    </Link>
+                      <span> Logout</span>
+                    </a>
                   </li>
                 </ul>
               </li>

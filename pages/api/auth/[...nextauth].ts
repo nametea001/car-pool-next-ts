@@ -1,15 +1,15 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+// import { randomBytes, randomUUID } from "crypto";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
+  pages: {
+    signIn: "login",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
+      credentials: {},
       async authorize(credentials, req) {
         const url = `http://localhost:3000/api/login`;
         const res = await fetch(url, {
@@ -21,6 +21,7 @@ export default NextAuth({
           //   "Content-Type": "application/json",
           // },
         });
+
         let data: any;
         try {
           data = await res.json();
@@ -28,13 +29,42 @@ export default NextAuth({
           data = null;
         }
         const user = data;
-        // If no error and we have user data, return it
         if (res.ok && user) {
+          delete user.password;
           return user;
         }
-        // Return null if user data could not be retrieved
         return null;
       },
     }),
   ],
+
+  session: {
+    strategy: "jwt",
+    maxAge: 6 * 60 * 60, // 5 hours
+    // maxAge: 2 * 24 * 60 * 60, // 2 day
+
+    // updateAge: 24 * 60 * 60, // 24 hours
+    // generateSessionToken: () => {
+    //   return randomUUID?.() ?? randomBytes(32).toString("hex");
+    // },
+  },
+
+  callbacks: {
+    async jwt({ token, account, user }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      // session.accessToken = token.accessToken;
+      session.user = token.user ?? "";
+      // session.user = user ?? "";
+
+      return session;
+    },
+  },
+
+  secret: process.env.NEXTAUTH_SECRET, // openssl rand -base64 32 //run with linux
 });

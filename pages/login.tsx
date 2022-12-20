@@ -1,27 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 
 function Login() {
   // bageUsername
   const [stateBadgeUsername, setStateBadgeUsername] = useState(true);
   let showBadgeUsername = stateBadgeUsername ? "d-none" : "";
+  const [statePlaceholderUsername, setStatePlaceholderUsername] =
+    useState(true);
+  let showPlaceholderUsername = statePlaceholderUsername ? "Username" : "";
+
   function badgeUsername() {
     setStateBadgeUsername((stateBadgeUsername) => false);
+    setStatePlaceholderUsername((statePlaceholderUsername) => false);
   }
   // bagePassword
   const [stateBadgePassword, setStateBadgePassword] = useState(true);
   let showBadgePassword = stateBadgePassword ? "d-none" : "";
+  const [statePlaceholderPassword, setStatePlaceholderPassword] =
+    useState(true);
+  let showPlaceholderPassword = statePlaceholderPassword ? "Password" : "";
   function badgePassword() {
     setStateBadgePassword((stateBadgePassword) => false);
+    setStatePlaceholderPassword((statePlaceholderPassword) => false);
   }
+
   // ref clickout
   const ref = useRef<HTMLHeadingElement>(null);
   function handleClickOutside(e: any) {
     if (!ref.current?.contains(e.target)) {
       setStateBadgeUsername((stateBadgeUsername) => true);
       setStateBadgePassword((stateBadgePassword) => true);
+      setStatePlaceholderUsername((statePlaceholderUsername) => true);
+      setStatePlaceholderPassword((statePlaceholderPassword) => true);
     }
   }
   useEffect(() => {
@@ -35,18 +47,17 @@ function Login() {
   const [stateloginWarning, setStateLoginWarning] = useState(true);
   let showloginWarning = stateloginWarning ? "d-none" : "";
 
-  const { data: session } = useSession();
-
   // loginSubmit
   const router = useRouter();
   async function loginSubmit(e: any) {
     e.preventDefault();
-    const data: any = await signIn("credentials", {
+    const res: any = await signIn("credentials", {
       redirect: false,
       username: username,
       password: password,
     });
-    if (data.ok && data.status === 200) {
+
+    if (res.ok && !res.error) {
       // login success
       router.push("/home");
     }
@@ -64,7 +75,7 @@ function Login() {
         <form>
           <div className=" align-middle border p-5 ">
             <div className="mb-3">
-              <div className={`${showBadgeUsername} mb-1 `}>
+              <div className={`${showBadgeUsername}`}>
                 <span className="position-absolute translate-middle badge rounded-pill input-login bg-light text-primary">
                   Username
                 </span>
@@ -73,7 +84,7 @@ function Login() {
               <input
                 type="text"
                 className="form-control "
-                placeholder="Username"
+                placeholder={`${showPlaceholderUsername}`}
                 onClick={badgeUsername}
                 onChange={(e) => {
                   setUsername(e.target.value);
@@ -82,7 +93,7 @@ function Login() {
               />
             </div>
             <div className="mb-3 pt-1">
-              <div className={` ${showBadgePassword}`}>
+              <div className={showBadgePassword}>
                 <span className="position-absolute translate-middle badge rounded-pill input-login bg-light text-primary">
                   Password
                 </span>
@@ -90,7 +101,7 @@ function Login() {
               <input
                 type="password"
                 className="form-control"
-                placeholder="password"
+                placeholder={showPlaceholderPassword}
                 onClick={badgePassword}
                 onChange={(e) => {
                   setPassword(e.target.value);
