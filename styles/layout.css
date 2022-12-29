@@ -1,0 +1,136 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.wrapper .content-wrapper {
+  background-color: #f8f9fc;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #e5e5e5;
+}
+
+/* sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  list-style: none;
+  align-items: center;
+  min-height: 100vh;
+  width: var(--sidebar-width);
+}
+
+.sidebar .sidebar-brand {
+  display: flex;
+  height: 4.375rem;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: 650;
+  padding: 0.5rem 0.5rem;
+  text-align: center;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  z-index: 1;
+}
+
+.sidebar .sidebar-nav {
+  list-style-type: none;
+  padding-left: 0px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  width: auto;
+}
+
+.sidebar .sidebar-nav-item {
+  width: 100%;
+  padding-left: 15%;
+  padding-right: 40%;
+}
+
+.sidebar .sidebar-nav-item .sidebar-nav-item-link {
+  text-decoration: none;
+  cursor: pointer;
+  color: #202020;
+  display: flex;
+}
+
+.sidebar .sidebar-nav-item .sidebar-nav-item-link:hover {
+  color: #f30775;
+  /* padding-left: 20px; */
+}
+
+/* active icon*/
+.sidebar .sidebar-nav-item .active .click-active {
+  color: #f30775;
+}
+
+.arrow {
+  transition: 0.15s ease-in;
+}
+/* active arow */
+.sidebar .sidebar-nav-item .active .arrow {
+  color: #f30775;
+  transform: rotate(-90deg);
+  align-items: center;
+}
+
+/* sidebar chill item */
+.sidebar .sidebar-nav .sidebar-nav-chill {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding-left: 0px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  width: auto;
+}
+
+.sidebar-nav-chill .sidebar-nav-chil-item {
+  padding-left: 8px;
+  width: 100%;
+}
+
+.sidebar-nav .sidebar-nav-chill.hide {
+  display: none;
+}
+
+.sidebar-nav-chill .sidebar-nav-chil-item .sidebar-nav-chil-item-link {
+  text-decoration: none;
+  cursor: pointer;
+  color: #202020;
+}
+
+.sidebar-nav-chill .sidebar-nav-chil-item .sidebar-nav-chil-item-link :hover {
+  color: #f30775;
+}
+
+/* navbar */
+.navbar-top {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 55px;
+  left: 0;
+}
+
+.img-profile {
+  height: 2.5em;
+  width: auto;
+}
+.text-profile {
+  font-size: 1.2em;
+  font-weight: 600;
+  padding-right: 5px;
+  padding-left: 5px;
+  cursor: pointer;
+  color: #202020;
+}
+
+/* other */
+.w-100 {
+  width: 100%;
+}

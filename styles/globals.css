@@ -26,29 +26,23 @@ a {
 }
 
 
-.img-profile {
-  height: 1.9rem;
-  width: auto;
-}
 
-.login{
+.login {
   width: 30%;
   margin-left: 35%;
   margin-right: 35%;
   margin-top: 40px;
 }
 
-
-.login .head{
+.login .head {
   width: 100%;
   text-align: center;
 }
 
-.login .input-login{
-margin-left: 3vh;
+.login .input-login {
+  margin-left: 3vh;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
-

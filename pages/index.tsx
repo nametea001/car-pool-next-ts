@@ -1,15 +1,9 @@
 import { useRouter } from "next/router";
 
+import { Container } from "react-bootstrap-v5";
+
 function Index() {
-  //   const router = useRouter();
-  //   router.push("/login");
-  function p() {
-    const router = useRouter();
-    router.push("/login");
-  }
-  return <>
-  
-  </>;
+  return <></>;
 }
 
 export default Index;
