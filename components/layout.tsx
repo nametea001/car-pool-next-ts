@@ -30,15 +30,20 @@ type Props = {
 };
 
 function Layout({ children }: Props) {
-  function showList(e: any) {
-    var el = document.getElementsByClassName("active");
-    var chill = document.querySelectorAll(".sidebar-nav .sidebar-nav-chill");
+  // master
+  function showListMaster(e: any) {
+    let master = document.getElementsByClassName("master");
+    let el = master[0].getElementsByClassName("active");
+    let chill = master[0].querySelectorAll(".sidebar-nav .sidebar-nav-chill");
+    console.log(master[0]);
+    console.log(chill[0]);
+
     try {
       el[0].className = el[0].className.replace(" active", "");
-      chill[0].className += " hide";
+      chill[0].className = chill[0].className.replace(" show", "");
     } catch (err) {
       e.currentTarget.className += " active";
-      chill[0].className = chill[0].className.replace(" hide", "");
+      chill[0].classList.add("show");
     }
   }
   return (
@@ -52,25 +57,25 @@ function Layout({ children }: Props) {
             </Link>
             <hr />
             {/* master */}
-            <Nav className="sidebar-nav">
+            <Nav className="master sidebar-nav">
               <Nav.Item className="sidebar-nav-item">
-                <a className="sidebar-nav-item-link" onClick={showList}>
+                <a className="sidebar-nav-item-link" onClick={showListMaster}>
                   <FontAwesomeIcon
                     className="click-active"
                     icon={IconSolid.faDatabase}
                     size="lg"
                   />
-                  <span className="ps-2">Master</span>
-                  <div className="ms-5 ps-4">
-                    <FontAwesomeIcon
-                      className="arrow"
-                      icon={IconSolid.faAngleLeft}
-                      size="lg"
-                    />
-                  </div>
+                  <span className="text">Master</span>
+                  {/* <div className="ms-5 ps-4"> */}
+                  <FontAwesomeIcon
+                    className="arrow"
+                    icon={IconSolid.faAngleLeft}
+                    size="lg"
+                  />
+                  {/* </div> */}
                 </a>
-                <Nav className={`sidebar-nav-chill hide`}>
-                  <Nav.Item className="sidebar-nav-chil-item">
+                <Nav className="sidebar-nav-chill">
+                  <Nav.Item className="sidebar-nav-chil-item ">
                     <Link href={"/"} className="sidebar-nav-chil-item-link">
                       <div>
                         <FontAwesomeIcon icon={IconSolid.faUser} />
@@ -80,15 +85,14 @@ function Layout({ children }: Props) {
                   </Nav.Item>
                   <Nav.Item className="sidebar-nav-chil-item">
                     <Link href={"/"} className="sidebar-nav-chil-item-link">
-                      <div>
-                        <FontAwesomeIcon icon={IconSolid.faUser} />
-                        <span className="ps-2">Users</span>
-                      </div>
+                      <FontAwesomeIcon icon={IconSolid.faUser} />
+                      <span className="ps-2">Users</span>
                     </Link>
                   </Nav.Item>
                 </Nav>
               </Nav.Item>
             </Nav>
+
             <hr />
           </div>
         </Navbar>
