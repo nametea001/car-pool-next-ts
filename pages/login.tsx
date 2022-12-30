@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 function Login() {
   // bageUsername
@@ -56,19 +56,23 @@ function Login() {
       username: username,
       password: password,
     });
-
     if (res.ok && !res.error) {
       // login success
       router.push("/home");
     }
   }
 
+  // const { data: session, status } = useSession();
+  // if (session) {
+  //   return <></>;
+  // }
+
   return (
     <>
       <Head>
         <title>Login</title>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* <meta charSet="UTF-8" /> */}
+        {/* <meta name="viewport" content="width=device-width, initial-scale=1.0" /> */}
       </Head>
       <div className="login position-absolute">
         <h1 className="head">Carpool</h1>

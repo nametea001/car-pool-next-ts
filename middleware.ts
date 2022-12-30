@@ -3,27 +3,25 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
-  // const url = req.nextUrl.clone();
-  // const session = await getToken({
-  //   req: req,
-  //   secret: process.env.NEXTAUTH_SECRET,
-  // });
-  // if (req.nextUrl.pathname === "/") {
-  //   req.nextUrl.pathname = "/login";
-  // }
-  // if (!session) {
-  //   // if(req.nextUrl.pathname = "/logout"){
-  //   // }
-  //   req.nextUrl.pathname = "/login";
-  //   return NextResponse.redirect(req.nextUrl);
-  // } else {
-  //   if (req.nextUrl.pathname === "/login") {
-  //     req.nextUrl.pathname = "/home";
-  //     return NextResponse.redirect(req.nextUrl);
-  //   }
-  // }
+  const url = req.nextUrl.clone();
+  const session = await getToken({
+    req: req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  if (url.pathname === "/") {
+    url.pathname = "/login";
+  }
+  if (!session) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  } else {
+    if (url.pathname === "/login") {
+      url.pathname = "/home";
+      return NextResponse.redirect(url);
+    }
+  }
 }
 
-// export const config = {
-//   matcher: ["/", "/home"],
-// };
+export const config = {
+  matcher: ["/", "/home"],
+};

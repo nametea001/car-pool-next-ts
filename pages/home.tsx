@@ -1,20 +1,16 @@
-import type { NextPageWithLayout } from "./_app";
 import { useRouter } from "next/router";
 
 // Layouy
 import Layout from "../components/layout";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useSession, getSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Loading from "../components/loading";
+import { Container } from "react-bootstrap-v5";
 
-const Home: NextPageWithLayout = () => {
-  const { data: session, status }: any = useSession();
+const Home = () => {
   const router = useRouter();
-
-  return (
-    <div className="container-fluid p-0">
-      <h1>test</h1>
-    </div>
-  );
+  return <Container fluid></Container>;
 };
+Home.auth = true;
 
 export default Home;
