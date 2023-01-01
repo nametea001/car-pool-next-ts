@@ -2,7 +2,12 @@ import "../styles/globals.css";
 import Layout from "../components/layout";
 import "../styles/layout.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getToken } from "next-auth/jwt";
+
+// datatable
+import "primeicons/primeicons.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+
 // tool
 import type { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";
@@ -51,18 +56,4 @@ export default function MyApp({
       </SessionProvider>
     </>
   );
-
-  // return (
-  //   <>
-  //     {Component.auth ? (
-  //       <Layout>
-  //         <SessionProvider session={session} refetchInterval={5 * 60}>
-  //           <Component {...pageProps} />
-  //         </SessionProvider>
-  //       </Layout>
-  //     ) : (
-  //       <Component {...pageProps} />
-  //     )}
-  //   </>
-  // );
 }

@@ -1,13 +1,17 @@
+:root {
+  --bg: #ffffff;
+}
 .wrapper {
   display: flex;
   width: 100%;
+  overflow-y: hidden;
+  position: fixed;
 }
 
 .wrapper .content-wrapper {
-  background-color: #f8f9fc;
+  /* background-color: #f8f9fc; */
   width: 100%;
-  overflow-x: hidden;
-  background-color: #e5e5e5;
+  /* background-color: #e5e5e5; */
 }
 
 /* sidebar */
@@ -20,8 +24,17 @@
   list-style: none;
   align-items: center;
   min-height: 100vh;
-  width: 290px;
-  transition: 0.5s ease;
+  width: 300px;
+  /* width: 100%; */
+  opacity: 1;
+  transition: 0.65s ease;
+  background-color: var(--bg);
+}
+
+.sidebar.hide {
+  opacity: 0;
+  width: 0;
+  overflow: auto;
 }
 
 .sidebar .sidebar-brand {
@@ -98,13 +111,18 @@
   font-size: 1.2rem;
   font-weight: 400;
   width: auto;
-  display: none;
+  height: 0;
+  /* display: none; */
+  /* height: 0; */
+  /* transition: all 0.3s linear; */
   opacity: 0;
-  transition: all 0.3s linear;
+  transition: all 0.65s ease;
+  overflow: hidden;
 }
 
 .sidebar-nav .sidebar-nav-chill.show {
-  display: block;
+  /* display: block; */
+  height: auto;
   opacity: 1;
 }
 
@@ -147,8 +165,17 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: 55px;
+  height: 70px;
   left: 0;
+  background-color: var(--bg);
+  box-shadow: 0px 3px 10px #e4e3e3;
+}
+.navbar-top .bt-sidebar-hide {
+  cursor: pointer;
+  color: #202020;
+}
+.navbar-top .bt-sidebar-hide:active {
+  color: #f30775;
 }
 
 .navbar-top .navbar-top-conten {
@@ -178,6 +205,17 @@
   margin-top: 50vh;
 }
 
+/* content */
+.content {
+  margin-top: 40px;
+  margin-left: 10px;
+}
+.data-table {
+  min-width: 100%;
+  /* */
+  height: calc(100vh - 231px);
+  overflow-x: scroll;
+}
 /* other */
 .w-100 {
   width: 100%;

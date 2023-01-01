@@ -1,16 +1,31 @@
 import { useRouter } from "next/router";
-
-// Layouy
-import Layout from "../components/layout";
-import { useSession, getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Head from "next/head";
+
+// css
 import Loading from "../components/loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as IconSolid from "@fortawesome/free-solid-svg-icons";
+import * as IconRegular from "@fortawesome/free-regular-svg-icons";
 import { Container } from "react-bootstrap-v5";
 
-const Home = () => {
+function Home() {
   const router = useRouter();
-  return <Container fluid></Container>;
-};
+  return (
+    <Container fluid className="content">
+      <Head>
+        <title>Home</title>
+      </Head>
+      <div className="row">
+        <div className="col">
+          <h1>
+            <FontAwesomeIcon icon={IconSolid.faDashboard} /> Dashboard{" "}
+          </h1>
+        </div>
+      </div>
+    </Container>
+  );
+}
 Home.auth = true;
 
 export default Home;

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { LoginSubmitAction } from "../../src/Action/LoginSubmitAction";
+import { LoginSubmitAction } from "../../src/Action/api/LoginSubmitAction";
 
 export default async function handler(
   req: NextApiRequest,

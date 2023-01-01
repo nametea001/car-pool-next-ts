@@ -37,24 +37,35 @@ function Layout({ children }: Props) {
   if (status == "loading") {
     <Loading />;
   }
+  const [stateSmallScreen, setStateSmallScreen] = useState(false);
+  useEffect(() => {
+    const { innerWidth: width, innerHeight: height } = window;
+    if (innerWidth < 920) {
+      setStateSidebarHide(true);
+      setStateSmallScreen(true);
+    } else {
+      setStateSidebarHide(false);
+      setStateSmallScreen(false);
+    }
+  }, []);
   const router = useRouter();
+
+  // hide sidebar
+  const [statesidebarHide, setStateSidebarHide] = useState(false);
+  function sidebarHide() {
+    setStateSidebarHide(!statesidebarHide);
+  }
+  // chillIndex
   const [chilActive, setChillActive] = useState(0);
   function setChillActiveIndex(index: any) {
     setChillActive(index);
+    if (stateSmallScreen) {
+      setStateSidebarHide(true);
+    }
   }
   // master
   const [masterActive, setMasterActive] = useState(false);
   function showListMaster() {
-    // let master = document.getElementsByClassName("master");
-    // let el = master[0].getElementsByClassName("active");
-    // let chill = master[0].getElementsByClassName("master-chill");
-    // try {
-    //   el[0].className = el[0].className.replace(" active", "");
-    //   chill[0].className = chill[0].className.replace(" show", "");
-    // } catch (err) {
-    //   e.currentTarget.className += " active";
-    //   chill[0].classList.add("show");
-    // }
     setMasterActive(!masterActive);
   }
 
@@ -62,17 +73,18 @@ function Layout({ children }: Props) {
     <>
       <div className="wrapper">
         {/* sidebar */}
-        <Navbar className="sidebar">
+        <Navbar
+          className={`sidebar ${statesidebarHide === true ? "hide" : ""}`}
+        >
           <div className="">
             {/* brand */}
-            <Navbar.Brand className="sidebar-brand text-dark" href={"/"}>
+            <Navbar.Brand className="sidebar-brand text-dark" href={"/home"}>
               {/* <FontAwesomeIcon icon={IconSolid.faHouse} /> */}
-              {/* <span className="ps-1">CARSHARING</span> */}
               <span className="ps-1">RIDESHARE</span>
             </Navbar.Brand>
             <hr />
             {/* master */}
-            <Nav className="master sidebar-nav">
+            <Nav className="sidebar-nav">
               <Nav.Item className="sidebar-nav-item">
                 <a
                   className={`sidebar-nav-item-link ${
@@ -93,13 +105,13 @@ function Layout({ children }: Props) {
                   />
                 </a>
                 <Nav
-                  className={`master-chill sidebar-nav-chill ${
+                  className={`sidebar-nav-chill ${
                     masterActive === true ? "show" : ""
                   }`}
                 >
                   <Nav.Item className="sidebar-nav-chil-item">
                     <Link
-                      href={"/"}
+                      href={"/users"}
                       className="sidebar-nav-chil-item-link"
                       onClick={() => {
                         setChillActiveIndex(1);
@@ -139,7 +151,7 @@ function Layout({ children }: Props) {
         <div className="content-wrapper">
           <Navbar className="navbar-top" bg="light" variant="dark">
             <Container fluid>
-              <a className="">
+              <a className="bt-sidebar-hide " onClick={sidebarHide}>
                 <FontAwesomeIcon icon={IconSolid.faBars} size="xl" />
               </a>
               {/* <div className="me-1 d-flex flex-row"> */}
@@ -166,15 +178,17 @@ function Layout({ children }: Props) {
                     style={{ minWidth: "9vw" }}
                     // menuVariant="light"
                     className="ms-2 me-4"
-                    title=<>
-                      <span className="me-2 text-profile">
-                        {session?.user?.username}
-                      </span>
-                      <img
-                        className="img-profile"
-                        src="img/undraw_profile.svg"
-                      />
-                    </>
+                    title={
+                      <>
+                        <span className="me-2 text-profile">
+                          {session?.user?.username}
+                        </span>
+                        <img
+                          className="img-profile"
+                          src="img/undraw_profile.svg"
+                        />
+                      </>
+                    }
                   >
                     <NavDropdown.Item href="">
                       <FontAwesomeIcon icon={IconSolid.faUser} />

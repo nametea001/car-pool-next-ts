@@ -7,18 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id              Int       @id @default(autoincrement())
-  username        String    @db.VarChar(100)
-  password        String    @db.VarChar(100)
-  first_name      String?   @db.VarChar(100)
-  last_name       String?   @db.VarChar(100)
-  email           String    @db.VarChar(30)
-  user_role_id    Int
-  locale          String?   @db.VarChar(100)
-  enabled         Int       @db.TinyInt
-  created_at      DateTime? @db.DateTime(0)
-  created_user_id Int
-  updated_at      DateTime? @db.DateTime(0)
+model user_roles {
+  id              Int      @id @default(autoincrement())
+  user_role_name  String   @db.VarChar(100)
+  created_at      DateTime @db.DateTime(0)
+  cerated_user_id Int
+  updated_at      DateTime @db.DateTime(0)
   updated_user_id Int
+  users           users[]
+}
+
+model users {
+  id              Int        @id @default(autoincrement())
+  username        String     @unique(map: "username") @db.VarChar(100)
+  password        String     @db.VarChar(100)
+  first_name      String?    @db.VarChar(100)
+  last_name       String?    @db.VarChar(100)
+  email           String     @db.VarChar(30)
+  user_role_id    Int
+  locale          String?    @db.VarChar(100)
+  enabled         Int        @db.TinyInt
+  created_at      DateTime?  @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime?  @db.DateTime(0)
+  updated_user_id Int
+  user_roles      user_roles @relation(fields: [user_role_id], references: [id])
+
+  @@index([user_role_id], map: "users_user_role_id_fkey")
 }

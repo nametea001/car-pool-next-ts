@@ -5,26 +5,6 @@ export class UserReposotory {
   prisma = new PrismaClient();
   async checkLogin(username: string, password: string) {
     if (username !== "" && password !== "") {
-      // return josn
-      // const user = JSON.parse(
-      //   JSON.stringify(
-      //     await this.prisma.users.findFirst({
-      //       where: {
-      //         username: `${username}`,
-      //       },
-      //       select: {
-      //         username: true,
-      //         password: true,
-      //         first_name: true,
-      //         last_name: true,
-      //         email: true,
-      //         user_role_id: true,
-      //         locale: true,
-      //       },
-      //     })
-      //   )
-      // );
-      // return obj
       let user: any;
       try {
         user = await this.prisma.users.findFirst({
@@ -32,6 +12,7 @@ export class UserReposotory {
             username: `${username}`,
           },
           select: {
+            id: true,
             username: true,
             password: true,
             first_name: true,
@@ -60,5 +41,42 @@ export class UserReposotory {
       }
       return null;
     }
+  }
+
+  async findUsers(data: any) {
+    let param: any[] = [];
+    // controll
+    if (data.user_id) {
+      param.push({ id: parseInt(data.user_id) });
+    }
+    if (data.username) {
+      param.push({ username: data.username.toString() });
+    }
+    let whereData = param.length !== 0 ? { OR: param } : {}; //check param is empty
+
+    let user: any;
+
+    try {
+      user = await this.prisma.users.findMany({
+        where: whereData,
+        select: {
+          id: true,
+          username: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          user_role_id: true,
+          locale: true,
+          user_roles: {
+            select: {
+              user_role_name: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      user = null;
+    }
+    return user;
   }
 }

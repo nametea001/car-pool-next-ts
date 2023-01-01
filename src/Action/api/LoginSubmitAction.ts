@@ -1,4 +1,4 @@
-import { UserFinder } from "../Domain/User/Service/UserFinder";
+import { UserFinder } from "../../Domain/User/Service/UserFinder";
 
 export function LoginSubmitAction(username: string, password: string) {
   const userFinder = new UserFinder();
