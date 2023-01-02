@@ -22,7 +22,7 @@ import {
   NavDropdown,
   Dropdown,
   DropdownButton,
-} from "react-bootstrap-v5";
+} from "react-bootstrap";
 
 import Loading from "./loading";
 // type props

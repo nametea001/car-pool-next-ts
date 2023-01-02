@@ -88,10 +88,10 @@
   color: #f30775;
 }
 
-.sidebar .sidebar-nav-item .active {
-  /* color: #f30775; */
-  /* transition: all 5s linear; */
-}
+/* .sidebar .sidebar-nav-item .active {
+   color: #f30775; 
+   transition: all 5s linear; 
+} */
 
 .arrow {
   transition: 0.15s ease-in;
@@ -215,6 +215,13 @@
   /* */
   height: calc(100vh - 231px);
   overflow-x: scroll;
+}
+
+/* loading login */
+.loading-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* other */
 .w-100 {

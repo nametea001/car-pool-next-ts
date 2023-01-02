@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt"; //hash and compare
 
 export class UserReposotory {
   prisma = new PrismaClient();
+
   async checkLogin(username: string, password: string) {
     if (username !== "" && password !== "") {
       let user: any;
@@ -44,8 +45,8 @@ export class UserReposotory {
   }
 
   async findUsers(data: any) {
+    //  praram controll
     let param: any[] = [];
-    // controll
     if (data.user_id) {
       param.push({ id: parseInt(data.user_id) });
     }
@@ -55,7 +56,6 @@ export class UserReposotory {
     let whereData = param.length !== 0 ? { OR: param } : {}; //check param is empty
 
     let user: any;
-
     try {
       user = await this.prisma.users.findMany({
         where: whereData,

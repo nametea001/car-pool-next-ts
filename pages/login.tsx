@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Loading from "../components/loading";
 
 function Login() {
   // bageUsername
@@ -59,13 +60,10 @@ function Login() {
     if (res.ok && !res.error) {
       // login success
       router.push("/home");
+    } else {
+      setStateLoginWarning(false);
     }
   }
-
-  // const { data: session, status } = useSession();
-  // if (session) {
-  //   return <></>;
-  // }
 
   return (
     <>
@@ -75,7 +73,7 @@ function Login() {
         {/* <meta name="viewport" content="width=device-width, initial-scale=1.0" /> */}
       </Head>
       <div className="login position-absolute">
-        <h1 className="head">Carpool</h1>
+        <h1 className="head">RIDESHARE</h1>
         <form>
           <div className=" align-middle border p-5 ">
             <div className="mb-3">
