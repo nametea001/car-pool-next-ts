@@ -21,15 +21,14 @@ export default NextAuth({
           //   "Content-Type": "application/json",
           // },
         });
-
         let data: any;
         try {
           data = await res.json();
         } catch {
           data = null;
         }
-        const user = data;
-        if (res.ok && user) {
+        const user = data.user;
+        if (res.ok && data.error === false && user) {
           delete user.password;
           return user;
         }

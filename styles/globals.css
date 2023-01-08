@@ -25,8 +25,6 @@ a {
   }
 }
 
-
-
 .login {
   width: 30%;
   margin-left: 35%;
@@ -43,6 +41,8 @@ a {
   margin-left: 3vh;
 }
 
-.text-center {
-  text-align: center;
+.match-password {
+  display: none;
 }
+
+

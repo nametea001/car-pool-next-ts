@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, InputGroup, Modal } from "react-bootstrap";
 
 // css
 import Loading from "../components/loading";
@@ -14,14 +14,55 @@ import { Container } from "react-bootstrap";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { UserFinder } from "../src/Domain/User/Service/UserFinder";
+
 function Users({ propDataUsers }: any) {
   const router = useRouter();
 
   // datatable
-  const [dataUsers, setrDataUsers] = useState(propDataUsers);
+  const [dataUsers, setDataUsers] = useState(propDataUsers);
   function datatable(value: []) {
     // modal edit user
-
+    const [showUserEdit, setShowUseredit] = useState(false); //show modal
+    // show modal user edit handle
+    const [dataUserEdit, setDataUserEdit] = useState<any>({}); //data from colum
+    function showEditUser(e: any) {
+      if (e) {
+        setDataUserEdit(e);
+      }
+      setShowUseredit(true);
+    }
+    function showEditUserClose() {
+      setShowUseredit(false);
+    }
+    // showpassword edit
+    const [stateShowPasswordEdit, setStateShowPasswordEdit] = useState(false);
+    let showIconPasswordEdit = stateShowPasswordEdit
+      ? IconSolid.faEyeSlash
+      : IconSolid.faEye;
+    let showTextPasswordEdit = stateShowPasswordEdit ? "text" : "password";
+    function handleShowPasswordEdit() {
+      setStateShowPasswordEdit(!stateShowPasswordEdit);
+    }
+    // showpassword edit confirm
+    const [stateShowPasswordConfirmEdit, setStateShowPasswordConfirmEdit] =
+      useState(false);
+    let showIconPasswordConfirmEdit = stateShowPasswordConfirmEdit
+      ? IconSolid.faEyeSlash
+      : IconSolid.faEye;
+    let showTextPasswordConfirmEdit = stateShowPasswordConfirmEdit
+      ? "text"
+      : "password";
+    function handleShowPasswordConfirmEdit() {
+      setStateShowPasswordConfirmEdit(!stateShowPasswordConfirmEdit);
+    }
+    // option map user Role\
+    function userRoleMap() {}
+    // user edit check data
+    const [firstNameEdit, setFirstNameEdit] = useState("");
+    const [lastNameEdit, setLastrNameEdit] = useState("");
+    function handleEditUser() {
+      
+    }
     // table
     return (
       <>
@@ -70,7 +111,13 @@ function Users({ propDataUsers }: any) {
               body={
                 (data, props) => (
                   <div>
-                    <Button variant="warning" size="sm" onClick={() => {}}>
+                    <Button
+                      variant="warning"
+                      size="sm"
+                      onClick={() => {
+                        showEditUser(data);
+                      }}
+                    >
                       <FontAwesomeIcon icon={IconSolid.faPenToSquare} />
                     </Button>
                   </div>
@@ -80,6 +127,109 @@ function Users({ propDataUsers }: any) {
             ></Column>
           </DataTable>
         </div>
+
+        {/* edit user */}
+        <Modal show={showUserEdit} onHide={showEditUserClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={dataUserEdit.username}
+                  placeholder="Username"
+                  autoComplete="off"
+                  // autoFocus
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <InputGroup className="mb-3">
+                  <Form.Control
+                    type={showTextPasswordEdit}
+                    placeholder="Password"
+                    autoComplete="off"
+                    // autoFocus
+                  />
+                  <Button
+                    // variant="outline-secondary"
+                    variant="primary"
+                    onClick={handleShowPasswordEdit}
+                  >
+                    <FontAwesomeIcon icon={showIconPasswordEdit} />
+                  </Button>
+                </InputGroup>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Confirm Password</Form.Label>
+                {/* <Form.Label className=""> Confirm Password</Form.Label> */}
+                <InputGroup className="mb-3">
+                  <Form.Control
+                    type={showTextPasswordConfirmEdit}
+                    placeholder="Confirm Password"
+                    autoComplete="off"
+                    // onChange={}
+                    // autoFocus
+                  />
+                  <Button
+                    // variant="outline-secondary"
+                    variant="primary"
+                    onClick={handleShowPasswordConfirmEdit}
+                  >
+                    <FontAwesomeIcon icon={showIconPasswordConfirmEdit} />
+                  </Button>
+                </InputGroup>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={dataUserEdit.first_name}
+                  placeholder="First Name"
+                  autoComplete="off"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={dataUserEdit.last_name}
+                  placeholder="Last Name"
+                  autoComplete="off"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  defaultValue={dataUserEdit.email}
+                  placeholder="name@example.com"
+                  autoComplete="off"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>User Role</Form.Label>
+                <Form.Select>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </Form.Select>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="warning" onClick={handleEditUser}>
+              Edit
+            </Button>
+            <Button variant="danger" onClick={showEditUserClose}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }
@@ -97,12 +247,13 @@ function Users({ propDataUsers }: any) {
           </h1>
           <hr />
           {/* <DataTables /> */}
-          {datatable(dataUsers)};
+          {datatable(dataUsers)}
         </div>
       </div>
     </Container>
   );
 }
+
 Users.auth = true;
 
 export async function getServerSideProps() {
