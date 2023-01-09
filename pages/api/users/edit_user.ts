@@ -14,7 +14,7 @@ async function editUser(req: NextApiRequest, res: NextApiResponse) {
   if (session) {
     updateById = parseInt(session.user?.id) ?? 0;
   } else if (parseInt(dataQuery.user_id)) {
-    updateById = parseInt(dataQuery.user_id);
+    updateById = parseInt(dataQuery.user_id) ?? 0;
   }
   if (req.method === "POST" && updateById !== 0) {
     const data = req.body;

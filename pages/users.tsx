@@ -13,13 +13,13 @@ import { Container } from "react-bootstrap";
 // datatable
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { UserFinder } from "../src/Domain/User/Service/UserFinder";
 
-function Users({ propDataUsers }: any) {
+function Users({ propDataUsers, propDataUsersRole }: any) {
   const router = useRouter();
 
   // datatable
   const [dataUsers, setDataUsers] = useState(propDataUsers);
+  const [dataUsersRole, setDataUsersRole] = useState(propDataUsersRole);
   function datatable(value: []) {
     // modal edit user
     const [showUserEdit, setShowUseredit] = useState(false); //show modal
@@ -56,13 +56,22 @@ function Users({ propDataUsers }: any) {
       setStateShowPasswordConfirmEdit(!stateShowPasswordConfirmEdit);
     }
     // option map user Role\
-    function userRoleMap() {}
+    function userRoleMap() {
+      const mapDataUserRole = dataUsersRole.map((data: any) => (
+        <option key={data.id} value={data.id.toString()}>
+          {data.user_role_name}
+        </option>
+      ));
+      return mapDataUserRole;
+    }
     // user edit check data
     const [firstNameEdit, setFirstNameEdit] = useState("");
     const [lastNameEdit, setLastrNameEdit] = useState("");
-    function handleEditUser() {
-      
+    function handleEditUser(e: any) {
+      // e.preventDefault();
+      console.log(e);
     }
+
     // table
     return (
       <>
@@ -213,16 +222,14 @@ function Users({ propDataUsers }: any) {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>User Role</Form.Label>
-                <Form.Select>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <Form.Select defaultValue={dataUserEdit.user_role_id}>
+                  {userRoleMap()}
                 </Form.Select>
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="warning" onClick={handleEditUser}>
+            <Button variant="warning" onClick={handleEditUser} disabled={false}>
               Edit
             </Button>
             <Button variant="danger" onClick={showEditUserClose}>
@@ -256,11 +263,16 @@ function Users({ propDataUsers }: any) {
 
 Users.auth = true;
 
+import { UserFinder } from "../src/Domain/User/Service/UserFinder";
+import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";
+
 export async function getServerSideProps() {
   const userFinder = new UserFinder();
-  const propDataUsers = await userFinder.findUsers([]);
+  const userRoleFinder = new UserRoleFinder();
+  const propDataUsers = await userFinder.findUsers({});
+  const propDataUsersRole = await userRoleFinder.findUsersRoles({});
   return {
-    props: { propDataUsers }, // will be passed to the page component as props
+    props: { propDataUsers, propDataUsersRole }, // will be passed to the page component as props
   };
 }
 

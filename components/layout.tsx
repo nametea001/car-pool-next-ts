@@ -204,9 +204,8 @@ function Layout({ children }: Props) {
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item
-                      onClick={() => {
-                        signOut();
-                        router.push("/login");
+                      onClick={async () => {
+                        await signOut();
                       }}
                     >
                       <FontAwesomeIcon
