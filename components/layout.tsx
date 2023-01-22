@@ -33,7 +33,7 @@ type Props = {
 };
 
 function Layout({ children }: Props) {
-  const { data: session, status } = useSession();
+  const { data: session, status }: any = useSession();
   if (status == "loading") {
     <Loading />;
   }

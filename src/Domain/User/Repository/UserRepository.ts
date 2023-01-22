@@ -84,6 +84,11 @@ export class UserReposotory {
             email: true,
             user_role_id: true,
             locale: true,
+            user_roles: {
+              select: {
+                user_role_name: true,
+              },
+            },
           },
         });
       } catch {
