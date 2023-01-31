@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import * as bcrypt from "bcrypt"; //hash and compare
-export class UserReposotory {
+export class UserRepository {
   private prisma = new PrismaClient();
 
   async UserEdit(data: any, userId: number) {

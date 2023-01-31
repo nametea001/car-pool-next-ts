@@ -35,3 +35,33 @@ model users {
 
   @@index([user_role_id], map: "users_user_role_id_fkey")
 }
+
+model posts {
+  id              Int      @id @default(autoincrement())
+  created_at      DateTime @db.DateTime(0)
+  cerated_user_id Int
+  updated_at      DateTime @db.DateTime(0)
+  updated_user_id DateTime @db.DateTime(0)
+}
+
+model thai_amphures {
+  id             Int            @id
+  name_th        String         @db.VarChar(150)
+  name_en        String         @db.VarChar(150)
+  province_id    Int
+  created_at     DateTime?      @db.DateTime(0)
+  updated_at     DateTime?      @db.DateTime(0)
+  thai_provinces thai_provinces @relation(fields: [province_id], references: [id], onUpdate: Restrict, map: "thai_amphures_ibfk_1")
+
+  @@index([province_id], map: "province_id")
+}
+
+model thai_provinces {
+  id            Int             @id
+  name_th       String          @db.VarChar(150)
+  name_en       String          @db.VarChar(150)
+  geography_id  Int
+  created_at    DateTime?       @db.DateTime(0)
+  updated_at    DateTime?       @db.DateTime(0)
+  thai_amphures thai_amphures[]
+}

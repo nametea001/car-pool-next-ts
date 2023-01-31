@@ -15,9 +15,9 @@ import { NextPage } from "next";
 import { SessionProvider, useSession } from "next-auth/react";
 import { SSRProvider } from "react-bootstrap";
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+// export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+//   getLayout?: (page: ReactElement) => ReactNode;
+// };
 
 // type AppPropsWithLayout = AppProps & {
 //   Component: NextPageWithLayout;
@@ -48,7 +48,7 @@ export default function MyApp({
     <>
       <SessionProvider session={session} refetchInterval={5 * 60}>
         {Component.auth ? (
-          <SSRProvider> 
+          <SSRProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>

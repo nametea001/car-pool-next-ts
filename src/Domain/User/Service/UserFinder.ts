@@ -1,15 +1,15 @@
-import { UserReposotory } from "../Repository/UserRepository";
+import { UserRepository } from "../Repository/UserRepository";
 
 export class UserFinder {
-  private userReposotory = new UserReposotory();
+  private userRepository = new UserRepository();
 
   checkLogin(username: string, password: string) {
-    const user = this.userReposotory.checkLogin(username, password);
+    const user = this.userRepository.checkLogin(username, password);
     return user;
   }
 
   findUsers(data: any) {
-    const user = this.userReposotory.findUsers(data);
+    const user = this.userRepository.findUsers(data);
     return user;
   }
 }
