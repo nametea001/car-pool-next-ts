@@ -185,7 +185,7 @@ function Layout({ children }: Props) {
                         </span>
                         <img
                           className="img-profile"
-                          src="img/undraw_profile.svg"
+                          src={`profiles/${session?.user?.img_path}`}
                         />
                       </>
                     }
