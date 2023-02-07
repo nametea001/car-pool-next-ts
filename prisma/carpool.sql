@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2023 at 11:25 AM
+-- Generation Time: Feb 07, 2023 at 06:42 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -29,11 +29,23 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `posts` (
   `id` int(11) NOT NULL,
+  `start_amphure_id` int(11) NOT NULL,
+  `end_amphure_id` int(11) NOT NULL,
+  `go_back` tinyint(1) DEFAULT 0,
+  `date_time_start` datetime DEFAULT NULL,
+  `date_time_back` datetime DEFAULT NULL,
+  `created_user_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
-  `cerated_user_id` int(11) NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `updated_user_id` datetime NOT NULL
+  `updated_user_id` int(11) NOT NULL,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`id`, `start_amphure_id`, `end_amphure_id`, `go_back`, `date_time_start`, `date_time_back`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
+(1, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
 
 -- --------------------------------------------------------
 
@@ -989,6 +1001,29 @@ INSERT INTO `thai_amphures` (`id`, `name_th`, `name_en`, `province_id`, `created
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `thai_geographies`
+--
+
+CREATE TABLE `thai_geographies` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `thai_geographies`
+--
+
+INSERT INTO `thai_geographies` (`id`, `name`) VALUES
+(1, 'ภาคเหนือ'),
+(2, 'ภาคกลาง'),
+(3, 'ภาคตะวันออกเฉียงเหนือ'),
+(4, 'ภาคตะวันตก'),
+(5, 'ภาคตะวันออก'),
+(6, 'ภาคใต้');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `thai_provinces`
 --
 
@@ -1099,6 +1134,7 @@ CREATE TABLE `users` (
   `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_role_id` int(11) NOT NULL,
   `locale` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img_path` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'undraw_profile.svg',
   `enabled` tinyint(4) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_user_id` int(11) NOT NULL,
@@ -1110,9 +1146,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
-(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
-(2, 'admin', '$2b$10$hiVQzS2mcPSHWBs0pWCHy.1A4SbD/HJoXYoq7gJi6rpeY/edTCxjO', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
+INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
+(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', '1.jpg', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
+(2, 'admin', '$2b$10$hiVQzS2mcPSHWBs0pWCHy.1A4SbD/HJoXYoq7gJi6rpeY/edTCxjO', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'undraw_profile.svg', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
 
 -- --------------------------------------------------------
 
@@ -1145,7 +1181,10 @@ INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id
 -- Indexes for table `posts`
 --
 ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `end_amphure_id` (`end_amphure_id`),
+  ADD KEY `start_amphure_id` (`start_amphure_id`),
+  ADD KEY `created_user_id` (`created_user_id`);
 
 --
 -- Indexes for table `thai_amphures`
@@ -1155,10 +1194,17 @@ ALTER TABLE `thai_amphures`
   ADD KEY `province_id` (`province_id`);
 
 --
+-- Indexes for table `thai_geographies`
+--
+ALTER TABLE `thai_geographies`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `thai_provinces`
 --
 ALTER TABLE `thai_provinces`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `geography_id` (`geography_id`);
 
 --
 -- Indexes for table `users`
@@ -1166,7 +1212,7 @@ ALTER TABLE `thai_provinces`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `users_user_role_id_fkey` (`user_role_id`);
+  ADD KEY `users_ibfk_1` (`user_role_id`);
 
 --
 -- Indexes for table `user_roles`
@@ -1182,7 +1228,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1201,16 +1247,30 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- Constraints for table `posts`
+--
+ALTER TABLE `posts`
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`start_amphure_id`) REFERENCES `thai_amphures` (`id`),
+  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`end_amphure_id`) REFERENCES `thai_amphures` (`id`),
+  ADD CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `thai_amphures`
 --
 ALTER TABLE `thai_amphures`
   ADD CONSTRAINT `thai_amphures_ibfk_1` FOREIGN KEY (`province_id`) REFERENCES `thai_provinces` (`id`);
 
 --
+-- Constraints for table `thai_provinces`
+--
+ALTER TABLE `thai_provinces`
+  ADD CONSTRAINT `thai_provinces_ibfk_1` FOREIGN KEY (`geography_id`) REFERENCES `thai_geographies` (`id`);
+
+--
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_user_role_id_fkey` FOREIGN KEY (`user_role_id`) REFERENCES `user_roles` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`user_role_id`) REFERENCES `user_roles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

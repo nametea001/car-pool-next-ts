@@ -1,7 +1,7 @@
-import { UserReposotory } from "../Repository/UserRepository";
+import { UserRepository } from "../Repository/UserRepository";
 
 export class UserUpdater {
-  private userReposotory = new UserReposotory();
+  private userReposotory = new UserRepository();
 
   userEdit(data: any, userId: number, updateBy: number) {
     let row = this.MapToRow(data, updateBy);
@@ -21,6 +21,15 @@ export class UserUpdater {
     }
     if ("last_name" in data) {
       result.last_name = data.last_name;
+    }
+    if ("email" in data) {
+      result.email = data.email;
+    }
+    if ("user_role_id" in data) {
+      result.user_role_id = data.user_role_id;
+    }
+    if ("img_path" in data) {
+      result.img_path = data.img_path;
     }
     // if (data.hasOwnProperty("username")) {
     //   result.id = data.id;

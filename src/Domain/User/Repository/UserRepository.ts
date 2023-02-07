@@ -17,6 +17,7 @@ export class UserRepository {
           email: true,
           user_role_id: true,
           locale: true,
+          img_path: true,
           user_roles: {
             select: {
               user_role_name: true,
@@ -84,6 +85,7 @@ export class UserRepository {
             email: true,
             user_role_id: true,
             locale: true,
+            img_path: true,
             user_roles: {
               select: {
                 user_role_name: true,

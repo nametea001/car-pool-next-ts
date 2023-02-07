@@ -7,6 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model posts {
+  id                                                  Int           @id @default(autoincrement())
+  start_amphure_id                                    Int
+  end_amphure_id                                      Int
+  go_back                                             Boolean?      @default(false)
+  date_time_start                                     DateTime?     @db.DateTime(0)
+  date_time_back                                      DateTime?     @db.DateTime(0)
+  created_user_id                                     Int
+  created_at                                          DateTime      @db.DateTime(0)
+  updated_user_id                                     Int
+  updated_at                                          DateTime      @db.DateTime(0)
+  thai_amphures_posts_start_amphure_idTothai_amphures thai_amphures @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  thai_amphures_posts_end_amphure_idTothai_amphures   thai_amphures @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_2")
+  users                                               users         @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_3")
+
+  @@index([created_user_id], map: "created_user_id")
+  @@index([end_amphure_id], map: "end_amphure_id")
+  @@index([start_amphure_id], map: "start_amphure_id")
+}
+
+model thai_amphures {
+  id                                          Int            @id
+  name_th                                     String         @db.VarChar(150)
+  name_en                                     String         @db.VarChar(150)
+  province_id                                 Int
+  created_at                                  DateTime?      @db.DateTime(0)
+  updated_at                                  DateTime?      @db.DateTime(0)
+  posts_posts_start_amphure_idTothai_amphures posts[]        @relation("posts_start_amphure_idTothai_amphures")
+  posts_posts_end_amphure_idTothai_amphures   posts[]        @relation("posts_end_amphure_idTothai_amphures")
+  thai_provinces                              thai_provinces @relation(fields: [province_id], references: [id], onUpdate: Restrict, map: "thai_amphures_ibfk_1")
+
+  @@index([province_id], map: "province_id")
+}
+
+model thai_geographies {
+  id             Int              @id
+  name           String           @db.VarChar(255)
+  thai_provinces thai_provinces[]
+}
+
+model thai_provinces {
+  id               Int              @id
+  name_th          String           @db.VarChar(150)
+  name_en          String           @db.VarChar(150)
+  geography_id     Int
+  created_at       DateTime?        @db.DateTime(0)
+  updated_at       DateTime?        @db.DateTime(0)
+  thai_amphures    thai_amphures[]
+  thai_geographies thai_geographies @relation(fields: [geography_id], references: [id], onUpdate: Restrict, map: "thai_provinces_ibfk_1")
+
+  @@index([geography_id], map: "geography_id")
+}
+
 model user_roles {
   id              Int      @id @default(autoincrement())
   user_role_name  String   @db.VarChar(100)
@@ -26,42 +79,14 @@ model users {
   email           String     @db.VarChar(30)
   user_role_id    Int
   locale          String?    @db.VarChar(100)
+  img_path        String     @default("undraw_profile.svg") @db.Text
   enabled         Int        @db.TinyInt
   created_at      DateTime?  @db.DateTime(0)
   created_user_id Int
   updated_at      DateTime?  @db.DateTime(0)
   updated_user_id Int
-  user_roles      user_roles @relation(fields: [user_role_id], references: [id])
+  posts           posts[]
+  user_roles      user_roles @relation(fields: [user_role_id], references: [id], onUpdate: Restrict, map: "users_ibfk_1")
 
-  @@index([user_role_id], map: "users_user_role_id_fkey")
-}
-
-model posts {
-  id              Int      @id @default(autoincrement())
-  created_at      DateTime @db.DateTime(0)
-  cerated_user_id Int
-  updated_at      DateTime @db.DateTime(0)
-  updated_user_id DateTime @db.DateTime(0)
-}
-
-model thai_amphures {
-  id             Int            @id
-  name_th        String         @db.VarChar(150)
-  name_en        String         @db.VarChar(150)
-  province_id    Int
-  created_at     DateTime?      @db.DateTime(0)
-  updated_at     DateTime?      @db.DateTime(0)
-  thai_provinces thai_provinces @relation(fields: [province_id], references: [id], onUpdate: Restrict, map: "thai_amphures_ibfk_1")
-
-  @@index([province_id], map: "province_id")
-}
-
-model thai_provinces {
-  id            Int             @id
-  name_th       String          @db.VarChar(150)
-  name_en       String          @db.VarChar(150)
-  geography_id  Int
-  created_at    DateTime?       @db.DateTime(0)
-  updated_at    DateTime?       @db.DateTime(0)
-  thai_amphures thai_amphures[]
+  @@index([user_role_id], map: "users_ibfk_1")
 }
