@@ -12,7 +12,7 @@ export class UserRoleRepository {
     // if (data.username) {
     //   param.push({ username: data.username.toString() });
     // }
-    let whereData = param.length !== 0 ? { OR: param } : {}; //check param is empty
+    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let user: any;
     try {

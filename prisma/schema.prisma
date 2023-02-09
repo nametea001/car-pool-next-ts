@@ -8,19 +8,19 @@ datasource db {
 }
 
 model posts {
-  id                                                  Int           @id @default(autoincrement())
-  start_amphure_id                                    Int
-  end_amphure_id                                      Int
-  go_back                                             Boolean?      @default(false)
-  date_time_start                                     DateTime?     @db.DateTime(0)
-  date_time_back                                      DateTime?     @db.DateTime(0)
-  created_user_id                                     Int
-  created_at                                          DateTime      @db.DateTime(0)
-  updated_user_id                                     Int
-  updated_at                                          DateTime      @db.DateTime(0)
-  thai_amphures_posts_start_amphure_idTothai_amphures thai_amphures @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
-  thai_amphures_posts_end_amphure_idTothai_amphures   thai_amphures @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_2")
-  users                                               users         @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_3")
+  id                  Int           @id @default(autoincrement())
+  start_amphure_id    Int
+  end_amphure_id      Int
+  go_back             Boolean?      @default(false)
+  date_time_start     DateTime?     @db.DateTime(0)
+  date_time_back      DateTime?     @db.DateTime(0)
+  created_user_id     Int
+  created_at          DateTime      @db.DateTime(0)
+  updated_user_id     Int
+  updated_at          DateTime      @db.DateTime(0)
+  start_thai_amphures thai_amphures @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  end_thai_amphures   thai_amphures @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_2")
+  users               users         @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([end_amphure_id], map: "end_amphure_id")

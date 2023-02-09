@@ -9,7 +9,7 @@ export class ThaiAumphureRepository {
     if (data.aumphure_id) {
       param.push({ id: parseInt(data.aumphure_id) });
     }
-    let whereData = param.length !== 0 ? { OR: param } : {}; //check param is empty
+    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let aumphure: any;
     try {

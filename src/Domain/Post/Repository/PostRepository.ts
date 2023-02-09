@@ -9,7 +9,7 @@ export class PostRepository {
     if (data.post_id) {
       param.push({ id: parseInt(data.post_id) });
     }
-    let whereData = param.length !== 0 ? { OR: param } : {}; //check param is empty
+    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let posts: any;
     try {
@@ -41,6 +41,9 @@ export class PostRepository {
               },
             },
           },
+          go_back: true,
+          date_time_start: true,
+          date_time_back: true,
           created_user_id: true,
           users: {
             select: {

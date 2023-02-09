@@ -9,7 +9,7 @@ export class ThaiProvenceRepository {
     if (data.provence_id) {
       param.push({ id: parseInt(data.provence_id) });
     }
-    let whereData = param.length !== 0 ? { OR: param } : {}; //check param is empty
+    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let provences: any;
     try {
