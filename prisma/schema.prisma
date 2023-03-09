@@ -8,19 +8,21 @@ datasource db {
 }
 
 model posts {
-  id                  Int           @id @default(autoincrement())
+  id                  Int            @id @default(autoincrement())
+  led_long            String?        @db.LongText
   start_amphure_id    Int
   end_amphure_id      Int
-  go_back             Boolean?      @default(false)
-  date_time_start     DateTime?     @db.DateTime(0)
-  date_time_back      DateTime?     @db.DateTime(0)
+  go_back             Boolean?       @default(false)
+  date_time_start     DateTime?      @db.DateTime(0)
+  date_time_back      DateTime?      @db.DateTime(0)
   created_user_id     Int
-  created_at          DateTime      @db.DateTime(0)
+  created_at          DateTime       @db.DateTime(0)
   updated_user_id     Int
-  updated_at          DateTime      @db.DateTime(0)
-  start_thai_amphures thai_amphures @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
-  end_thai_amphures   thai_amphures @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_2")
-  users               users         @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_3")
+  updated_at          DateTime       @db.DateTime(0)
+  start_thai_amphures thai_amphures  @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  end_thai_amphures   thai_amphures  @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_2")
+  users               users          @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_3")
+  pots_members        pots_members[]
 
   @@index([created_user_id], map: "created_user_id")
   @@index([end_amphure_id], map: "end_amphure_id")
@@ -89,4 +91,54 @@ model users {
   user_roles      user_roles @relation(fields: [user_role_id], references: [id], onUpdate: Restrict, map: "users_ibfk_1")
 
   @@index([user_role_id], map: "users_ibfk_1")
+}
+
+model chat_details {
+  id              Int                   @id @default(autoincrement())
+  chat_id         Int
+  msg_type        chat_details_msg_type
+  msg             String                @db.Text
+  let_long        String                @db.LongText
+  created_at      DateTime              @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime              @db.DateTime(0)
+  updated_user_id Int
+  chats           chats                 @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_details_ibfk_1")
+
+  @@index([chat_id], map: "chat_id")
+}
+
+model chats {
+  id              Int             @id @default(autoincrement())
+  chat_type       chats_chat_type
+  send_user_id    Int?
+  send_post_id    Int?
+  created_at      DateTime        @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime        @db.DateTime(0)
+  updated_user_id Int
+  chat_details    chat_details[]
+}
+
+model pots_members {
+  id              Int      @id @default(autoincrement())
+  post_id         Int
+  user_id         Int
+  created_at      DateTime @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime @db.DateTime(0)
+  updated_user_id Int
+  posts           posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "pots_members_ibfk_1")
+
+  @@index([post_id], map: "post_id")
+}
+
+enum chats_chat_type {
+  PRIVATE
+  GROUP
+}
+
+enum chat_details_msg_type {
+  MSG
+  LOCATION
 }

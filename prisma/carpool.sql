@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 07, 2023 at 06:42 PM
+-- Generation Time: Mar 09, 2023 at 05:25 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -24,11 +24,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `chats`
+--
+
+CREATE TABLE `chats` (
+  `id` int(11) NOT NULL,
+  `chat_type` enum('PRIVATE','GROUP') NOT NULL,
+  `send_user_id` int(11) DEFAULT NULL,
+  `send_post_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `created_user_id` int(11) NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chat_details`
+--
+
+CREATE TABLE `chat_details` (
+  `id` int(11) NOT NULL,
+  `chat_id` int(11) NOT NULL,
+  `msg_type` enum('MSG','LOCATION') NOT NULL,
+  `msg` text NOT NULL,
+  `let_long` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`let_long`)),
+  `created_at` datetime NOT NULL,
+  `created_user_id` int(11) NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `posts`
 --
 
 CREATE TABLE `posts` (
   `id` int(11) NOT NULL,
+  `led_long` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`led_long`)),
   `start_amphure_id` int(11) NOT NULL,
   `end_amphure_id` int(11) NOT NULL,
   `go_back` tinyint(1) DEFAULT 0,
@@ -44,8 +80,24 @@ CREATE TABLE `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `start_amphure_id`, `end_amphure_id`, `go_back`, `date_time_start`, `date_time_back`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
-(1, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
+INSERT INTO `posts` (`id`, `led_long`, `start_amphure_id`, `end_amphure_id`, `go_back`, `date_time_start`, `date_time_back`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
+(1, NULL, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pots_members`
+--
+
+CREATE TABLE `pots_members` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_user_id` int(11) NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1134,7 +1186,7 @@ CREATE TABLE `users` (
   `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_role_id` int(11) NOT NULL,
   `locale` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `img_path` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'undraw_profile.svg',
+  `img_path` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '\'non_img.png\'',
   `enabled` tinyint(4) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_user_id` int(11) NOT NULL,
@@ -1148,7 +1200,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
 (1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', '1.jpg', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
-(2, 'admin', '$2b$10$hiVQzS2mcPSHWBs0pWCHy.1A4SbD/HJoXYoq7gJi6rpeY/edTCxjO', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'undraw_profile.svg', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
+(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
 
 -- --------------------------------------------------------
 
@@ -1178,6 +1230,19 @@ INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id
 --
 
 --
+-- Indexes for table `chats`
+--
+ALTER TABLE `chats`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `chat_details`
+--
+ALTER TABLE `chat_details`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `chat_id` (`chat_id`);
+
+--
 -- Indexes for table `posts`
 --
 ALTER TABLE `posts`
@@ -1185,6 +1250,13 @@ ALTER TABLE `posts`
   ADD KEY `end_amphure_id` (`end_amphure_id`),
   ADD KEY `start_amphure_id` (`start_amphure_id`),
   ADD KEY `created_user_id` (`created_user_id`);
+
+--
+-- Indexes for table `pots_members`
+--
+ALTER TABLE `pots_members`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `post_id` (`post_id`);
 
 --
 -- Indexes for table `thai_amphures`
@@ -1225,10 +1297,28 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- AUTO_INCREMENT for table `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `chat_details`
+--
+ALTER TABLE `chat_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `pots_members`
+--
+ALTER TABLE `pots_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1247,12 +1337,24 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- Constraints for table `chat_details`
+--
+ALTER TABLE `chat_details`
+  ADD CONSTRAINT `chat_details_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`);
+
+--
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
   ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`start_amphure_id`) REFERENCES `thai_amphures` (`id`),
   ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`end_amphure_id`) REFERENCES `thai_amphures` (`id`),
   ADD CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `pots_members`
+--
+ALTER TABLE `pots_members`
+  ADD CONSTRAINT `pots_members_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
 
 --
 -- Constraints for table `thai_amphures`
