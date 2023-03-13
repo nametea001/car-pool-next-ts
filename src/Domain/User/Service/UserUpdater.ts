@@ -3,6 +3,8 @@ import { UserRepository } from "../Repository/UserRepository";
 export class UserUpdater {
   private userReposotory = new UserRepository();
 
+  userInsert(data: any) {}
+
   userEdit(data: any, userId: number, updateBy: number) {
     let row = this.MapToRow(data, updateBy);
     const user = this.userReposotory.UserEdit(row, userId);
@@ -38,11 +40,12 @@ export class UserUpdater {
     // }
     // console.log(Object.keys(result).length === 0);
     if (Object.keys(result).length !== 0) {
+      let dataTime = this.DateTimeToSQL();
       if (create) {
-        result.created_at = this.DateTimeToSQL();
+        result.created_at = dataTime;
         result.created_user_id = updateBy;
       }
-      result.updated_at = this.DateTimeToSQL();
+      result.updated_at = dataTime;
       result.updated_user_id = updateBy;
     }
 

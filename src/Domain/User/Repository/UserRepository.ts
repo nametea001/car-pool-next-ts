@@ -3,10 +3,22 @@ import * as bcrypt from "bcrypt"; //hash and compare
 export class UserRepository {
   private prisma = new PrismaClient();
 
-  async UserEdit(data: any, userId: number) {
-    let check: any = false;
+  async userInsert(data: any) {
+    let resData: any = null;
     try {
-      check = await this.prisma.users.update({
+      // resData = await this.prisma.users.create({
+      //   data: {},
+      // });
+    } catch (err) {
+      resData = null;
+    }
+    return resData;
+  }
+
+  async UserEdit(data: any, userId: number) {
+    let resData: any = null;
+    try {
+      resData = await this.prisma.users.update({
         where: { id: userId },
         data: data,
         select: {
@@ -26,9 +38,9 @@ export class UserRepository {
         },
       });
     } catch (err) {
-      check = false;
+      resData = false;
     }
-    return check;
+    return resData;
   }
 
   async findUsers(data: any) {
