@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2023 at 06:16 PM
+-- Generation Time: Mar 18, 2023 at 05:17 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -92,6 +92,7 @@ INSERT INTO `posts` (`id`, `led_lng`, `start_amphure_id`, `end_amphure_id`, `go_
 CREATE TABLE `post_detail` (
   `id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
+  `desciption` text NOT NULL,
   `seat` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `brand` text NOT NULL,

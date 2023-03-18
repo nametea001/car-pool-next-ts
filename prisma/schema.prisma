@@ -147,6 +147,7 @@ model pots_members {
 model post_detail {
   id                   Int      @id @default(autoincrement())
   post_id              Int
+  desciption           String   @db.Text
   seat                 Int
   price                Decimal  @db.Decimal(10, 2)
   brand                String   @db.Text
