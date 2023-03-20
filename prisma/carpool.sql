@@ -1224,7 +1224,7 @@ CREATE TABLE `users` (
   `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_role_id` int(11) NOT NULL DEFAULT 5,
   `locale` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `img_path` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'non_img.png',
+  `img_path` varchar(30) COLLATE utf8mb4_unicode_ci  NULL DEFAULT 'non_img.png',
   `enabled` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
   `created_user_id` int(11) NOT NULL,

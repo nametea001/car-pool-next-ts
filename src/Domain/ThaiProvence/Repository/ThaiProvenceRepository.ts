@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
-export class ThaiProvenceRepository {
+export class ThaiProvinceRepository {
   private prisma = new PrismaClient();
 
-  async findProvences(data: any) {
+  async findProvinces(data: any) {
     //  praram controll
     let param: any[] = [];
     if (data.provence_id) {
@@ -18,7 +18,7 @@ export class ThaiProvenceRepository {
         select: {
           id: true,
           name_th: true,
-          name_en: true,
+          // name_en: true,
         },
       });
     } catch (err) {

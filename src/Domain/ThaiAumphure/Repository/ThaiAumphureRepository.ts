@@ -18,7 +18,8 @@ export class ThaiAumphureRepository {
         select: {
           id: true,
           name_th: true,
-          name_en: true,
+          // name_en: true,
+          province_id: true,
         },
       });
     } catch (err) {

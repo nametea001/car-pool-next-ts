@@ -21,9 +21,9 @@ model posts {
   updated_at          DateTime       @db.DateTime(0)
   chats               chats[]
   post_detail         post_detail[]
-  start_thai_amphures thai_amphures  @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
-  end_thai_amphures   thai_amphures  @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_2")
-  users               users          @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "posts_ibfk_3")
+  start_thai_amphures thai_amphures  @relation("posts_start_amphure_idTothai_amphures", fields: [start_amphure_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
+  end_thai_amphures   thai_amphures  @relation("posts_end_amphure_idTothai_amphures", fields: [end_amphure_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_2")
+  users               users          @relation(fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_3")
   pots_members        pots_members[]
 
   @@index([created_user_id], map: "created_user_id")
@@ -40,7 +40,7 @@ model thai_amphures {
   updated_at                                  DateTime?      @db.DateTime(0)
   posts_posts_start_amphure_idTothai_amphures posts[]        @relation("posts_start_amphure_idTothai_amphures")
   posts_posts_end_amphure_idTothai_amphures   posts[]        @relation("posts_end_amphure_idTothai_amphures")
-  thai_provinces                              thai_provinces @relation(fields: [province_id], references: [id], onUpdate: Restrict, map: "thai_amphures_ibfk_1")
+  thai_provinces                              thai_provinces @relation(fields: [province_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "thai_amphures_ibfk_1")
 
   @@index([province_id], map: "province_id")
 }
@@ -59,7 +59,7 @@ model thai_provinces {
   created_at       DateTime?        @db.DateTime(0)
   updated_at       DateTime?        @db.DateTime(0)
   thai_amphures    thai_amphures[]
-  thai_geographies thai_geographies @relation(fields: [geography_id], references: [id], onUpdate: Restrict, map: "thai_provinces_ibfk_1")
+  thai_geographies thai_geographies @relation(fields: [geography_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "thai_provinces_ibfk_1")
 
   @@index([geography_id], map: "geography_id")
 }
@@ -83,7 +83,7 @@ model users {
   email                                String     @db.VarChar(30)
   user_role_id                         Int        @default(5)
   locale                               String?    @db.Text
-  img_path                             String     @default("non_img.png") @db.Text
+  img_path                             String?    @default("non_img.png") @db.VarChar(30)
   enabled                              Int        @default(1) @db.TinyInt
   created_at                           DateTime?  @db.DateTime(0)
   created_user_id                      Int
@@ -94,7 +94,9 @@ model users {
   posts                                posts[]
   review_review_user_idTousers         review[]   @relation("review_user_idTousers")
   review_review_created_user_idTousers review[]   @relation("review_created_user_idTousers")
-  user_roles                           user_roles @relation(fields: [user_role_id], references: [id], onUpdate: Restrict, map: "users_ibfk_1")
+  user_roles                           user_roles @relation(fields: [user_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+
+  @@index([user_role_id], map: "users_ibfk_1")
 }
 
 model chat_details {
@@ -107,7 +109,7 @@ model chat_details {
   created_user_id Int
   updated_at      DateTime              @db.DateTime(0)
   updated_user_id Int
-  chats           chats                 @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_details_ibfk_1")
+  chats           chats                 @relation(fields: [chat_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chat_details_ibfk_1")
 
   @@index([chat_id], map: "chat_id")
 }
@@ -122,9 +124,9 @@ model chats {
   updated_at                         DateTime        @db.DateTime(0)
   updated_user_id                    Int
   chat_details                       chat_details[]
-  users_chats_created_user_idTousers users           @relation("chats_created_user_idTousers", fields: [created_user_id], references: [id], onUpdate: Restrict, map: "chats_ibfk_1")
-  users_chats_send_user_idTousers    users?          @relation("chats_send_user_idTousers", fields: [send_user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "chats_ibfk_2")
-  posts                              posts?          @relation(fields: [send_post_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "chats_ibfk_3")
+  users_chats_created_user_idTousers users           @relation("chats_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_1")
+  users_chats_send_user_idTousers    users?          @relation("chats_send_user_idTousers", fields: [send_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_2")
+  posts                              posts?          @relation(fields: [send_post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([send_post_id], map: "send_post_id")
@@ -139,7 +141,7 @@ model pots_members {
   created_user_id Int
   updated_at      DateTime @db.DateTime(0)
   updated_user_id Int
-  posts           posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "pots_members_ibfk_1")
+  posts           posts    @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pots_members_ibfk_1")
 
   @@index([post_id], map: "post_id")
 }
@@ -158,7 +160,7 @@ model post_detail {
   created_user_id      Int
   updated_at           DateTime @db.DateTime(0)
   updated_user_id      Int
-  posts                posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "post_detail_ibfk_1")
+  posts                posts    @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_detail_ibfk_1")
 
   @@index([post_id], map: "post_id")
 }
@@ -171,8 +173,8 @@ model review {
   created_at                          DateTime @db.DateTime(0)
   updated_user_id                     Int
   updated_at                          DateTime @db.DateTime(0)
-  users_review_user_idTousers         users    @relation("review_user_idTousers", fields: [user_id], references: [id], onUpdate: Restrict, map: "review_ibfk_1")
-  users_review_created_user_idTousers users    @relation("review_created_user_idTousers", fields: [created_user_id], references: [id], onUpdate: Restrict, map: "review_ibfk_2")
+  users_review_user_idTousers         users    @relation("review_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_ibfk_1")
+  users_review_created_user_idTousers users    @relation("review_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_ibfk_2")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([user_id], map: "user_id")

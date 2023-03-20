@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { ThaiProvenceFinder } from "../../../src/Domain/ThaiProvence/Service/ThaiProvenceFinder";
+import { ThaiProvinceFinder } from "../../../src/Domain/ThaiProvence/Service/ThaiProvinceFinder";
 
 export default async function Provinces(
   req: NextApiRequest,
@@ -9,11 +9,11 @@ export default async function Provinces(
   let viewData: any = {};
   const data = req.query;
   if (req.method === "GET") {
-    const provenceFinders = new ThaiProvenceFinder();
-    const provences = await provenceFinders.findThaiProvences(data);
-    viewData.message = "Get Provences Successful";
+    const provinceFinders = new ThaiProvinceFinder();
+    const provinces = await provinceFinders.findThaiProvinces(data);
+    viewData.message = "Get Provinces Successful";
     viewData.error = false;
-    viewData.provences = provences;
+    viewData.provinces = provinces;
   }
 
   res.status(200).send(viewData);

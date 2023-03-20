@@ -20,8 +20,14 @@ export default async function handler(
             "public/profiles/",
             post.users.img_path
           );
-          const imageBuffer = fs.readFileSync(filePath, "base64");
-          post.img = imageBuffer;
+          try {
+            const imageBuffer = fs.readFileSync(filePath, "base64");
+            post.img = imageBuffer;
+          } catch (err) {
+            const filePath = path.resolve("public/profiles/", "non_img.png");
+            const imageBuffer = fs.readFileSync(filePath, "base64");
+            post.img = imageBuffer;
+          }
         });
       }
       viewData.message = "Get Post Successful";

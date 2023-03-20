@@ -1,7 +1,7 @@
-import { ThaiProvenceRepository } from "../Repository/ThaiProvenceRepository";
+import { ThaiProvinceRepository } from "../Repository/ThaiProvenceRepository";
 
 export class ThaiProvenceUpdater {
-  private userReposotory = new ThaiProvenceRepository();
+  private userReposotory = new ThaiProvinceRepository();
 
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {

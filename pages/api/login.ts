@@ -16,9 +16,15 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
     const user = await userFinder.checkLogin(username, password);
     if (user) {
       if (dataParam.device == "mobile") {
-        const filePath = path.resolve("public/profiles/", user.img_path);
-        const imageBuffer = fs.readFileSync(filePath, "base64");
-        user.img = imageBuffer;
+        try {
+          const filePath = path.resolve("public/profiles/", user.img_path);
+          const imageBuffer = fs.readFileSync(filePath, "base64");
+          user.img = imageBuffer;
+        } catch (err) {
+          const filePath = path.resolve("public/profiles/", "non_img.png");
+          const imageBuffer = fs.readFileSync(filePath, "base64");
+          user.img = imageBuffer;
+        }
       }
       viewData.message = "Login Successful";
       viewData.error = false;
