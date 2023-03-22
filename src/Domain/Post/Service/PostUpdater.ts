@@ -15,7 +15,8 @@ export class PostUpdater {
     }
 
     if (Object.keys(result).length !== 0) {
-      let dataTime = this.DateTimeToSQL();
+      let dataTime = new Date();
+
       if (create) {
         result.created_at = dataTime;
         result.created_user_id = updateBy;
@@ -24,16 +25,5 @@ export class PostUpdater {
       result.updated_user_id = updateBy;
     }
     return result;
-  }
-
-  // date formath
-  private DateTimeToSQL() {
-    let datetime = new Date(
-      new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
-    )
-      .toJSON()
-      .slice(0, 19)
-      .replace("T", " ");
-    return datetime;
   }
 }

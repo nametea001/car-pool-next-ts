@@ -6,12 +6,29 @@ export class UserRepository {
   async userInsert(data: any) {
     let resData: any = null;
     try {
-      // resData = await this.prisma.users.create({
-      //   data: {},
-      // });
+      if ("password" in data) {
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(data.password, salt);
+        data.password = hash;
+        data.user_role_id = 5;
+        data.img_path = "non_img.png";
+        data.enabled = 1;
+        data.locale = null;
+        resData = await this.prisma.users.create({
+          data: data,
+          select: {
+            // id:true,
+            username: true,
+            email: true,
+          },
+        });
+      }
     } catch (err) {
+      console.log(err);
       resData = null;
     }
+    this.prisma.$disconnect();
     return resData;
   }
 
@@ -80,6 +97,31 @@ export class UserRepository {
     return user;
   }
 
+  async findUserForCheckRegister(data: any) {
+    //  praram controll
+    let param: any[] = [];
+    if (data.user_id) {
+      param.push({ id: parseInt(data.user_id) });
+    }
+    if (data.username) {
+      param.push({ username: data.username.toString() });
+    }
+    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
+    let user: any;
+    try {
+      user = await this.prisma.users.findFirst({
+        where: whereData,
+        select: {
+          id: true,
+        },
+      });
+    } catch (err) {
+      user = null;
+    }
+    this.prisma.$disconnect();
+    return user;
+  }
+
   async checkLogin(username: string, password: string) {
     if (username !== "" && password !== "") {
       let user: any;
@@ -110,15 +152,6 @@ export class UserRepository {
       }
 
       this.prisma.$disconnect();
-      // const saltRounds = 10;
-      // let x = bcrypt.hashSync("tool", saltRounds);
-      // console.log(x);
-      // console.log(
-      //   bcrypt.compareSync(
-      //     password,
-      //     "$2b$10$IbazMriR5GYoIZFDQlLyde.M/c9WMw3dIzVBcfdXZf0YVYSBWQl2W"
-      //   )
-      // );
       if (user && bcrypt.compareSync(password, user.password)) {
         return user;
       }

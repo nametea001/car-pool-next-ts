@@ -6,16 +6,16 @@ async function editUser(req: NextApiRequest, res: NextApiResponse) {
   const dataParam: any = req.query;
   let viewData: any = {};
 
-  if (req.method === "POST") {
+  if (req.method === "POST" && dataParam.device == "mobile") {
     const data = req.body;
     const userUpdater = new UserUpdater();
-    // const user = await userUpdater.userEdit(data, userId, updateById);
+    const user = await userUpdater.userInsert(data);
     // if (user) {
     //   viewData.message = "add Users Successful";
     //   viewData.error = false;
     // //   viewData.users = user;
     // }
-    viewData.test = data;
+    viewData.user = data;
   }
   res.status(200).send(viewData);
 }

@@ -1,13 +1,26 @@
+import { create } from "domain";
 import { UserRepository } from "../Repository/UserRepository";
 
 export class UserUpdater {
   private userReposotory = new UserRepository();
 
-  userInsert(data: any) {}
+  async userInsert(data: any) {
+    let errUser: any = {};
+    let row = this.MapToRow(data, 1, true);
+    row.user_role_id = 5;
+    const checkUser = await this.userReposotory.findUserForCheckRegister(row);
+    if (!checkUser) {
+      const user = this.userReposotory.userInsert(row);
+    } else if (checkUser) {
+      errUser.err = true;
+      return errUser;
+    }
+    return null;
+  }
 
-  userEdit(data: any, userId: number, updateBy: number) {
+  async userEdit(data: any, userId: number, updateBy: number) {
     let row = this.MapToRow(data, updateBy);
-    const user = this.userReposotory.UserEdit(row, userId);
+    const user = await this.userReposotory.UserEdit(row, userId);
     return user;
   }
 
@@ -17,6 +30,9 @@ export class UserUpdater {
 
     if ("username" in data) {
       result.username = data.username;
+    }
+    if ("password" in data) {
+      result.password = data.password;
     }
     if ("first_name" in data) {
       result.first_name = data.first_name;
@@ -40,7 +56,8 @@ export class UserUpdater {
     // }
     // console.log(Object.keys(result).length === 0);
     if (Object.keys(result).length !== 0) {
-      let dataTime = this.DateTimeToSQL();
+      let dataTime = new Date();
+
       if (create) {
         result.created_at = dataTime;
         result.created_user_id = updateBy;
@@ -50,16 +67,5 @@ export class UserUpdater {
     }
 
     return result;
-  }
-
-  // date formath
-  private DateTimeToSQL() {
-    let datetime = new Date(
-      new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
-    )
-      .toJSON()
-      .slice(0, 19)
-      .replace("T", " ");
-    return datetime;
   }
 }
