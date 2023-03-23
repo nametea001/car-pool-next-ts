@@ -21,7 +21,7 @@ export class PostRepository {
           start_thai_amphures: {
             select: {
               name_th: true,
-              thai_provinces: {
+              provinces: {
                 select: {
                   id: true,
                   name_th: true,
@@ -33,7 +33,7 @@ export class PostRepository {
           end_thai_amphures: {
             select: {
               name_th: true,
-              thai_provinces: {
+              provinces: {
                 select: {
                   id: true,
                   name_th: true,

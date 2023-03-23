@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-export class ThaiProvinceRepository {
+export class ProvinceRepository {
   private prisma = new PrismaClient();
 
   async findProvinces(data: any) {
@@ -13,7 +13,7 @@ export class ThaiProvinceRepository {
 
     let provences: any;
     try {
-      provences = await this.prisma.thai_provinces.findMany({
+      provences = await this.prisma.provinces.findMany({
         where: whereData,
         select: {
           id: true,

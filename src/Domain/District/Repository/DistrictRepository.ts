@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 
-export class ThaiAumphureRepository {
+export class ThaiDistrictRepository {
   private prisma = new PrismaClient();
 
-  async findAumphures(data: any) {
+  async findDistricts(data: any) {
     //  praram controll
     let param: any[] = [];
-    if (data.aumphure_id) {
-      param.push({ id: parseInt(data.aumphure_id) });
+    if (data.district_id) {
+      param.push({ id: parseInt(data.district_id) });
     }
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
-    let aumphure: any;
+    let district: any;
     try {
-      aumphure = await this.prisma.thai_amphures.findMany({
+      district = await this.prisma.districts.findMany({
         where: whereData,
         select: {
           id: true,
@@ -23,9 +23,9 @@ export class ThaiAumphureRepository {
         },
       });
     } catch (err) {
-      aumphure = null;
+      district = null;
     }
     this.prisma.$disconnect();
-    return aumphure;
+    return district;
   }
 }

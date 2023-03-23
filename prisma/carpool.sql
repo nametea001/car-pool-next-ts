@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 18, 2023 at 05:17 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Host: localhost
+-- Generation Time: Mar 23, 2023 at 06:07 PM
+-- Server version: 8.0.32
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,15 +28,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `chats` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `chat_type` enum('PRIVATE','GROUP') NOT NULL,
-  `send_user_id` int(11) DEFAULT NULL,
-  `send_post_id` int(11) DEFAULT NULL,
+  `send_user_id` int DEFAULT NULL,
+  `send_post_id` int DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `created_user_id` int(11) NOT NULL,
+  `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -45,118 +45,37 @@ CREATE TABLE `chats` (
 --
 
 CREATE TABLE `chat_details` (
-  `id` int(11) NOT NULL,
-  `chat_id` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `chat_id` int NOT NULL,
   `msg_type` enum('MSG','LOCATION') NOT NULL,
   `msg` text NOT NULL,
   `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `created_at` datetime NOT NULL,
-  `created_user_id` int(11) NOT NULL,
+  `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `posts`
+-- Table structure for table `districts`
 --
 
-CREATE TABLE `posts` (
-  `id` int(11) NOT NULL,
-  `led_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `start_amphure_id` int(11) NOT NULL,
-  `end_amphure_id` int(11) NOT NULL,
-  `go_back` tinyint(1) DEFAULT 0,
-  `date_time_start` datetime DEFAULT NULL,
-  `date_time_back` datetime DEFAULT NULL,
-  `created_user_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL,
-  `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `posts`
---
-
-INSERT INTO `posts` (`id`, `led_lng`, `start_amphure_id`, `end_amphure_id`, `go_back`, `date_time_start`, `date_time_back`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
-(1, NULL, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `post_detail`
---
-
-CREATE TABLE `post_detail` (
-  `id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `desciption` text NOT NULL,
-  `seat` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `brand` text NOT NULL,
-  `model` text NOT NULL,
-  `vehicle_registration` text NOT NULL,
-  `color` text NOT NULL,
-  `created_at` datetime NOT NULL,
-  `created_user_id` int(11) NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pots_members`
---
-
-CREATE TABLE `pots_members` (
-  `id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `created_user_id` int(11) NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `review`
---
-
-CREATE TABLE `review` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `score` int(11) NOT NULL,
-  `created_user_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL,
-  `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `thai_amphures`
---
-
-CREATE TABLE `thai_amphures` (
-  `id` int(11) NOT NULL,
-  `name_th` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name_en` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `province_id` int(11) NOT NULL,
+CREATE TABLE `districts` (
+  `id` int NOT NULL,
+  `name_th` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_en` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `province_id` int NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `thai_amphures`
+-- Dumping data for table `districts`
 --
 
-INSERT INTO `thai_amphures` (`id`, `name_th`, `name_en`, `province_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `districts` (`id`, `name_th`, `name_en`, `province_id`, `created_at`, `updated_at`) VALUES
 (1001, 'เขตพระนคร', 'Khet Phra Nakhon', 1, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
 (1002, 'เขตดุสิต', 'Khet Dusit', 1, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
 (1003, 'เขตหนองจอก', 'Khet Nong Chok', 1, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
@@ -762,7 +681,7 @@ INSERT INTO `thai_amphures` (`id`, `name_th`, `name_en`, `province_id`, `created
 (5607, 'แม่ใจ', 'Mae Chai', 44, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
 (5608, 'ภูซาง', 'Phu Sang', 44, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
 (5609, 'ภูกามยาว', 'Phu Kamyao', 44, '2019-08-09 03:33:09', '2022-05-16 06:31:26');
-INSERT INTO `thai_amphures` (`id`, `name_th`, `name_en`, `province_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `districts` (`id`, `name_th`, `name_en`, `province_id`, `created_at`, `updated_at`) VALUES
 (5701, 'เมืองเชียงราย', 'Mueang Chiang Rai', 45, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
 (5702, 'เวียงชัย', 'Wiang Chai', 45, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
 (5703, 'เชียงของ', 'Chiang Khong', 45, '2019-08-09 03:33:09', '2022-05-16 06:31:26'),
@@ -1091,46 +1010,88 @@ INSERT INTO `thai_amphures` (`id`, `name_th`, `name_en`, `province_id`, `created
 -- --------------------------------------------------------
 
 --
--- Table structure for table `thai_geographies`
+-- Table structure for table `posts`
 --
 
-CREATE TABLE `thai_geographies` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `posts` (
+  `id` int NOT NULL,
+  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `start_amphure_id` int NOT NULL,
+  `end_amphure_id` int NOT NULL,
+  `go_back` tinyint(1) DEFAULT '0',
+  `date_time_start` datetime DEFAULT NULL,
+  `date_time_back` datetime DEFAULT NULL,
+  `created_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `thai_geographies`
+-- Dumping data for table `posts`
 --
 
-INSERT INTO `thai_geographies` (`id`, `name`) VALUES
-(1, 'ภาคเหนือ'),
-(2, 'ภาคกลาง'),
-(3, 'ภาคตะวันออกเฉียงเหนือ'),
-(4, 'ภาคตะวันตก'),
-(5, 'ภาคตะวันออก'),
-(6, 'ภาคใต้');
+INSERT INTO `posts` (`id`, `lat_lng`, `start_amphure_id`, `end_amphure_id`, `go_back`, `date_time_start`, `date_time_back`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
+(1, NULL, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `thai_provinces`
+-- Table structure for table `post_details`
 --
 
-CREATE TABLE `thai_provinces` (
-  `id` int(11) NOT NULL,
-  `name_th` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name_en` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `geography_id` int(11) NOT NULL,
+CREATE TABLE `post_details` (
+  `id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `desciption` text NOT NULL,
+  `seat` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `brand` text NOT NULL,
+  `model` text NOT NULL,
+  `vehicle_registration` text NOT NULL,
+  `color` text NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_members`
+--
+
+CREATE TABLE `post_members` (
+  `id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `provinces`
+--
+
+CREATE TABLE `provinces` (
+  `id` int NOT NULL,
+  `name_th` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_en` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geography_id` int NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `thai_provinces`
+-- Dumping data for table `provinces`
 --
 
-INSERT INTO `thai_provinces` (`id`, `name_th`, `name_en`, `geography_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `provinces` (`id`, `name_th`, `name_en`, `geography_id`, `created_at`, `updated_at`) VALUES
 (1, 'กรุงเทพมหานคร', 'Bangkok', 2, '2019-08-09 03:33:09', '2022-05-16 06:31:03'),
 (2, 'สมุทรปราการ', 'Samut Prakan', 2, '2019-08-09 03:33:09', '2022-05-16 06:31:03'),
 (3, 'นนทบุรี', 'Nonthaburi', 2, '2019-08-09 03:33:09', '2022-05-16 06:31:03'),
@@ -1212,24 +1173,63 @@ INSERT INTO `thai_provinces` (`id`, `name_th`, `name_en`, `geography_id`, `creat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `regions`
+--
+
+CREATE TABLE `regions` (
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `regions`
+--
+
+INSERT INTO `regions` (`id`, `name`) VALUES
+(1, 'ภาคเหนือ'),
+(2, 'ภาคกลาง'),
+(3, 'ภาคตะวันออกเฉียงเหนือ'),
+(4, 'ภาคตะวันตก'),
+(5, 'ภาคตะวันออก'),
+(6, 'ภาคใต้');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `score` int NOT NULL,
+  `created_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_role_id` int(11) NOT NULL DEFAULT 5,
-  `locale` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `img_path` varchar(30) COLLATE utf8mb4_unicode_ci  NULL DEFAULT 'non_img.png',
-  `enabled` tinyint(4) NOT NULL DEFAULT 1,
+  `id` int NOT NULL,
+  `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_role_id` int NOT NULL DEFAULT '5',
+  `locale` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `img_path` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'non_img.png',
+  `enabled` tinyint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT NULL,
-  `created_user_id` int(11) NOT NULL,
+  `created_user_id` int NOT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `updated_user_id` int(11) NOT NULL
+  `updated_user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1247,12 +1247,12 @@ INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `e
 --
 
 CREATE TABLE `user_roles` (
-  `id` int(11) NOT NULL,
-  `user_role_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int NOT NULL,
+  `user_role_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `cerated_user_id` int(11) NOT NULL,
+  `cerated_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_user_id` int(11) NOT NULL
+  `updated_user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 --
@@ -1287,6 +1287,13 @@ ALTER TABLE `chat_details`
   ADD KEY `chat_id` (`chat_id`);
 
 --
+-- Indexes for table `districts`
+--
+ALTER TABLE `districts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `province_id` (`province_id`);
+
+--
 -- Indexes for table `posts`
 --
 ALTER TABLE `posts`
@@ -1296,53 +1303,47 @@ ALTER TABLE `posts`
   ADD KEY `created_user_id` (`created_user_id`);
 
 --
--- Indexes for table `post_detail`
+-- Indexes for table `post_details`
 --
-ALTER TABLE `post_detail`
+ALTER TABLE `post_details`
   ADD PRIMARY KEY (`id`),
   ADD KEY `post_id` (`post_id`);
 
 --
--- Indexes for table `pots_members`
+-- Indexes for table `post_members`
 --
-ALTER TABLE `pots_members`
+ALTER TABLE `post_members`
   ADD PRIMARY KEY (`id`),
   ADD KEY `post_id` (`post_id`);
 
 --
--- Indexes for table `review`
+-- Indexes for table `provinces`
 --
-ALTER TABLE `review`
+ALTER TABLE `provinces`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `created_user_id` (`created_user_id`);
+  ADD KEY `geography_id` (`geography_id`);
 
 --
--- Indexes for table `thai_amphures`
+-- Indexes for table `regions`
 --
-ALTER TABLE `thai_amphures`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `province_id` (`province_id`);
-
---
--- Indexes for table `thai_geographies`
---
-ALTER TABLE `thai_geographies`
+ALTER TABLE `regions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `thai_provinces`
+-- Indexes for table `reviews`
 --
-ALTER TABLE `thai_provinces`
+ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `geography_id` (`geography_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `created_user_id` (`created_user_id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `users_ibfk_1` (`user_role_id`);
 
 --
 -- Indexes for table `user_roles`
@@ -1358,49 +1359,49 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `chats`
 --
 ALTER TABLE `chats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `chat_details`
 --
 ALTER TABLE `chat_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `post_detail`
+-- AUTO_INCREMENT for table `post_details`
 --
-ALTER TABLE `post_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `post_details`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `pots_members`
+-- AUTO_INCREMENT for table `post_members`
 --
-ALTER TABLE `pots_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `post_members`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `review`
+-- AUTO_INCREMENT for table `reviews`
 --
-ALTER TABLE `review`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `reviews`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -1421,43 +1422,43 @@ ALTER TABLE `chat_details`
   ADD CONSTRAINT `chat_details_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`);
 
 --
+-- Constraints for table `districts`
+--
+ALTER TABLE `districts`
+  ADD CONSTRAINT `districts_ibfk_1` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`);
+
+--
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`start_amphure_id`) REFERENCES `thai_amphures` (`id`),
-  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`end_amphure_id`) REFERENCES `thai_amphures` (`id`),
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`start_amphure_id`) REFERENCES `districts` (`id`),
+  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`end_amphure_id`) REFERENCES `districts` (`id`),
   ADD CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `post_detail`
+-- Constraints for table `post_details`
 --
-ALTER TABLE `post_detail`
-  ADD CONSTRAINT `post_detail_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
+ALTER TABLE `post_details`
+  ADD CONSTRAINT `post_details_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
 
 --
--- Constraints for table `pots_members`
+-- Constraints for table `post_members`
 --
-ALTER TABLE `pots_members`
-  ADD CONSTRAINT `pots_members_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
+ALTER TABLE `post_members`
+  ADD CONSTRAINT `post_members_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
 
 --
--- Constraints for table `review`
+-- Constraints for table `provinces`
 --
-ALTER TABLE `review`
-  ADD CONSTRAINT `review_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `provinces`
+  ADD CONSTRAINT `provinces_ibfk_1` FOREIGN KEY (`geography_id`) REFERENCES `regions` (`id`);
 
 --
--- Constraints for table `thai_amphures`
+-- Constraints for table `reviews`
 --
-ALTER TABLE `thai_amphures`
-  ADD CONSTRAINT `thai_amphures_ibfk_1` FOREIGN KEY (`province_id`) REFERENCES `thai_provinces` (`id`);
-
---
--- Constraints for table `thai_provinces`
---
-ALTER TABLE `thai_provinces`
-  ADD CONSTRAINT `thai_provinces_ibfk_1` FOREIGN KEY (`geography_id`) REFERENCES `thai_geographies` (`id`);
+ALTER TABLE `reviews`
+  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `users`

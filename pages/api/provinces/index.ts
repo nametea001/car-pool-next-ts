@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { ThaiProvinceFinder } from "../../../src/Domain/ThaiProvence/Service/ThaiProvinceFinder";
+import { ThaiProvinceFinder } from "../../../src/Domain/Province/Service/ProvinceFinder";
 
 export default async function Provinces(
   req: NextApiRequest,

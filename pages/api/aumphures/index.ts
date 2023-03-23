@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { ThaiAumphureFinder } from "../../../src/Domain/ThaiAumphure/Service/ThaiAumphureFinder";
+import { ThaiAumphureFinder } from "../../../src/Domain/District/Service/DistrictFinder";
 
 export default async function Aumphure(
   req: NextApiRequest,

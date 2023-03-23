@@ -1,7 +1,7 @@
-import { ThaiAumphureRepository } from "../Repository/ThaiAumphureRepository";
+import { ThaiDistrictRepository } from "../Repository/DistrictRepository";
 
-export class ThaiAumphureUpdater {
-  private userReposotory = new ThaiAumphureRepository();
+export class ThaiDistrictUpdater {
+  private userReposotory = new ThaiDistrictRepository();
 
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
@@ -27,6 +27,4 @@ export class ThaiAumphureUpdater {
 
     return result;
   }
-
-  
 }
