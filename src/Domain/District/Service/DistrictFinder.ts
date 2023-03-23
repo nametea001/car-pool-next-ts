@@ -1,10 +1,10 @@
-import { ThaiDistrictRepository } from "../Repository/DistrictRepository";
+import { DistrictRepository } from "../Repository/DistrictRepository";
 
-export class ThaiDistrictFinder {
-  private thaiProvenceRepository = new ThaiDistrictRepository();
+export class DistrictFinder {
+  private districtRepository = new DistrictRepository();
 
   async findDistricts(data: any) {
-    const provences = await this.thaiProvenceRepository.findDistricts(data);
+    const provences = await this.districtRepository.findDistricts(data);
     return provences;
   }
 }

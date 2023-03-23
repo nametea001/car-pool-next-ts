@@ -6,14 +6,14 @@ export class ProvinceRepository {
   async findProvinces(data: any) {
     //  praram controll
     let param: any[] = [];
-    if (data.provence_id) {
-      param.push({ id: parseInt(data.provence_id) });
+    if (data.province_id) {
+      param.push({ id: parseInt(data.province_id) });
     }
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
-    let provences: any;
+    let provinces: any;
     try {
-      provences = await this.prisma.provinces.findMany({
+      provinces = await this.prisma.provinces.findMany({
         where: whereData,
         select: {
           id: true,
@@ -22,9 +22,9 @@ export class ProvinceRepository {
         },
       });
     } catch (err) {
-      provences = null;
+      provinces = null;
     }
     this.prisma.$disconnect();
-    return provences;
+    return provinces;
   }
 }

@@ -1,10 +1,10 @@
 import { ProvinceRepository } from "../Repository/ProvinceRepository";
 
-export class  Finder {
-  private thaiProvinceRepository = new ProvinceRepository();
+export class ProvinceFinder {
+  private provinceRepository = new ProvinceRepository();
 
   async findProvinces(data: any) {
-    const provinces = await this.thaiProvinceRepository.findProvinces(data);
+    const provinces = await this.provinceRepository.findProvinces(data);
     return provinces;
   }
 }

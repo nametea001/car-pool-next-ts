@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-export class ThaiDistrictRepository {
+export class DistrictRepository {
   private prisma = new PrismaClient();
 
   async findDistricts(data: any) {

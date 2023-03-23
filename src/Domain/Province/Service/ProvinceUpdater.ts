@@ -1,7 +1,7 @@
 import { ProvinceRepository } from "../Repository/ProvinceRepository";
 
-export class ThaiProvenceUpdater {
-  private userReposotory = new ProvinceRepository();
+export class ProvenceUpdater {
+  private provinceReposotory = new ProvinceRepository();
 
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
