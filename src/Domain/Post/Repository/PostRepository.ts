@@ -17,8 +17,8 @@ export class PostRepository {
         where: whereData,
         select: {
           id: true,
-          start_amphure_id: true,
-          start_thai_amphures: {
+          start_district_id: true,
+          start_district: {
             select: {
               name_th: true,
               provinces: {
@@ -29,8 +29,8 @@ export class PostRepository {
               },
             },
           },
-          end_amphure_id: true,
-          end_thai_amphures: {
+          end_district_id: true,
+          end_district: {
             select: {
               name_th: true,
               provinces: {
@@ -44,7 +44,10 @@ export class PostRepository {
           go_back: true,
           date_time_start: true,
           date_time_back: true,
-          created_user_id: true,
+          // created_user_id: true,
+          seat: true,
+          seat_full: true,
+          price: true,
           users: {
             select: {
               img_path: true,
