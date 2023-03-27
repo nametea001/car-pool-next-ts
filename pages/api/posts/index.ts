@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { PostFinder } from "../../../src/Domain/Post/Service/PostFinder";
+import { JWT } from "../../../src/Auth/JWT";
+
 import path from "path";
 import fs from "fs";
 
@@ -10,7 +12,10 @@ export default async function handler(
 ) {
   const dataParam: any = req.query;
   let viewData: any = {};
-  if (req.method == "GET") {
+  const jwt = new JWT();
+  const token = req.headers["auth-token"];
+  const tokenVerify = jwt.verifyToken(token);
+  if (req.method == "GET" && tokenVerify) {
     const postFinder = new PostFinder();
     const posts = await postFinder.findPosts(dataParam);
     if (posts) {
@@ -34,6 +39,8 @@ export default async function handler(
       viewData.error = false;
       viewData.posts = posts;
     }
+    res.status(200).send(viewData);
+  } else {
+    res.status(400).send("Bad request");
   }
-  res.status(200).send(viewData);
 }

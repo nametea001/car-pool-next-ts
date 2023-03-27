@@ -153,6 +153,7 @@ export class UserRepository {
 
       this.prisma.$disconnect();
       if (user && bcrypt.compareSync(password, user.password)) {
+        delete user.password;
         return user;
       }
       return null;

@@ -9,11 +9,11 @@ export default async function Aumphure(
   let viewData: any = {};
   const data = req.query;
   if (req.method === "GET") {
-    const aumphureFinders = new DistrictFinder();
-    const aumphures = await aumphureFinders.findDistricts(data);
+    const districtFinders = new DistrictFinder();
+    const districts = await districtFinders.findDistricts(data);
     viewData.message = "Get Districts Successful";
     viewData.error = false;
-    viewData.aumphures = aumphures;
+    viewData.districts = districts;
   }
 
   res.status(200).send(viewData);
