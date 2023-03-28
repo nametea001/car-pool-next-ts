@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 23, 2023 at 06:07 PM
+-- Generation Time: Mar 28, 2023 at 01:40 PM
 -- Server version: 8.0.32
 -- PHP Version: 8.2.4
 
@@ -24,19 +24,38 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cars`
+--
+
+CREATE TABLE `cars` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `brand` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_registration` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `chats`
 --
 
 CREATE TABLE `chats` (
   `id` int NOT NULL,
-  `chat_type` enum('PRIVATE','GROUP') NOT NULL,
+  `chat_type` enum('PRIVATE','GROUP') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `send_user_id` int DEFAULT NULL,
   `send_post_id` int DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -47,14 +66,31 @@ CREATE TABLE `chats` (
 CREATE TABLE `chat_details` (
   `id` int NOT NULL,
   `chat_id` int NOT NULL,
-  `msg_type` enum('MSG','LOCATION') NOT NULL,
-  `msg` text NOT NULL,
-  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `msg_type` enum('MSG','LOCATION') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chat_user_logs`
+--
+
+CREATE TABLE `chat_user_logs` (
+  `id` int NOT NULL,
+  `chat_id` int NOT NULL,
+  `chat_detail_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1015,24 +1051,28 @@ INSERT INTO `districts` (`id`, `name_th`, `name_en`, `province_id`, `created_at`
 
 CREATE TABLE `posts` (
   `id` int NOT NULL,
-  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
-  `start_amphure_id` int NOT NULL,
-  `end_amphure_id` int NOT NULL,
+  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `start_district_id` int NOT NULL,
+  `end_district_id` int NOT NULL,
   `go_back` tinyint(1) DEFAULT '0',
   `date_time_start` datetime DEFAULT NULL,
   `date_time_back` datetime DEFAULT NULL,
+  `seat` int NOT NULL DEFAULT '0',
+  `seat_full` int NOT NULL DEFAULT '2',
+  `status` enum('NEW','IN_PROGRESS','DONE','CANCEL') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `lat_lng`, `start_amphure_id`, `end_amphure_id`, `go_back`, `date_time_start`, `date_time_back`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
-(1, NULL, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
+INSERT INTO `posts` (`id`, `lat_lng`, `start_district_id`, `end_district_id`, `go_back`, `date_time_start`, `date_time_back`, `seat`, `seat_full`, `status`, `price`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
+(1, NULL, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 0, 2, 'NEW', '0.00', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
 
 -- --------------------------------------------------------
 
@@ -1043,18 +1083,16 @@ INSERT INTO `posts` (`id`, `lat_lng`, `start_amphure_id`, `end_amphure_id`, `go_
 CREATE TABLE `post_details` (
   `id` int NOT NULL,
   `post_id` int NOT NULL,
-  `desciption` text NOT NULL,
-  `seat` int NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `brand` text NOT NULL,
-  `model` text NOT NULL,
-  `vehicle_registration` text NOT NULL,
-  `color` text NOT NULL,
+  `desciption` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `brand` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_registration` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1070,7 +1108,7 @@ CREATE TABLE `post_members` (
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1082,7 +1120,7 @@ CREATE TABLE `provinces` (
   `id` int NOT NULL,
   `name_th` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name_en` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `geography_id` int NOT NULL,
+  `region_id` int NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1091,7 +1129,7 @@ CREATE TABLE `provinces` (
 -- Dumping data for table `provinces`
 --
 
-INSERT INTO `provinces` (`id`, `name_th`, `name_en`, `geography_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `provinces` (`id`, `name_th`, `name_en`, `region_id`, `created_at`, `updated_at`) VALUES
 (1, 'กรุงเทพมหานคร', 'Bangkok', 2, '2019-08-09 03:33:09', '2022-05-16 06:31:03'),
 (2, 'สมุทรปราการ', 'Samut Prakan', 2, '2019-08-09 03:33:09', '2022-05-16 06:31:03'),
 (3, 'นนทบุรี', 'Nonthaburi', 2, '2019-08-09 03:33:09', '2022-05-16 06:31:03'),
@@ -1201,13 +1239,31 @@ INSERT INTO `regions` (`id`, `name`) VALUES
 
 CREATE TABLE `reviews` (
   `id` int NOT NULL,
+  `post_id` int NOT NULL,
   `user_id` int NOT NULL,
   `score` int NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `review_user_logs`
+--
+
+CREATE TABLE `review_user_logs` (
+  `id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1271,6 +1327,14 @@ INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id
 --
 
 --
+-- Indexes for table `cars`
+--
+ALTER TABLE `cars`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `created_user_id` (`created_user_id`),
+  ADD KEY `cars_ibfk_1` (`user_id`);
+
+--
 -- Indexes for table `chats`
 --
 ALTER TABLE `chats`
@@ -1287,6 +1351,15 @@ ALTER TABLE `chat_details`
   ADD KEY `chat_id` (`chat_id`);
 
 --
+-- Indexes for table `chat_user_logs`
+--
+ALTER TABLE `chat_user_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `chat_detail_id` (`chat_detail_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `districts`
 --
 ALTER TABLE `districts`
@@ -1298,8 +1371,8 @@ ALTER TABLE `districts`
 --
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `end_amphure_id` (`end_amphure_id`),
-  ADD KEY `start_amphure_id` (`start_amphure_id`),
+  ADD KEY `end_amphure_id` (`end_district_id`),
+  ADD KEY `start_amphure_id` (`start_district_id`),
   ADD KEY `created_user_id` (`created_user_id`);
 
 --
@@ -1314,14 +1387,15 @@ ALTER TABLE `post_details`
 --
 ALTER TABLE `post_members`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `post_id` (`post_id`);
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `provinces`
 --
 ALTER TABLE `provinces`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `geography_id` (`geography_id`);
+  ADD KEY `geography_id` (`region_id`);
 
 --
 -- Indexes for table `regions`
@@ -1335,7 +1409,16 @@ ALTER TABLE `regions`
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `created_user_id` (`created_user_id`);
+  ADD KEY `created_user_id` (`created_user_id`),
+  ADD KEY `post_id` (`post_id`);
+
+--
+-- Indexes for table `review_user_logs`
+--
+ALTER TABLE `review_user_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -1356,6 +1439,12 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- AUTO_INCREMENT for table `cars`
+--
+ALTER TABLE `cars`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `chats`
 --
 ALTER TABLE `chats`
@@ -1365,6 +1454,12 @@ ALTER TABLE `chats`
 -- AUTO_INCREMENT for table `chat_details`
 --
 ALTER TABLE `chat_details`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `chat_user_logs`
+--
+ALTER TABLE `chat_user_logs`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -1392,6 +1487,12 @@ ALTER TABLE `reviews`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `review_user_logs`
+--
+ALTER TABLE `review_user_logs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -1408,6 +1509,12 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- Constraints for table `cars`
+--
+ALTER TABLE `cars`
+  ADD CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Constraints for table `chats`
 --
 ALTER TABLE `chats`
@@ -1422,6 +1529,14 @@ ALTER TABLE `chat_details`
   ADD CONSTRAINT `chat_details_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`);
 
 --
+-- Constraints for table `chat_user_logs`
+--
+ALTER TABLE `chat_user_logs`
+  ADD CONSTRAINT `chat_user_logs_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `chat_user_logs_ibfk_2` FOREIGN KEY (`chat_detail_id`) REFERENCES `chat_details` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `chat_user_logs_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Constraints for table `districts`
 --
 ALTER TABLE `districts`
@@ -1431,8 +1546,8 @@ ALTER TABLE `districts`
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`start_amphure_id`) REFERENCES `districts` (`id`),
-  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`end_amphure_id`) REFERENCES `districts` (`id`),
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`start_district_id`) REFERENCES `districts` (`id`),
+  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`end_district_id`) REFERENCES `districts` (`id`),
   ADD CONSTRAINT `posts_ibfk_3` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
 
 --
@@ -1445,20 +1560,29 @@ ALTER TABLE `post_details`
 -- Constraints for table `post_members`
 --
 ALTER TABLE `post_members`
-  ADD CONSTRAINT `post_members_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
+  ADD CONSTRAINT `post_members_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
+  ADD CONSTRAINT `post_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `provinces`
 --
 ALTER TABLE `provinces`
-  ADD CONSTRAINT `provinces_ibfk_1` FOREIGN KEY (`geography_id`) REFERENCES `regions` (`id`);
+  ADD CONSTRAINT `provinces_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`);
 
 --
 -- Constraints for table `reviews`
 --
 ALTER TABLE `reviews`
   ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `reviews_ibfk_3` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `review_user_logs`
+--
+ALTER TABLE `review_user_logs`
+  ADD CONSTRAINT `review_user_logs_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `review_user_logs_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `users`

@@ -7,66 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model posts {
-  id                Int            @id @default(autoincrement())
-  lat_lng           String?        @db.LongText
-  start_district_id Int
-  end_district_id   Int
-  go_back           Boolean?       @default(false)
-  date_time_start   DateTime?      @db.DateTime(0)
-  date_time_back    DateTime?      @db.DateTime(0)
-  seat              Int            @default(2)
-  seat_full         Int
-  price             Decimal        @db.Decimal(10, 2)
-  created_user_id   Int
-  created_at        DateTime       @db.DateTime(0)
-  updated_user_id   Int
-  updated_at        DateTime       @db.DateTime(0)
-  chats             chats[]
-  post_details      post_details[]
-  post_members      post_members[]
-  start_district    districts      @relation("posts_start_district_idTodistricts", fields: [start_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
-  end_district      districts      @relation("posts_end_district_idTodistricts", fields: [end_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_2")
-  users             users          @relation(fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_3")
+model cars {
+  id                   Int      @id @default(autoincrement())
+  user_id              Int
+  brand                String   @db.Text
+  model                String   @db.Text
+  vehicle_registration String   @db.Text
+  color                String   @db.Text
+  created_user_id      Int
+  created_at           DateTime @db.DateTime(0)
+  updated_user_id      Int
+  updated_at           DateTime @db.DateTime(0)
+  users                users    @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "cars_ibfk_1")
 
+  @@index([user_id], map: "cars_ibfk_1")
   @@index([created_user_id], map: "created_user_id")
-  @@index([end_district_id], map: "end_amphure_id")
-  @@index([start_district_id], map: "start_amphure_id")
-}
-
-model user_roles {
-  id              Int      @id @default(autoincrement())
-  user_role_name  String   @db.VarChar(100)
-  created_at      DateTime @db.DateTime(0)
-  cerated_user_id Int
-  updated_at      DateTime @db.DateTime(0)
-  updated_user_id Int
-  users           users[]
-}
-
-model users {
-  id                                     Int        @id @default(autoincrement())
-  username                               String     @unique(map: "username") @db.VarChar(100)
-  password                               String     @db.VarChar(100)
-  first_name                             String?    @db.VarChar(100)
-  last_name                              String?    @db.VarChar(100)
-  email                                  String     @db.VarChar(30)
-  user_role_id                           Int        @default(5)
-  locale                                 String?    @db.Text
-  img_path                               String?    @default("non_img.png") @db.VarChar(30)
-  enabled                                Int        @default(1) @db.TinyInt
-  created_at                             DateTime?  @db.DateTime(0)
-  created_user_id                        Int
-  updated_at                             DateTime?  @db.DateTime(0)
-  updated_user_id                        Int
-  chats_chats_created_user_idTousers     chats[]    @relation("chats_created_user_idTousers")
-  chats_chats_send_user_idTousers        chats[]    @relation("chats_send_user_idTousers")
-  posts                                  posts[]
-  reviews_reviews_user_idTousers         reviews[]  @relation("reviews_user_idTousers")
-  reviews_reviews_created_user_idTousers reviews[]  @relation("reviews_created_user_idTousers")
-  user_roles                             user_roles @relation(fields: [user_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
-
-  @@index([user_role_id], map: "users_ibfk_1")
 }
 
 model chat_details {
@@ -80,23 +35,43 @@ model chat_details {
   updated_at      DateTime              @db.DateTime(0)
   updated_user_id Int
   chats           chats                 @relation(fields: [chat_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chat_details_ibfk_1")
+  chat_user_logs  chat_user_logs[]
 
   @@index([chat_id], map: "chat_id")
 }
 
+model chat_user_logs {
+  id              Int          @id @default(autoincrement())
+  chat_id         Int
+  chat_detail_id  Int
+  user_id         Int
+  created_at      DateTime     @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime     @db.DateTime(0)
+  updated_user_id Int
+  chats           chats        @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_1")
+  chat_details    chat_details @relation(fields: [chat_detail_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_2")
+  users           users        @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_3")
+
+  @@index([chat_detail_id], map: "chat_detail_id")
+  @@index([chat_id], map: "chat_id")
+  @@index([user_id], map: "user_id")
+}
+
 model chats {
-  id                                 Int             @id @default(autoincrement())
+  id                                 Int              @id @default(autoincrement())
   chat_type                          chats_chat_type
   send_user_id                       Int?
   send_post_id                       Int?
-  created_at                         DateTime        @db.DateTime(0)
+  created_at                         DateTime         @db.DateTime(0)
   created_user_id                    Int
-  updated_at                         DateTime        @db.DateTime(0)
+  updated_at                         DateTime         @db.DateTime(0)
   updated_user_id                    Int
   chat_details                       chat_details[]
-  users_chats_created_user_idTousers users           @relation("chats_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_1")
-  users_chats_send_user_idTousers    users?          @relation("chats_send_user_idTousers", fields: [send_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_2")
-  posts                              posts?          @relation(fields: [send_post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_3")
+  chat_user_logs                     chat_user_logs[]
+  users_chats_created_user_idTousers users            @relation("chats_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_1")
+  users_chats_send_user_idTousers    users?           @relation("chats_send_user_idTousers", fields: [send_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_2")
+  posts                              posts?           @relation(fields: [send_post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([send_post_id], map: "send_post_id")
@@ -143,8 +118,40 @@ model post_members {
   updated_at      DateTime @db.DateTime(0)
   updated_user_id Int
   posts           posts    @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_members_ibfk_1")
+  users           users    @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "post_members_ibfk_2")
 
   @@index([post_id], map: "post_id")
+  @@index([user_id], map: "user_id")
+}
+
+model posts {
+  id                Int                @id @default(autoincrement())
+  lat_lng           String?            @db.LongText
+  start_district_id Int
+  end_district_id   Int
+  go_back           Boolean?           @default(false)
+  date_time_start   DateTime?          @db.DateTime(0)
+  date_time_back    DateTime?          @db.DateTime(0)
+  seat              Int                @default(0)
+  seat_full         Int                @default(2)
+  status            posts_status
+  price             Decimal            @db.Decimal(10, 2)
+  created_user_id   Int
+  created_at        DateTime           @db.DateTime(0)
+  updated_user_id   Int
+  updated_at        DateTime           @db.DateTime(0)
+  chats             chats[]
+  post_details      post_details[]
+  post_members      post_members[]
+  start_district    districts          @relation("posts_start_district_idTodistricts", fields: [start_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
+  end_district      districts          @relation("posts_end_district_idTodistricts", fields: [end_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_2")
+  users             users              @relation(fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_3")
+  review_user_logs  review_user_logs[]
+  reviews           reviews[]
+
+  @@index([created_user_id], map: "created_user_id")
+  @@index([end_district_id], map: "end_amphure_id")
+  @@index([start_district_id], map: "start_amphure_id")
 }
 
 model provinces {
@@ -166,19 +173,77 @@ model regions {
   provinces provinces[]
 }
 
+model review_user_logs {
+  id              Int      @id @default(autoincrement())
+  post_id         Int
+  user_id         Int
+  created_at      DateTime @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime @db.DateTime(0)
+  updated_user_id Int
+  posts           posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "review_user_logs_ibfk_1")
+  users           users    @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "review_user_logs_ibfk_2")
+
+  @@index([post_id], map: "post_id")
+  @@index([user_id], map: "user_id")
+}
+
 model reviews {
   id                                   Int      @id @default(autoincrement())
+  post_id                              Int
   user_id                              Int
   score                                Int
+  description                          String   @db.Text
   created_user_id                      Int
   created_at                           DateTime @db.DateTime(0)
   updated_user_id                      Int
   updated_at                           DateTime @db.DateTime(0)
   users_reviews_user_idTousers         users    @relation("reviews_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_1")
   users_reviews_created_user_idTousers users    @relation("reviews_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_2")
+  posts                                posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "reviews_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
+  @@index([post_id], map: "post_id")
   @@index([user_id], map: "user_id")
+}
+
+model user_roles {
+  id              Int      @id @default(autoincrement())
+  user_role_name  String   @db.VarChar(100)
+  created_at      DateTime @db.DateTime(0)
+  cerated_user_id Int
+  updated_at      DateTime @db.DateTime(0)
+  updated_user_id Int
+  users           users[]
+}
+
+model users {
+  id                                     Int                @id @default(autoincrement())
+  username                               String             @unique(map: "username") @db.VarChar(100)
+  password                               String             @db.VarChar(100)
+  first_name                             String?            @db.VarChar(100)
+  last_name                              String?            @db.VarChar(100)
+  email                                  String             @db.VarChar(30)
+  user_role_id                           Int                @default(5)
+  locale                                 String?            @db.Text
+  img_path                               String?            @default("non_img.png") @db.VarChar(30)
+  enabled                                Int                @default(1) @db.TinyInt
+  created_at                             DateTime?          @db.DateTime(0)
+  created_user_id                        Int
+  updated_at                             DateTime?          @db.DateTime(0)
+  updated_user_id                        Int
+  cars                                   cars[]
+  chat_user_logs                         chat_user_logs[]
+  chats_chats_created_user_idTousers     chats[]            @relation("chats_created_user_idTousers")
+  chats_chats_send_user_idTousers        chats[]            @relation("chats_send_user_idTousers")
+  post_members                           post_members[]
+  posts                                  posts[]
+  review_user_logs                       review_user_logs[]
+  reviews_reviews_user_idTousers         reviews[]          @relation("reviews_user_idTousers")
+  reviews_reviews_created_user_idTousers reviews[]          @relation("reviews_created_user_idTousers")
+  user_roles                             user_roles         @relation(fields: [user_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+
+  @@index([user_role_id], map: "users_ibfk_1")
 }
 
 enum chats_chat_type {
@@ -189,4 +254,11 @@ enum chats_chat_type {
 enum chat_details_msg_type {
   MSG
   LOCATION
+}
+
+enum posts_status {
+  NEW
+  IN_PROGRESS
+  DONE
+  CANCEL
 }

@@ -3,10 +3,10 @@ import { sign, verify, Secret } from "jsonwebtoken";
 export class JWT {
   createToken(user: any) {
     try {
-      delete user.locale;
-      delete user.img_path;
-      delete user.first_name;
-      delete user.last_name;
+      // delete user.locale;
+      // delete user.img_path;
+      // delete user.first_name;
+      // delete user.last_name;
       return sign(user, process.env.NEXTAUTH_SECRET as Secret);
     } catch (err) {
       console.log(err);

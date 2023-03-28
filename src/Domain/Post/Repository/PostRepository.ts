@@ -44,7 +44,7 @@ export class PostRepository {
           go_back: true,
           date_time_start: true,
           date_time_back: true,
-          // created_user_id: true,
+          created_user_id: true,
           seat: true,
           seat_full: true,
           price: true,
