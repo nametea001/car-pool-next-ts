@@ -14,11 +14,15 @@ export default async function Aumphure(
   const tokenVerify = jwt.verifyToken(token);
   if (req.method === "GET" && tokenVerify) {
     const districtFinders = new DistrictFinder();
-    const districts = await districtFinders.findDistricts(data);
-    viewData.message = "Get Districts Successful";
-    viewData.error = false;
-    viewData.districts = districts;
-    res.status(200).send(viewData);
+    const district = await districtFinders.findDistrictByName(data);
+    if (district) {
+      viewData.message = "Get Districts Successful";
+      viewData.error = false;
+      viewData.district = district;
+      res.status(200).send(viewData);
+    } else {
+      res.status(401).send("null data");
+    }
   } else {
     res.status(400).send("Bad requie");
   }
