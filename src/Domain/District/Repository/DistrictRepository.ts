@@ -39,9 +39,7 @@ export class DistrictRepository {
     if (data.name_en) {
       param.push({ name_en: data.name_en });
     }
-    if (data.name_th) {
-      param.push({ name_en: data.name_th });
-    }
+   
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let district: any;
