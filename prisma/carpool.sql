@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 28, 2023 at 01:40 PM
+-- Generation Time: Apr 04, 2023 at 04:24 PM
 -- Server version: 8.0.32
 -- PHP Version: 8.2.4
 
@@ -68,7 +68,7 @@ CREATE TABLE `chat_details` (
   `chat_id` int NOT NULL,
   `msg_type` enum('MSG','LOCATION') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lat_lng` json NOT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1051,28 +1051,19 @@ INSERT INTO `districts` (`id`, `name_th`, `name_en`, `province_id`, `created_at`
 
 CREATE TABLE `posts` (
   `id` int NOT NULL,
-  `lat_lng` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `name_start` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_end` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_district_id` int NOT NULL,
   `end_district_id` int NOT NULL,
   `go_back` tinyint(1) DEFAULT '0',
   `date_time_start` datetime DEFAULT NULL,
   `date_time_back` datetime DEFAULT NULL,
-  `seat` int NOT NULL DEFAULT '0',
-  `seat_full` int NOT NULL DEFAULT '2',
   `status` enum('NEW','IN_PROGRESS','DONE','CANCEL') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` decimal(10,2) NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `posts`
---
-
-INSERT INTO `posts` (`id`, `lat_lng`, `start_district_id`, `end_district_id`, `go_back`, `date_time_start`, `date_time_back`, `seat`, `seat_full`, `status`, `price`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
-(1, NULL, 1001, 1002, 0, '2023-02-03 00:34:49', '2023-02-16 00:35:43', 0, 2, 'NEW', '0.00', 1, '2023-02-07 21:44:27', 1, '2023-02-07 21:44:27');
 
 -- --------------------------------------------------------
 
@@ -1083,7 +1074,11 @@ INSERT INTO `posts` (`id`, `lat_lng`, `start_district_id`, `end_district_id`, `g
 CREATE TABLE `post_details` (
   `id` int NOT NULL,
   `post_id` int NOT NULL,
-  `desciption` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lat_lng_start` json NOT NULL,
+  `lat_lng_end` json NOT NULL,
+  `seat` int NOT NULL DEFAULT '1',
+  `price` decimal(10,2) NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `brand` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `model` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `vehicle_registration` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1281,6 +1276,7 @@ CREATE TABLE `users` (
   `user_role_id` int NOT NULL DEFAULT '5',
   `locale` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `img_path` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'non_img.png',
+  `sex` enum('Male','Famale') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `enabled` tinyint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT NULL,
   `created_user_id` int NOT NULL,
@@ -1292,9 +1288,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
-(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', '1.jpg', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
-(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
+INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `sex`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
+(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', '1.jpg', 'Male', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
+(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 'Male', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
 
 -- --------------------------------------------------------
 
@@ -1466,7 +1462,7 @@ ALTER TABLE `chat_user_logs`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `post_details`

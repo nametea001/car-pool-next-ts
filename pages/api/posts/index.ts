@@ -6,7 +6,7 @@ import { JWT } from "../../../src/Auth/JWT";
 import path from "path";
 import fs from "fs";
 
-export default async function handler(
+export default async function getPosts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -38,8 +38,10 @@ export default async function handler(
       viewData.message = "Get Post Successful";
       viewData.error = false;
       viewData.posts = posts;
+      res.status(200).send(viewData);
+    } else {
+      res.status(401).send("Null data");
     }
-    res.status(200).send(viewData);
   } else {
     res.status(400).send("Bad request");
   }

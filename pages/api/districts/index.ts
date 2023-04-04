@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { DistrictFinder } from "../../../src/Domain/District/Service/DistrictFinder";
 import { JWT } from "../../../src/Auth/JWT";
 
-export default async function Aumphure(
+export default async function getDistrict(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

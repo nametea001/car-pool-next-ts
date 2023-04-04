@@ -29,7 +29,7 @@ model chat_details {
   chat_id         Int
   msg_type        chat_details_msg_type
   msg             String                @db.Text
-  lat_lng         String                @db.LongText
+  lat_lng         Json
   created_at      DateTime              @db.DateTime(0)
   created_user_id Int
   updated_at      DateTime              @db.DateTime(0)
@@ -95,7 +95,11 @@ model districts {
 model post_details {
   id                   Int      @id @default(autoincrement())
   post_id              Int
-  desciption           String   @db.Text
+  lat_lng_start        Json
+  lat_lng_end          Json
+  seat                 Int      @default(1)
+  price                Decimal  @db.Decimal(10, 2)
+  description          String?  @db.Text
   brand                String   @db.Text
   model                String   @db.Text
   vehicle_registration String   @db.Text
@@ -126,16 +130,14 @@ model post_members {
 
 model posts {
   id                Int                @id @default(autoincrement())
-  lat_lng           String?            @db.LongText
+  name_start        String             @db.Text
+  name_end          String             @db.Text
   start_district_id Int
   end_district_id   Int
   go_back           Boolean?           @default(false)
   date_time_start   DateTime?          @db.DateTime(0)
   date_time_back    DateTime?          @db.DateTime(0)
-  seat              Int                @default(0)
-  seat_full         Int                @default(2)
   status            posts_status
-  price             Decimal            @db.Decimal(10, 2)
   created_user_id   Int
   created_at        DateTime           @db.DateTime(0)
   updated_user_id   Int
@@ -227,6 +229,7 @@ model users {
   user_role_id                           Int                @default(5)
   locale                                 String?            @db.Text
   img_path                               String?            @default("non_img.png") @db.VarChar(30)
+  sex                                    users_sex
   enabled                                Int                @default(1) @db.TinyInt
   created_at                             DateTime?          @db.DateTime(0)
   created_user_id                        Int
@@ -251,14 +254,19 @@ enum chats_chat_type {
   GROUP
 }
 
-enum chat_details_msg_type {
-  MSG
-  LOCATION
-}
-
 enum posts_status {
   NEW
   IN_PROGRESS
   DONE
   CANCEL
+}
+
+enum chat_details_msg_type {
+  MSG
+  LOCATION
+}
+
+enum users_sex {
+  Male
+  Famale
 }

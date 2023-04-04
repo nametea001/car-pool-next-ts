@@ -1,6 +1,6 @@
 import { DistrictRepository } from "../Repository/DistrictRepository";
 
-export class ThaiDistrictUpdater {
+export class DistrictUpdater {
   private districtReposotory = new DistrictRepository();
 
   // map to DB

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { UserUpdater } from "../../../src/Domain/User/Service/UserUpdater";
 
-async function editUser(req: NextApiRequest, res: NextApiResponse) {
+async function addUser(req: NextApiRequest, res: NextApiResponse) {
   const dataParam: any = req.query;
   let viewData: any = {};
 
@@ -20,4 +20,4 @@ async function editUser(req: NextApiRequest, res: NextApiResponse) {
   res.status(200).send(viewData);
 }
 
-export default editUser;
+export default addUser;

@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ProvinceFinder } from "../../../src/Domain/Province/Service/ProvinceFinder";
 import { JWT } from "../../../src/Auth/JWT";
 
-export default async function Provinces(
+export default async function getProvinces(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
