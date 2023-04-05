@@ -4,9 +4,6 @@ import { PostFinder } from "../../../src/Domain/Post/Service/PostFinder";
 import { PostUpdater } from "../../../src/Domain/Post/Service/PostUpdater";
 import { JWT } from "../../../src/Auth/JWT";
 
-import path from "path";
-import fs from "fs";
-
 export default async function addPost(
   req: NextApiRequest,
   res: NextApiResponse

@@ -1,7 +1,7 @@
 import { PostDetailRepository } from "../Repository/PostDetailRepository";
 
 export class PostDetailUpdater {
-  private districtReposotory = new PostDetailRepository();
+  private postDetailReposotory = new PostDetailRepository();
 
   // map to DB
   MapToRow(data: any, updateBy: number, create: boolean = false) {

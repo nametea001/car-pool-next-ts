@@ -1,21 +1,16 @@
 import { PostDetailRepository } from "../Repository/PostDetailRepository";
 
 export class PostDetailFinder {
-  private districtRepository = new PostDetailRepository();
+  private postDetailRepository = new PostDetailRepository();
 
   async findPostDetails(data: any) {
-    const provences = await this.districtRepository.findPostDetails(data);
-    return provences;
+    const postDetails = await this.postDetailRepository.findPostDetails(data);
+    return postDetails;
   }
-  async findPostDetailByName(data: any) {
-    const provences = await this.districtRepository.findPostDetailByName(data);
-    return provences;
-  }
-
-  async findPostDetailByProvinceName(data: any) {
-    const provences = await this.districtRepository.findPostDetailByProvinceName(
+  async findPostDetailByPostID(data: any) {
+    const postDetails = await this.postDetailRepository.findPostDetailByPostID(
       data
     );
-    return provences;
+    return postDetails;
   }
 }

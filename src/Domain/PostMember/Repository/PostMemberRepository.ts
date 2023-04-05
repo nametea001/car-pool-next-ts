@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
-export class PostDetailRepository {
+export class PostMemberRepository {
   private prisma = new PrismaClient();
 
-  async findPostDetails(data: any) {
+  async findPostMembers(data: any) {
     //  praram controll
     let param: any[] = [];
     if (data.district_id) {
@@ -14,23 +14,28 @@ export class PostDetailRepository {
     }
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
-    let post_detail: any;
+    let district: any;
     try {
-      post_detail = await this.prisma.post_details.findMany({
+      district = await this.prisma.districts.findMany({
         where: whereData,
-        select: {},
+        select: {
+          id: true,
+          name_th: true,
+          name_en: true,
+          province_id: true,
+        },
       });
     } catch (err) {
-      post_detail = null;
+      district = null;
     }
     this.prisma.$disconnect();
-    return post_detail;
+    return district;
   }
 
-  async findPostDetailByPostID(data: any) {
-    let post_detail: any;
+  async findPostMemberByPostID(data: any) {
+    let district: any;
     try {
-      post_detail = await this.prisma.post_details.findFirst({
+      district = await this.prisma.post_details.findFirst({
         where: data,
         select: {
           id: true,
@@ -48,9 +53,9 @@ export class PostDetailRepository {
         },
       });
     } catch (err) {
-      post_detail = null;
+      district = null;
     }
     this.prisma.$disconnect();
-    return post_detail;
+    return district;
   }
 }

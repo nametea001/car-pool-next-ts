@@ -85,6 +85,9 @@ export class PostRepository {
           date_time_start: true,
           date_time_back: true,
           post_details: {
+            orderBy: {
+              created_at: "desc",
+            },
             select: {
               lat_lng_start: true,
               lat_lng_end: true,
@@ -149,6 +152,7 @@ export class PostRepository {
           date_time_start: true,
           date_time_back: true,
           created_user_id: true,
+          status: true,
           post_details: {
             select: {
               seat: true,

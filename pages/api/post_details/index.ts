@@ -3,8 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PostFinder } from "../../../src/Domain/Post/Service/PostFinder";
 import { JWT } from "../../../src/Auth/JWT";
 
-import path from "path";
-import fs from "fs";
 
 export default async function getPostDetails(
   req: NextApiRequest,
