@@ -7,6 +7,7 @@ export class PostRepository {
   async addPostAndPostDetail(dataPost: any, dataPostdetail: any) {
     let posts: any = null;
     let dataInsert: any = null;
+
     {
       if (dataPost.go_back) {
         dataInsert = {
@@ -15,8 +16,8 @@ export class PostRepository {
           start_district_id: dataPost.start_district_id,
           end_district_id: dataPost.end_district_id,
           go_back: dataPost.go_back,
-          date_time_start: new Date(dataPost.date_time_start),
-          date_time_back: new Date(dataPost.date_time_back),
+          date_time_start: this._timeBankokToDB(dataPost.date_time_start),
+          date_time_back: this._timeBankokToDB(dataPost.date_time_back),
           status: "NEW",
           created_user_id: dataPost.created_user_id,
           created_at: dataPost.created_at,
@@ -47,7 +48,7 @@ export class PostRepository {
           start_district_id: dataPost.start_district_id,
           end_district_id: dataPost.end_district_id,
           go_back: dataPost.go_back,
-          date_time_start: new Date(dataPost.date_time_start),
+          date_time_start: this._timeBankokToDB(dataPost.date_time_start),
           date_time_back: null,
           status: "NEW",
           created_user_id: dataPost.created_user_id,
@@ -81,6 +82,8 @@ export class PostRepository {
           name_start: true,
           name_end: true,
           go_back: true,
+          date_time_start: true,
+          date_time_back: true,
           post_details: {
             select: {
               lat_lng_start: true,
@@ -169,5 +172,11 @@ export class PostRepository {
     }
     this.prisma.$disconnect();
     return posts;
+  }
+
+  _timeBankokToDB(dateTime: any) {
+    let dateTimeFormat = new Date(dateTime);
+    dateTimeFormat.setHours(dateTimeFormat.getHours() + 7);
+    return dateTimeFormat;
   }
 }

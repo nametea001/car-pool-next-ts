@@ -16,6 +16,7 @@ export class DistrictUpdater {
 
     if (Object.keys(result).length !== 0) {
       let dataTime = new Date();
+      dataTime.setHours(dataTime.getHours() + 7);
 
       if (create) {
         result.created_at = dataTime;
