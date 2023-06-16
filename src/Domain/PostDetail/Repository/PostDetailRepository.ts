@@ -53,4 +53,41 @@ export class PostDetailRepository {
     this.prisma.$disconnect();
     return post_detail;
   }
+
+  async findPostDetailByPostIDAndFindPostMember(data: any) {
+    let post_detail: any;
+    try {
+      post_detail = await this.prisma.post_details.findFirst({
+        where: data,
+        select: {
+          id: true,
+          post_id: true,
+          lat_lng_start: true,
+          lat_lng_end: true,
+          seat: true,
+          price: true,
+          description: true,
+          brand: true,
+          model: true,
+          vehicle_registration: true,
+          color: true,
+          // created_user_id: true,
+
+          posts: {
+            select: {
+              post_members: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (err) {
+      post_detail = null;
+    }
+    this.prisma.$disconnect();
+    return post_detail;
+  }
 }

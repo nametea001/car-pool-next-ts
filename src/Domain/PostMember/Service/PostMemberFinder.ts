@@ -7,8 +7,8 @@ export class PostMemberFinder {
     const postDetails = await this.postDetailRepository.findPostMembers(data);
     return postDetails;
   }
-  async findPostMemberByPostID(data: any) {
-    const postDetails = await this.postDetailRepository.findPostMemberByPostID(
+  async findPostMemberForCheckJoin(data: any) {
+    const postDetails = await this.postDetailRepository.findPostMemberForCheckJoin(
       data
     );
     return postDetails;

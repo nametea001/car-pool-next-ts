@@ -6,56 +6,50 @@ export class PostMemberRepository {
   async findPostMembers(data: any) {
     //  praram controll
     let param: any[] = [];
-    if (data.district_id) {
-      param.push({ id: parseInt(data.district_id) });
+    if (data.postMember_id) {
+      param.push({ id: parseInt(data.postMember_id) });
     }
     if (data.name_en) {
       param.push({ name_en: data.name_en });
     }
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
-    let district: any;
+    let postMember: any;
     try {
-      district = await this.prisma.districts.findMany({
+      postMember = await this.prisma.post_members.findMany({
         where: whereData,
-        select: {
-          id: true,
-          name_th: true,
-          name_en: true,
-          province_id: true,
-        },
+        select: {},
       });
     } catch (err) {
-      district = null;
+      postMember = null;
     }
     this.prisma.$disconnect();
-    return district;
+    return postMember;
   }
 
-  async findPostMemberByPostID(data: any) {
-    let district: any;
+  async findPostMemberForCheckJoin(data: any) {
+    let postMember: any;
     try {
-      district = await this.prisma.post_details.findFirst({
+      postMember = await this.prisma.post_members.findMany({
+        // where: {
+        //   AND: {
+        //     post_id: data.post_id,
+        //     NOT: {
+        //       user_id: data.user_id,
+        //     },
+        //   },
+        // },
         where: data,
         select: {
           id: true,
           post_id: true,
-          lat_lng_start: true,
-          lat_lng_end: true,
-          seat: true,
-          price: true,
-          description: true,
-          brand: true,
-          model: true,
-          vehicle_registration: true,
-          color: true,
-          // created_user_id: true,
+          user_id: true,
         },
       });
     } catch (err) {
-      district = null;
+      postMember = null;
     }
     this.prisma.$disconnect();
-    return district;
+    return postMember;
   }
 }
