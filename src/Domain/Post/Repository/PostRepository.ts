@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { now } from "next-auth/client/_utils";
 
 export class PostRepository {
   private prisma = new PrismaClient();
@@ -9,13 +8,13 @@ export class PostRepository {
     let dataInsert: any = null;
 
     {
-      if (dataPost.go_back) {
+      if (dataPost.is_back) {
         dataInsert = {
           name_start: dataPost.name_start,
           name_end: dataPost.name_end,
           start_district_id: dataPost.start_district_id,
           end_district_id: dataPost.end_district_id,
-          go_back: dataPost.go_back,
+          is_back: dataPost.is_back,
           date_time_start: this._timeBankokToDB(dataPost.date_time_start),
           date_time_back: this._timeBankokToDB(dataPost.date_time_back),
           status: "NEW",
@@ -47,7 +46,7 @@ export class PostRepository {
           name_end: dataPost.name_end,
           start_district_id: dataPost.start_district_id,
           end_district_id: dataPost.end_district_id,
-          go_back: dataPost.go_back,
+          is_back: dataPost.is_back,
           date_time_start: this._timeBankokToDB(dataPost.date_time_start),
           date_time_back: null,
           status: "NEW",
@@ -81,7 +80,7 @@ export class PostRepository {
         select: {
           name_start: true,
           name_end: true,
-          go_back: true,
+          is_back: true,
           date_time_start: true,
           date_time_back: true,
           post_details: {
@@ -111,15 +110,65 @@ export class PostRepository {
   async findPosts(data: any) {
     //  praram controll
     let param: any[] = [];
-    if (data.post_id) {
-      param.push({ id: parseInt(data.post_id) });
+
+    param.push({
+      status: "NEW",
+    });
+
+    param.push({
+      is_back: data.is_back === "true",
+    });
+
+    param.push({
+      date_time_start: {
+        gte: new Date(data.date_time_start),
+      },
+    });
+
+    if (data.date_time_back !== "" && data.is_back === "true") {
+      param.push({
+        date_time_back: {
+          gte: new Date(data.date_time_back),
+        },
+      });
     }
-    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
+
+    // start all district or only district
+    if (parseInt(data.start_district_id) !== 0) {
+      param.push({
+        start_district_id: data.start_district_id,
+      });
+    } else {
+      param.push({
+        start_district: {
+          province_id: parseInt(data.start_province_id),
+        },
+      });
+    }
+
+    // end all district or only district or region
+    if (parseInt(data.end_district_id) !== 0) {
+      param.push({
+        end_district_id: data.end_district_id,
+      });
+    } else if (parseInt(data.end_province_id) !== 0) {
+      param.push({
+        end_district: {
+          end_district_id: parseInt(data.end_district_id),
+        },
+      });
+    }
+
+    // if (data.post_id) {
+    //   param.push({ id: parseInt(data.post_id) });
+    // }
+    // let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
+    let whereData = {};
 
     let posts: any;
     try {
       posts = await this.prisma.posts.findMany({
-        where: whereData,
+        where: {},
         select: {
           id: true,
           name_start: true,
@@ -148,7 +197,7 @@ export class PostRepository {
           //     },
           //   },
           // },
-          go_back: true,
+          is_back: true,
           date_time_start: true,
           date_time_back: true,
           created_user_id: true,

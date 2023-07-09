@@ -17,6 +17,8 @@ export default async function getPosts(
   const tokenVerify = jwt.verifyToken(token);
   if (req.method == "GET" && tokenVerify) {
     const postFinder = new PostFinder();
+
+    
     const posts = await postFinder.findPosts(dataParam);
     if (posts) {
       if (dataParam.device == "mobile") {
