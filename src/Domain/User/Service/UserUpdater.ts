@@ -11,6 +11,7 @@ export class UserUpdater {
     const checkUser = await this.userReposotory.findUserForCheckRegister(row);
     if (!checkUser) {
       const user = this.userReposotory.userInsert(row);
+      return user;
     } else if (checkUser) {
       errUser.err = true;
       return errUser;

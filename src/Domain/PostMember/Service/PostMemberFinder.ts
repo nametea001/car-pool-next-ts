@@ -8,9 +8,8 @@ export class PostMemberFinder {
     return postDetails;
   }
   async findPostMemberForCheckJoin(data: any) {
-    const postDetails = await this.postDetailRepository.findPostMemberForCheckJoin(
-      data
-    );
+    const postDetails =
+      await this.postDetailRepository.findPostMemberForCheckJoin(data);
     return postDetails;
   }
 }

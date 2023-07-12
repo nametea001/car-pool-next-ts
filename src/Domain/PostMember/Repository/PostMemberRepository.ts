@@ -3,6 +3,22 @@ import { PrismaClient } from "@prisma/client";
 export class PostMemberRepository {
   private prisma = new PrismaClient();
 
+  async postMemberInsert(data: any) {
+    let postMember: any;
+    try {
+      postMember = this.prisma.post_members.create({
+        data: data,
+        select: {
+          id: true,
+        },
+      });
+      return postMember;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
+
   async findPostMembers(data: any) {
     //  praram controll
     let param: any[] = [];
@@ -44,6 +60,15 @@ export class PostMemberRepository {
           id: true,
           post_id: true,
           user_id: true,
+          posts: {
+            select: {
+              post_details: {
+                select: {
+                  seat: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (err) {

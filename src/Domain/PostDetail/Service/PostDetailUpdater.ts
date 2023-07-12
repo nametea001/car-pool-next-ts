@@ -4,6 +4,7 @@ export class PostDetailUpdater {
   private postDetailReposotory = new PostDetailRepository();
 
   // map to DB
+  // don't private for check from update post and postdetail
   MapToRow(data: any, updateBy: number, create: boolean = false) {
     let result: any = {};
 

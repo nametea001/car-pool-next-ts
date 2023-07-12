@@ -15,12 +15,12 @@ export default async function getPostDetails(
   const tokenVerify = jwt.verifyToken(token);
   if (req.method == "GET" && tokenVerify) {
     const postFinder = new PostMemberFinder();
-    let whereData = { user_id: Number(dataParam.user_id) };
+    let whereData = { post_id: Number(dataParam.post_id) };
     const postMember = await postFinder.findPostMemberForCheckJoin(whereData);
     if (postMember) {
       viewData.message = "Get Post Member Successful";
       viewData.error = false;
-      viewData.post_member = postMember;
+      viewData.post_members = postMember;
       res.status(200).send(viewData);
     } else {
       res.status(401).send("Null data");
