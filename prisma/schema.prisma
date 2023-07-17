@@ -191,18 +191,18 @@ model review_user_logs {
 }
 
 model reviews {
-  id                                   Int      @id @default(autoincrement())
-  post_id                              Int
-  user_id                              Int
-  score                                Int
-  description                          String   @db.Text
-  created_user_id                      Int
-  created_at                           DateTime @db.DateTime(0)
-  updated_user_id                      Int
-  updated_at                           DateTime @db.DateTime(0)
-  users_reviews_user_idTousers         users    @relation("reviews_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_1")
-  users_reviews_created_user_idTousers users    @relation("reviews_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_2")
-  posts                                posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "reviews_ibfk_3")
+  id                    Int      @id @default(autoincrement())
+  post_id               Int
+  user_id               Int
+  score                 Int
+  description           String   @db.Text
+  created_user_id       Int
+  created_at            DateTime @db.DateTime(0)
+  updated_user_id       Int
+  updated_at            DateTime @db.DateTime(0)
+  users_reviews         users    @relation("reviews_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_1")
+  users_reviews_created users    @relation("reviews_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_2")
+  posts                 posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "reviews_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([post_id], map: "post_id")
