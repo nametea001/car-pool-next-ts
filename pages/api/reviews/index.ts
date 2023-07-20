@@ -20,23 +20,26 @@ export default async function getPosts(
     let reviews = await reviewFinder.findReviews(dataParam);
     if (reviews) {
       reviews.forEach((review: any) => {
-        const filePath = path.resolve(
+        let filePath = path.resolve(
           "public/profiles/",
           review.users_reviews_created.img_path
         );
         try {
-          const imageBuffer = fs.readFileSync(filePath, "base64");
+          let imageBuffer = fs.readFileSync(filePath, "base64");
           review.img = imageBuffer;
         } catch (err) {
-          const filePath = path.resolve("public/profiles/", "non_img.png");
-          const imageBuffer = fs.readFileSync(filePath, "base64");
+          let filePath = path.resolve("public/profiles/", "non_img.png");
+          let imageBuffer = fs.readFileSync(filePath, "base64");
           review.img = imageBuffer;
         }
       });
+      viewData.message = "Get Reveiw Successful";
+      viewData.error = false;
+      viewData.reviews = reviews;
+      res.status(200).send(viewData);
     } else {
       res.status(401).send("err null data");
     }
-    res.status(200).send(viewData);
   } else {
     res.status(400).send("Bad request");
   }

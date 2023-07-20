@@ -211,6 +211,10 @@ export class PostRepository {
           users: {
             select: {
               img_path: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+              sex: true,
             },
           },
           _count: {

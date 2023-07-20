@@ -18,21 +18,17 @@ export default async function getPosts(
   if (req.method == "GET" && tokenVerify) {
     const postFinder = new PostFinder();
 
-    
     const posts = await postFinder.findPosts(dataParam);
     if (posts) {
       if (dataParam.device == "mobile") {
         posts.forEach((post: any) => {
-          const filePath = path.resolve(
-            "public/profiles/",
-            post.users.img_path
-          );
+          let filePath = path.resolve("public/profiles/", post.users.img_path);
           try {
-            const imageBuffer = fs.readFileSync(filePath, "base64");
+            let imageBuffer = fs.readFileSync(filePath, "base64");
             post.img = imageBuffer;
           } catch (err) {
-            const filePath = path.resolve("public/profiles/", "non_img.png");
-            const imageBuffer = fs.readFileSync(filePath, "base64");
+            let filePath = path.resolve("public/profiles/", "non_img.png");
+            let imageBuffer = fs.readFileSync(filePath, "base64");
             post.img = imageBuffer;
           }
         });
