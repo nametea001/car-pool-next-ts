@@ -8,4 +8,8 @@ export class ReviewFinder {
     return reviews;
   }
 
+  async avgReviews(user_id: number) {
+    const avgReviews = await this.reviewRepository.avgReviews(user_id);
+    return avgReviews;
+  }
 }

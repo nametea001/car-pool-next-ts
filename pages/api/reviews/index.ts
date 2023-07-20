@@ -33,9 +33,13 @@ export default async function getPosts(
           review.img = imageBuffer;
         }
       });
+      let avgRatingReview = await reviewFinder.avgReviews(
+        parseInt(dataParam.user_id)
+      );
       viewData.message = "Get Reveiw Successful";
       viewData.error = false;
       viewData.reviews = reviews;
+      viewData.avg_review = avgRatingReview;
       res.status(200).send(viewData);
     } else {
       res.status(401).send("err null data");

@@ -52,4 +52,23 @@ export class ReviewRepository {
     this.prisma.$disconnect();
     return review;
   }
+
+  async avgReviews(user_id: number) {
+    let avg: any = null;
+    try {
+      avg = await this.prisma.reviews.aggregate({
+        // where: {
+        //   user_id: user_id,
+        // },
+        _avg: {
+          score: true,
+        },
+      });
+      return avg;
+    } catch (err) {
+      avg = null;
+    }
+    this.prisma.$disconnect();
+    return avg;
+  }
 }
