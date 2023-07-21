@@ -25,7 +25,7 @@ export class UserRepository {
         });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       resData = null;
     }
     this.prisma.$disconnect();
