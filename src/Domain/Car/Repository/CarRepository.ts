@@ -23,6 +23,38 @@ export class CarRepository {
     return resData;
   }
 
+  async carUpdate(whereData: any, data: any) {
+    let resData: any = null;
+    try {
+      resData = await this.prisma.cars.update({
+        where: whereData,
+        data: data,
+        select: {
+          id: true,
+          brand: true,
+          model: true,
+          vehicle_registration: true,
+          color: true,
+        },
+      });
+    } catch (err) {
+      resData = null;
+    }
+    return resData;
+  }
+
+  async carDelete(whereData: any) {
+    let resData: any = null;
+    try {
+      resData = await this.prisma.cars.delete({
+        where: whereData,
+      });
+    } catch (err) {
+      resData = null;
+    }
+    return resData;
+  }
+
   async findCars(data: any) {
     //  praram controll
     let param: any[] = [];

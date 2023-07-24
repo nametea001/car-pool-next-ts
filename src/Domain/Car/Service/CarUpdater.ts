@@ -9,6 +9,16 @@ export class CarUpdater {
     return car;
   }
 
+  async carUpdate(whereData: any, data: any, user_id: number) {
+    const row = this.MapToRow(data, user_id);
+    let car = await this.carRepository.carUpdate(whereData, row);
+    return car;
+  }
+
+  async carDelete(whereData: any) {
+    let car = await this.carRepository.carDelete(whereData);
+    return car;
+  }
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
     let result: any = {};
