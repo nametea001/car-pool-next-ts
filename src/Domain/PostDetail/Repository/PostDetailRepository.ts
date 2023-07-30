@@ -44,6 +44,11 @@ export class PostDetailRepository {
           model: true,
           vehicle_registration: true,
           color: true,
+          posts: {
+            select: {
+              status: true,
+            },
+          },
           // created_user_id: true,
         },
       });

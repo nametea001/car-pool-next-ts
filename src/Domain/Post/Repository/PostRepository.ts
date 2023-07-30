@@ -107,6 +107,19 @@ export class PostRepository {
     return posts;
   }
 
+  async updatePosts(whereData: any, dataPost: any) {
+    let resData: any = null;
+    try {
+      resData = await this.prisma.posts.update({
+        where: whereData,
+        data: dataPost,
+      });
+    } catch (err) {
+      resData = null;
+    }
+    return resData;
+  }
+
   async findPosts(data: any) {
     //  praram controll
     let param: any[] = [];
@@ -229,6 +242,20 @@ export class PostRepository {
     }
     this.prisma.$disconnect();
     return posts;
+  }
+
+  async findStatusPostByID(postID: number) {
+    let resData: any = null;
+
+    try {
+      resData = this.prisma.posts.findFirst({
+        where: { id: postID },
+        select: { id: true, status: true },
+      });
+    } catch (err) {
+      resData = null;
+    }
+    return resData;
   }
 
   _timeBankokToDB(dateTime: any) {

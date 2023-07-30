@@ -2,18 +2,24 @@ import { PostRepository } from "../Repository/PostRepository";
 import { PostDetailUpdater } from "../../PostDetail/Service/PostDetailUpdater";
 
 export class PostUpdater {
-  private userReposotory = new PostRepository();
+  private postReposotory = new PostRepository();
 
   async addPostAndPostDetail(data: any, updateBy: number) {
     const postDetailForPost = new PostDetailUpdater();
     let post: any = null;
     const rowPost = this.MapToRow(data, updateBy, true);
     const rowPosDetail = postDetailForPost.MapToRow(data, updateBy, true);
-    post = await this.userReposotory.addPostAndPostDetail(
+    post = await this.postReposotory.addPostAndPostDetail(
       rowPost,
       rowPosDetail
     );
     return post;
+  }
+
+  async updatePosts(whereData: any, dataPost: any, user_id: number) {
+    const row = this.MapToRow(dataPost, user_id);
+    let posts = await this.postReposotory.updatePosts(whereData, row);
+    return posts;
   }
 
   // map to DB
