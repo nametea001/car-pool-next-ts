@@ -19,17 +19,6 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
     const user = await userFinder.checkLogin(username, password);
     const token = jwt.createToken(user);
     if (user && token) {
-      if (dataParam.device == "mobile") {
-        try {
-          const filePath = path.resolve("public/profiles/", user.img_path);
-          const imageBuffer = fs.readFileSync(filePath, "base64");
-          user.img = imageBuffer;
-        } catch (err) {
-          const filePath = path.resolve("public/profiles/", "non_img.png");
-          const imageBuffer = fs.readFileSync(filePath, "base64");
-          user.img = imageBuffer;
-        }
-      }
       viewData.message = "Login Successful";
       viewData.error = false;
       viewData.token = token;

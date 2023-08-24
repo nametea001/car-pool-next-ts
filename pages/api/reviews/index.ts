@@ -19,20 +19,6 @@ export default async function getPosts(
     const reviewFinder = new ReviewFinder();
     let reviews = await reviewFinder.findReviews(dataParam);
     if (reviews) {
-      reviews.forEach((review: any) => {
-        let filePath = path.resolve(
-          "public/profiles/",
-          review.users_reviews_created.img_path
-        );
-        try {
-          let imageBuffer = fs.readFileSync(filePath, "base64");
-          review.img = imageBuffer;
-        } catch (err) {
-          let filePath = path.resolve("public/profiles/", "non_img.png");
-          let imageBuffer = fs.readFileSync(filePath, "base64");
-          review.img = imageBuffer;
-        }
-      });
       let avgRatingReview = await reviewFinder.avgReviews(
         parseInt(dataParam.user_id)
       );

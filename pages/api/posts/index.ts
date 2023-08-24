@@ -20,19 +20,6 @@ export default async function getPosts(
 
     const posts = await postFinder.findPosts(dataParam);
     if (posts) {
-      if (dataParam.device == "mobile") {
-        posts.forEach((post: any) => {
-          let filePath = path.resolve("public/profiles/", post.users.img_path);
-          try {
-            let imageBuffer = fs.readFileSync(filePath, "base64");
-            post.img = imageBuffer;
-          } catch (err) {
-            let filePath = path.resolve("public/profiles/", "non_img.png");
-            let imageBuffer = fs.readFileSync(filePath, "base64");
-            post.img = imageBuffer;
-          }
-        });
-      }
       viewData.message = "Get Post Successful";
       viewData.error = false;
       viewData.posts = posts;
