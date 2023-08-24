@@ -29,15 +29,17 @@ model chat_details {
   chat_id         Int
   msg_type        chat_details_msg_type
   msg             String                @db.Text
-  lat_lng         Json
+  lat_lng         Json?
   created_at      DateTime              @db.DateTime(0)
   created_user_id Int
   updated_at      DateTime              @db.DateTime(0)
   updated_user_id Int
   chats           chats                 @relation(fields: [chat_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chat_details_ibfk_1")
+  users           users                 @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "chat_details_ibfk_2")
   chat_user_logs  chat_user_logs[]
 
   @@index([chat_id], map: "chat_id")
+  @@index([created_user_id], map: "created_user_id")
 }
 
 model chat_user_logs {
@@ -236,6 +238,7 @@ model users {
   updated_at                             DateTime?          @db.DateTime(0)
   updated_user_id                        Int
   cars                                   cars[]
+  chat_details                           chat_details[]
   chat_user_logs                         chat_user_logs[]
   chats_chats_created_user_idTousers     chats[]            @relation("chats_created_user_idTousers")
   chats_chats_send_user_idTousers        chats[]            @relation("chats_send_user_idTousers")

@@ -1,7 +1,18 @@
-import { NextApiRequest } from "next";
-import { NextApiResponseServerIO } from "../types/next";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Server as ServerIO } from "socket.io";
+import { Server as HttpServer } from "http";
+import { Server as NetServer, Socket } from "net";
+import { Server as SocketIOServer } from "socket.io";
 
 import { JWT } from "../../../src/Auth/JWT";
+
+type NextApiResponseServerIO = NextApiResponse & {
+  socket: Socket & {
+    server: NetServer & {
+      io: SocketIOServer;
+    };
+  };
+};
 
 export default function chat(
   req: NextApiRequest,
