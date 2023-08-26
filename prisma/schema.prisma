@@ -36,26 +36,22 @@ model chat_details {
   updated_user_id Int
   chats           chats                 @relation(fields: [chat_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chat_details_ibfk_1")
   users           users                 @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "chat_details_ibfk_2")
-  chat_user_logs  chat_user_logs[]
 
   @@index([chat_id], map: "chat_id")
   @@index([created_user_id], map: "created_user_id")
 }
 
 model chat_user_logs {
-  id              Int          @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   chat_id         Int
-  chat_detail_id  Int
   user_id         Int
-  created_at      DateTime     @db.DateTime(0)
+  created_at      DateTime @db.DateTime(0)
   created_user_id Int
-  updated_at      DateTime     @db.DateTime(0)
+  updated_at      DateTime @db.DateTime(0)
   updated_user_id Int
-  chats           chats        @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_1")
-  chat_details    chat_details @relation(fields: [chat_detail_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_2")
-  users           users        @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_3")
+  chats           chats    @relation(fields: [chat_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_1")
+  users           users    @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "chat_user_logs_ibfk_3")
 
-  @@index([chat_detail_id], map: "chat_detail_id")
   @@index([chat_id], map: "chat_id")
   @@index([user_id], map: "user_id")
 }
@@ -264,12 +260,13 @@ enum posts_status {
   CANCEL
 }
 
-enum chat_details_msg_type {
-  MSG
-  LOCATION
-}
-
 enum users_sex {
   Male
   Famale
+}
+
+enum chat_details_msg_type {
+  MSG
+  IMG
+  LOCATION
 }
