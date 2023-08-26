@@ -4,15 +4,34 @@ export class ChatRepository {
 
   async inserChat(data: any) {
     let chat: any = null;
+    let select = {};
+    if (data.chat_type === "PRIVATE") {
+      select = {
+        id: true,
+        chat_type: true,
+        send_user_id: true,
+        created_user_id: true,
+        send_user: {
+          select: {
+            first_name: true,
+            last_name: true,
+            img_path: true,
+          },
+        },
+        created_user: {
+          select: {
+            first_name: true,
+            last_name: true,
+            img_path: true,
+          },
+        },
+      };
+    } else {
+    }
     try {
       chat = await this.prisma.chats.create({
         data: data,
-        select: {
-          id: true,
-          send_user_id: true,
-          send_post_id: true,
-          created_user_id: true,
-        },
+        select: select,
       });
     } catch (err) {
       console.log(err);
@@ -51,21 +70,77 @@ export class ChatRepository {
         send_post_id: data.send_post_id,
       };
     }
+    let select = {};
+    if (data.chat_type === "PRIVATE") {
+      select = {
+        id: true,
+        chat_type: true,
+        send_user_id: true,
+        created_user_id: true,
+        send_user: {
+          select: {
+            first_name: true,
+            last_name: true,
+            img_path: true,
+          },
+        },
+        created_user: {
+          select: {
+            first_name: true,
+            last_name: true,
+            img_path: true,
+          },
+        },
+      };
+    } else {
+    }
 
     try {
       chat = await this.prisma.chats.findFirst({
         where: whereData,
-        select: {
-          id: true,
-          send_user_id: true,
-          send_post_id: true,
-          created_user_id: true,
-        },
+        select: select,
       });
     } catch (err) {
       chat = null;
     }
     this.prisma.$disconnect();
     return chat;
+  }
+
+  async findChats(data: any) {
+    let chats: any = null;
+    try {
+      chats = await this.prisma.chats.findMany({
+        select: {
+          id: true,
+          chat_type: true,
+          send_user_id: true,
+          send_post_id: true,
+          created_user_id: true,
+          send_user: {
+            select: { first_name: true, last_name: true, img_path: true },
+          },
+          created_user: {
+            select: { first_name: true, last_name: true, img_path: true },
+          },
+          posts: {
+            select: { name_end: true },
+          },
+          chat_details: {
+            select: { msg_type: true, msg: true },
+            orderBy: { id: "desc" },
+            take: 1,
+          },
+          _count: {
+            select: { chat_user_logs: true },
+          },
+          created_at: true,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      chats = null;
+    }
+    return chats;
   }
 }

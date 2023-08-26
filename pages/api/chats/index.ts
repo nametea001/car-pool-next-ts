@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { JWT } from "../../../src/Auth/JWT";
-import { ChatRepository } from "../../../src/Domain/Chat/Repository/ChatRepository";
+import { ChatFinder } from "../../../src/Domain/Chat/Service/ChatFinder";
 
 export default async function getPosts(
   req: NextApiRequest,
@@ -13,10 +13,13 @@ export default async function getPosts(
   const token = req.headers["auth-token"];
   const tokenVerify: any = jwt.verifyToken(token);
   if (req.method == "GET" && tokenVerify) {
-    if (true) {
+    const chatFinder = new ChatFinder();
+
+    let chatData = await chatFinder.findChats(dataParam);
+    if (chatData) {
       viewData.message = "Get Car Successful";
       viewData.error = false;
-      viewData.cars = {};
+      viewData.chats = chatData;
       res.status(200).send(viewData);
     } else {
       res.status(401).send("null data");

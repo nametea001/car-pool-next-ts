@@ -26,7 +26,7 @@ export default async function socketIO(
     // adapt Next's net Server to http Server
     const httpServer: HttpServer = res.socket.server as any;
     const io = new ServerIO(httpServer, {
-      path: "/api/socket/socket_io",
+      path: "/api/socket_io",
       // addTrailingSlash: false,
     });
     // append SocketIO server to Next.js socket server response

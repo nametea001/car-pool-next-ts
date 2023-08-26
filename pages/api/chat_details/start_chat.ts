@@ -40,13 +40,13 @@ export default async function getPostDetails(
       let dataInsertChat = {};
       if (param.chat_type == "PRIVATE") {
         dataInsertChat = {
-          chatType: "PRIVATE",
+          chat_type: "PRIVATE",
           send_user_id: param.send_user_id,
           send_post_id: null,
         };
       } else {
         dataInsertChat = {
-          chatType: "GROUP",
+          chat_type: "GROUP",
           send_user_id: null,
           send_post_id: param.send_post_id,
         };

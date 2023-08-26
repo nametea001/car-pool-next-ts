@@ -17,7 +17,7 @@ export class ChatDetailRepository {
           created_user_id: true,
           created_at: true,
           users: {
-            select: { first_name: true, last_name: true },
+            select: { first_name: true, last_name: true, img_path: true },
           },
         },
       });

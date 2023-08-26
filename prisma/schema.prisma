@@ -61,19 +61,19 @@ model chat_user_logs {
 }
 
 model chats {
-  id                                 Int              @id @default(autoincrement())
-  chat_type                          chats_chat_type
-  send_user_id                       Int?
-  send_post_id                       Int?
-  created_at                         DateTime         @db.DateTime(0)
-  created_user_id                    Int
-  updated_at                         DateTime         @db.DateTime(0)
-  updated_user_id                    Int
-  chat_details                       chat_details[]
-  chat_user_logs                     chat_user_logs[]
-  users_chats_created_user_idTousers users            @relation("chats_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_1")
-  users_chats_send_user_idTousers    users?           @relation("chats_send_user_idTousers", fields: [send_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_2")
-  posts                              posts?           @relation(fields: [send_post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_3")
+  id              Int              @id @default(autoincrement())
+  chat_type       chats_chat_type
+  send_user_id    Int?
+  send_post_id    Int?
+  created_at      DateTime         @db.DateTime(0)
+  created_user_id Int
+  updated_at      DateTime         @db.DateTime(0)
+  updated_user_id Int
+  chat_details    chat_details[]
+  chat_user_logs  chat_user_logs[]
+  created_user    users            @relation("chats_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_1")
+  send_user       users?           @relation("chats_send_user_idTousers", fields: [send_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_2")
+  posts           posts?           @relation(fields: [send_post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chats_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([send_post_id], map: "send_post_id")
