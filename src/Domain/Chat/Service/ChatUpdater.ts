@@ -3,6 +3,11 @@ import { ChatRepository } from "../Repository/ChatRepository";
 export class ChatUpdater {
   private chatRepository = new ChatRepository();
 
+  async inserChat(data: any, updateBy: number) {
+    const row = this.MapToRow(data, updateBy, true);
+    return await this.chatRepository.inserChat(row);
+  }
+
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
     let result: any = {};

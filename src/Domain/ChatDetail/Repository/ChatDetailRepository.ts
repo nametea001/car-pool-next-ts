@@ -7,6 +7,7 @@ export class ChatDetailRepository {
 
     try {
       chatDetail = await this.prisma.chat_details.findMany({
+        orderBy: { id: "desc" },
         where: { chat_id: chatID },
         select: {
           id: true,

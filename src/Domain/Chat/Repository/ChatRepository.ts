@@ -2,8 +2,26 @@ import { PrismaClient } from "@prisma/client";
 export class ChatRepository {
   private prisma = new PrismaClient();
 
+  async inserChat(data: any) {
+    let chat: any = null;
+    try {
+      chat = await this.prisma.chats.create({
+        data: data,
+        select: {
+          id: true,
+          send_user_id: true,
+          send_post_id: true,
+          created_user_id: true,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    return chat;
+  }
+
   async getChatForStart(data: any) {
-    let chat: any;
+    let chat: any = null;
     let whereData = {};
     if (data.chat_type === "PRIVATE") {
       whereData = {
@@ -37,7 +55,12 @@ export class ChatRepository {
     try {
       chat = await this.prisma.chats.findFirst({
         where: whereData,
-        select: { id: true },
+        select: {
+          id: true,
+          send_user_id: true,
+          send_post_id: true,
+          created_user_id: true,
+        },
       });
     } catch (err) {
       chat = null;
