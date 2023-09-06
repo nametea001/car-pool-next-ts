@@ -39,9 +39,25 @@ export class ChatRepository {
     return chat;
   }
 
+  async updateChat(data: any, chatID: number) {
+    let chat: any = null;
+    try {
+      chat = await this.prisma.chats.update({
+        where: { id: chatID },
+        data: data,
+        select: { chat_type: true },
+      });
+    } catch (err) {
+      console.log(err);
+      chat = null;
+    }
+    return chat;
+  }
+
   async getChatForStart(data: any) {
     let chat: any = null;
     let whereData = {};
+    let select = {};
     if (data.chat_type === "PRIVATE") {
       whereData = {
         AND: [
@@ -64,14 +80,6 @@ export class ChatRepository {
           },
         ],
       };
-    } else {
-      whereData = {
-        chat_type: "GROUP",
-        send_post_id: data.send_post_id,
-      };
-    }
-    let select = {};
-    if (data.chat_type === "PRIVATE") {
       select = {
         id: true,
         chat_type: true,
@@ -93,6 +101,10 @@ export class ChatRepository {
         },
       };
     } else {
+      whereData = {
+        chat_type: "GROUP",
+        send_post_id: data.send_post_id,
+      };
     }
 
     try {
@@ -107,10 +119,23 @@ export class ChatRepository {
     return chat;
   }
 
-  async findChats(data: any) {
+  async findChats(userID: number) {
     let chats: any = null;
     try {
       chats = await this.prisma.chats.findMany({
+        orderBy: {
+          updated_at: "desc",
+        },
+        where: {
+          OR: [
+            {
+              send_user_id: userID,
+            },
+            {
+              created_user_id: userID,
+            },
+          ],
+        },
         select: {
           id: true,
           chat_type: true,
@@ -127,12 +152,12 @@ export class ChatRepository {
             select: { name_end: true },
           },
           chat_details: {
-            select: { msg_type: true, msg: true },
+            select: { msg_type: true, msg: true, created_user_id: true },
             orderBy: { id: "desc" },
             take: 1,
           },
           _count: {
-            select: { chat_user_logs: true },
+            select: { chat_user_logs: { where: { user_id: userID } } },
           },
           created_at: true,
         },

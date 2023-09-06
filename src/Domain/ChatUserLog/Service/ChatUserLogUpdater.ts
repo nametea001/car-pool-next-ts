@@ -3,10 +3,27 @@ import { ChatUserLogRepository } from "../Repository/ChatUserLogRepository";
 export class ChatUserLogUpdater {
   private chatUserLogRepository = new ChatUserLogRepository();
 
-  // async inserChatUserLog(data: any, updateBy: number) {
-  //   const row = this.MapToRow(data, updateBy, true);
-  //   return await this.chatUserLogRepository.inserChatUserLog(row, updateBy);
-  // }
+  async insertChatUserLog(data: any, updateBy: number) {
+    const row = await this.MapToRow(data, updateBy, true);
+    return this.chatUserLogRepository.insertChatUserLog(row);
+  }
+  async insertManyChatUserLog(
+    chatID: number,
+    postMembers: [],
+    updateBy: number
+  ) {
+    let rows: [any] = [{}];
+    postMembers.forEach((user: any) => {
+      let data = { chat_id: chatID, user_id: user.id };
+      let row = this.MapToRow(data, updateBy, true);
+      rows.push(row);
+    });
+    return await this.chatUserLogRepository.insertManyChatUserLog(rows);
+  }
+
+  async DeleteByChatIDAndUserID(data: any) {
+    return await this.chatUserLogRepository.DeleteByChatIDAndUserID(data);
+  }
 
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {

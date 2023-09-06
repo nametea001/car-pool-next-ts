@@ -1,19 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Server as ServerIO } from "socket.io";
 import { Server as HttpServer } from "http";
-import { Server as NetServer, Socket } from "net";
-import { Server as SocketIOServer } from "socket.io";
+import { NextApiResponseServerIO } from "../../../src/Domain/SocketIO/Type/SocketIOType";
 import cors from "cors";
-
-import { JWT } from "../../../src/Auth/JWT";
-
-type NextApiResponseServerIO = NextApiResponse & {
-  socket: Socket & {
-    server: NetServer & {
-      io: SocketIOServer;
-    };
-  };
-};
 
 export default async function socketIO(
   req: NextApiRequest,
@@ -31,6 +20,10 @@ export default async function socketIO(
     });
     // append SocketIO server to Next.js socket server response
     // res.socket.server.io = io;
+    io.on("connection", (socket) => {
+      let userId = socket.handshake.query.user_id;
+      console.log(userId);
+    });
 
     corsMiddleware(req, res, () => {
       res.socket.server.io = io;

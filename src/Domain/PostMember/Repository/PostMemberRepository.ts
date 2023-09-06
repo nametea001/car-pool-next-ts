@@ -19,22 +19,14 @@ export class PostMemberRepository {
     }
   }
 
-  async findPostMembers(data: any) {
-    //  praram controll
-    let param: any[] = [];
-    if (data.postMember_id) {
-      param.push({ id: parseInt(data.postMember_id) });
-    }
-    if (data.name_en) {
-      param.push({ name_en: data.name_en });
-    }
-    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
-
+  async findPostMembersByPostID(postID: number) {
     let postMember: any;
     try {
       postMember = await this.prisma.post_members.findMany({
-        where: whereData,
-        select: {},
+        where: { post_id: postID },
+        select: {
+          user_id: true,
+        },
       });
     } catch (err) {
       postMember = null;

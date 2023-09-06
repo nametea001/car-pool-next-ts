@@ -1,24 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { JWT } from "../../../src/Auth/JWT";
-import { ChatFinder } from "../../../src/Domain/Chat/Service/ChatFinder";
+import { JWT } from "../../../../src/Auth/JWT";
+import { ChatUserLogUpdater } from "../../../../src/Domain/ChatUserLog/Service/ChatUserLogUpdater";
 
 export default async function getPosts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // const dataParam: {} = req.query;
+  const { chat_id } = req.query;
   let viewData: any = {};
   const jwt = new JWT();
   const token = req.headers["auth-token"];
   const tokenVerify: any = jwt.verifyToken(token);
-  if (req.method == "GET" && tokenVerify) {
-    const chatFinder = new ChatFinder();
-    let chatData = await chatFinder.findChats(tokenVerify.id);
-    if (chatData) {
+  if (req.method == "DELETE" && tokenVerify) {
+    if (true) {
       viewData.message = "Get Car Successful";
       viewData.error = false;
-      viewData.chats = chatData;
       res.status(200).send(viewData);
     } else {
       res.status(401).send("null data");

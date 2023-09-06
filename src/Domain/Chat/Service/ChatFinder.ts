@@ -8,8 +8,8 @@ export class ChatFinder {
     return chat;
   }
 
-  async findChats(data: any) {
-    const chats = await this.ChatRepository.findChats(data);
+  async findChats(userID: number) {
+    const chats = await this.ChatRepository.findChats(userID);
     return chats;
   }
 }

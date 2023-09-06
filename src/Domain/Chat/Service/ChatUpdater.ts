@@ -5,7 +5,12 @@ export class ChatUpdater {
 
   async inserChat(data: any, updateBy: number) {
     const row = this.MapToRow(data, updateBy, true);
-    return await this.chatRepository.inserChat(row,updateBy);
+    return await this.chatRepository.inserChat(row);
+  }
+
+  async updateChat(data: any, chatID: number, updateBy: number) {
+    const row = this.MapToRow(data, updateBy);
+    return await this.chatRepository.updateChat(row, chatID);
   }
 
   // map to DB
