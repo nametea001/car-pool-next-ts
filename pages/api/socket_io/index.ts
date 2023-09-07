@@ -20,10 +20,14 @@ export default async function socketIO(
     });
     // append SocketIO server to Next.js socket server response
     // res.socket.server.io = io;
-    io.on("connection", (socket) => {
-      let userId = socket.handshake.query.user_id;
-      console.log(userId);
-    });
+    // io.on("connection", (socket) => {
+    //   let userId = socket.handshake.query.user_id;
+    //   console.log(userId);
+    // });
+
+    // io.on("test", (socket) => {
+    //   console.log(socket);
+    // });
 
     corsMiddleware(req, res, () => {
       res.socket.server.io = io;

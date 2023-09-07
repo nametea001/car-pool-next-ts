@@ -31,7 +31,7 @@ export class PostDetailRepository {
     let post_detail: any;
     try {
       post_detail = await this.prisma.post_details.findFirst({
-        where: data,
+        where: { post_id: data.post_id },
         select: {
           id: true,
           post_id: true,
@@ -46,7 +46,22 @@ export class PostDetailRepository {
           color: true,
           posts: {
             select: {
+              _count: {
+                select: {
+                  // post_members: { where: { NOT: { user_id: data.user_id } } },
+                  post_members: true,
+                },
+              },
               status: true,
+              users: {
+                select: {
+                  first_name: true,
+                  last_name: true,
+                  email: true,
+                  sex: true,
+                  img_path: true,
+                },
+              },
             },
           },
           // created_user_id: true,

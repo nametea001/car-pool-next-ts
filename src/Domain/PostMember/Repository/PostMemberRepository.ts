@@ -19,11 +19,18 @@ export class PostMemberRepository {
     }
   }
 
-  async findPostMembersByPostID(postID: number) {
+  async findPostMembersByPostIDAndNotOwner(data: any) {
     let postMember: any;
     try {
       postMember = await this.prisma.post_members.findMany({
-        where: { post_id: postID },
+        where: {
+          AND: {
+            post_id: data.post_id,
+            NOT: {
+              user_id: data.user_id,
+            },
+          },
+        },
         select: {
           user_id: true,
         },

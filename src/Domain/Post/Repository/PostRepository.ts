@@ -7,73 +7,52 @@ export class PostRepository {
     let posts: any = null;
     let dataInsert: any = null;
 
-    {
-      if (dataPost.is_back) {
-        dataInsert = {
-          name_start: dataPost.name_start,
-          name_end: dataPost.name_end,
-          start_district_id: dataPost.start_district_id,
-          end_district_id: dataPost.end_district_id,
-          is_back: dataPost.is_back,
-          date_time_start: this._timeBankokToDB(dataPost.date_time_start),
-          date_time_back: this._timeBankokToDB(dataPost.date_time_back),
-          status: "NEW",
-          created_user_id: dataPost.created_user_id,
-          created_at: dataPost.created_at,
-          updated_user_id: dataPost.updated_user_id,
-          updated_at: dataPost.updated_at,
-          post_details: {
-            create: {
-              lat_lng_start: dataPostdetail.lat_lng_start,
-              lat_lng_end: dataPostdetail.lat_lng_end,
-              seat: dataPostdetail.seat,
-              price: dataPostdetail.price,
-              description: dataPostdetail.description,
-              brand: dataPostdetail.brand,
-              model: dataPostdetail.model,
-              vehicle_registration: dataPostdetail.vehicle_registration,
-              color: dataPostdetail.color,
-              created_at: dataPostdetail.created_at,
-              created_user_id: dataPostdetail.created_user_id,
-              updated_at: dataPostdetail.updated_at,
-              updated_user_id: dataPostdetail.updated_user_id,
-            },
-          },
-        };
-      } else {
-        dataInsert = {
-          name_start: dataPost.name_start,
-          name_end: dataPost.name_end,
-          start_district_id: dataPost.start_district_id,
-          end_district_id: dataPost.end_district_id,
-          is_back: dataPost.is_back,
-          date_time_start: this._timeBankokToDB(dataPost.date_time_start),
-          date_time_back: null,
-          status: "NEW",
-          created_user_id: dataPost.created_user_id,
-          created_at: dataPost.created_at,
-          updated_user_id: dataPost.updated_user_id,
-          updated_at: dataPost.updated_at,
-          post_details: {
-            create: {
-              lat_lng_start: dataPostdetail.lat_lng_start,
-              lat_lng_end: dataPostdetail.lat_lng_end,
-              seat: dataPostdetail.seat,
-              price: dataPostdetail.price,
-              description: dataPostdetail.description,
-              brand: dataPostdetail.brand,
-              model: dataPostdetail.model,
-              vehicle_registration: dataPostdetail.vehicle_registration,
-              color: dataPostdetail.color,
-              created_at: dataPostdetail.created_at,
-              created_user_id: dataPostdetail.created_user_id,
-              updated_at: dataPostdetail.updated_at,
-              updated_user_id: dataPostdetail.updated_user_id,
-            },
-          },
-        };
-      }
+    dataInsert = {
+      name_start: dataPost.name_start,
+      name_end: dataPost.name_end,
+      start_district_id: dataPost.start_district_id,
+      end_district_id: dataPost.end_district_id,
+      is_back: false,
+      date_time_start: this._timeBankokToDB(dataPost.date_time_start),
+      date_time_back: null,
+      status: "NEW",
+      created_user_id: dataPost.created_user_id,
+      created_at: dataPost.created_at,
+      updated_user_id: dataPost.updated_user_id,
+      updated_at: dataPost.updated_at,
+      post_details: {
+        create: {
+          lat_lng_start: dataPostdetail.lat_lng_start,
+          lat_lng_end: dataPostdetail.lat_lng_end,
+          seat: dataPostdetail.seat,
+          price: dataPostdetail.price,
+          description: dataPostdetail.description,
+          brand: dataPostdetail.brand,
+          model: dataPostdetail.model,
+          vehicle_registration: dataPostdetail.vehicle_registration,
+          color: dataPostdetail.color,
+          created_at: dataPostdetail.created_at,
+          created_user_id: dataPostdetail.created_user_id,
+          updated_at: dataPostdetail.updated_at,
+          updated_user_id: dataPostdetail.updated_user_id,
+        },
+      },
+      post_members: {
+        create: {
+          user_id: dataPostdetail.created_user_id,
+          created_at: dataPostdetail.created_at,
+          created_user_id: dataPostdetail.created_user_id,
+          updated_at: dataPostdetail.updated_at,
+          updated_user_id: dataPostdetail.updated_user_id,
+        },
+      },
+    };
+
+    if (dataPost.is_back) {
+      dataInsert.date_time_back = this._timeBankokToDB(dataPost.date_time_back);
+      dataInsert.is_back = true;
     }
+
     try {
       posts = this.prisma.posts.create({
         data: dataInsert,
@@ -97,6 +76,15 @@ export class PostRepository {
               model: true,
               vehicle_registration: true,
               color: true,
+            },
+          },
+          users: {
+            select: {
+              first_name: true,
+              last_name: true,
+              email: true,
+              sex: true,
+              img_path: true,
             },
           },
         },
@@ -258,7 +246,7 @@ export class PostRepository {
     return resData;
   }
 
-  _timeBankokToDB(dateTime: any) {
+  private _timeBankokToDB(dateTime: any) {
     let dateTimeFormat = new Date(dateTime);
     dateTimeFormat.setHours(dateTimeFormat.getHours() + 7);
     return dateTimeFormat;

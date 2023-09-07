@@ -51,7 +51,6 @@ export default async function getPostDetails(
           send_post_id: param.send_post_id,
         };
       }
-
       let chatDataCreated = await chatUpdater.inserChat(
         dataInsertChat,
         tokenVerify.id
@@ -64,5 +63,4 @@ export default async function getPostDetails(
   } else {
     res.status(400).send("Bad request");
   }
-  res.end();
 }

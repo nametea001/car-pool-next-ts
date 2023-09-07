@@ -27,6 +27,12 @@ export class ChatRepository {
         },
       };
     } else {
+      select = {
+        id: true,
+        chat_type: true,
+        send_post_id: true,
+        posts: { select: { name_start: true, name_end: true } },
+      };
     }
     try {
       chat = await this.prisma.chats.create({
@@ -102,8 +108,13 @@ export class ChatRepository {
       };
     } else {
       whereData = {
-        chat_type: "GROUP",
         send_post_id: data.send_post_id,
+      };
+      select = {
+        id: true,
+        chat_type: true,
+        send_post_id: true,
+        posts: { select: { name_start: true, name_end: true } },
       };
     }
 
@@ -134,6 +145,15 @@ export class ChatRepository {
             {
               created_user_id: userID,
             },
+            {
+              posts: {
+                post_members: {
+                  every: {
+                    user_id: userID,
+                  },
+                },
+              },
+            },
           ],
         },
         select: {
@@ -149,7 +169,7 @@ export class ChatRepository {
             select: { first_name: true, last_name: true, img_path: true },
           },
           posts: {
-            select: { name_end: true },
+            select: { name_start: true, name_end: true },
           },
           chat_details: {
             select: { msg_type: true, msg: true, created_user_id: true },

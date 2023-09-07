@@ -38,8 +38,8 @@ export class PostUpdater {
     if ("end_district_id" in data) {
       result.end_district_id = data.end_district_id;
     }
-    if ("go_back" in data) {
-      result.go_back = data.go_back;
+    if ("is_back" in data) {
+      result.is_back = data.is_back;
     }
     if ("date_time_start" in data) {
       result.date_time_start = data.date_time_start;

@@ -28,13 +28,14 @@ export class ChatUserLogRepository {
     return res;
   }
 
-  async insertManyChatUserLog(data: [any]) {
+  async insertManyChatUserLog(data: any) {
     let res: any = null;
     try {
       res = await this.prisma.chat_user_logs.createMany({
         data: data,
       });
     } catch (err) {
+      console.log(err);
       res = null;
     }
     return res;

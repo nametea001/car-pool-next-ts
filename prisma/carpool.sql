@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 04, 2023 at 04:24 PM
--- Server version: 8.0.32
--- PHP Version: 8.2.4
+-- Generation Time: Sep 06, 2023 at 02:18 PM
+-- Server version: 8.1.0
+-- PHP Version: 8.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,6 +40,15 @@ CREATE TABLE `cars` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `cars`
+--
+
+INSERT INTO `cars` (`id`, `user_id`, `brand`, `model`, `vehicle_registration`, `color`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
+(1, 1, 'B', 'A', 'C', 'D', 1, '2023-07-24 08:56:00', 1, '2023-07-24 08:56:00'),
+(2, 1, 'dd', 'ss', 'cc', 'ff', 1, '2023-07-25 16:22:08', 1, '2023-07-25 16:22:08'),
+(3, 1, 'Sqpp', 'Yamaha', 'ufod20', 'blue', 1, '2023-08-10 14:59:18', 1, '2023-08-10 14:59:18');
+
 -- --------------------------------------------------------
 
 --
@@ -66,9 +75,9 @@ CREATE TABLE `chats` (
 CREATE TABLE `chat_details` (
   `id` int NOT NULL,
   `chat_id` int NOT NULL,
-  `msg_type` enum('MSG','LOCATION') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `msg_type` enum('MSG','IMG','LOCATION') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lat_lng` json NOT NULL,
+  `lat_lng` json DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -84,7 +93,6 @@ CREATE TABLE `chat_details` (
 CREATE TABLE `chat_user_logs` (
   `id` int NOT NULL,
   `chat_id` int NOT NULL,
-  `chat_detail_id` int NOT NULL,
   `user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
@@ -1055,14 +1063,14 @@ CREATE TABLE `posts` (
   `name_end` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_district_id` int NOT NULL,
   `end_district_id` int NOT NULL,
-  `go_back` tinyint(1) DEFAULT '0',
   `date_time_start` datetime DEFAULT NULL,
   `date_time_back` datetime DEFAULT NULL,
   `status` enum('NEW','IN_PROGRESS','DONE','CANCEL') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
-  `updated_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  `is_back` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1289,8 +1297,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `sex`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
-(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', '1.jpg', 'Male', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
-(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 'Male', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
+(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', 'non_img.png', 'Male', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
+(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 'Male', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1),
+(3, 'test1', '$2b$10$AjEH17H3DkDjajzmL3fJPOAWn5QXDYMI1u19LUYHycT8W9MBunAJG', 'test1', 'test1', 'test1@test1.com', 5, NULL, 'non_img.png', 'Male', 1, '2023-07-21 08:58:40', 1, '2023-07-21 08:58:40', 1);
 
 -- --------------------------------------------------------
 
@@ -1344,7 +1353,8 @@ ALTER TABLE `chats`
 --
 ALTER TABLE `chat_details`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `chat_id` (`chat_id`);
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `created_user_id` (`created_user_id`);
 
 --
 -- Indexes for table `chat_user_logs`
@@ -1352,7 +1362,6 @@ ALTER TABLE `chat_details`
 ALTER TABLE `chat_user_logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `chat_id` (`chat_id`),
-  ADD KEY `chat_detail_id` (`chat_detail_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -1438,7 +1447,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `chats`
@@ -1492,7 +1501,7 @@ ALTER TABLE `review_user_logs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
@@ -1522,14 +1531,14 @@ ALTER TABLE `chats`
 -- Constraints for table `chat_details`
 --
 ALTER TABLE `chat_details`
-  ADD CONSTRAINT `chat_details_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`);
+  ADD CONSTRAINT `chat_details_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`),
+  ADD CONSTRAINT `chat_details_ibfk_2` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `chat_user_logs`
 --
 ALTER TABLE `chat_user_logs`
   ADD CONSTRAINT `chat_user_logs_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `chat_user_logs_ibfk_2` FOREIGN KEY (`chat_detail_id`) REFERENCES `chat_details` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `chat_user_logs_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --

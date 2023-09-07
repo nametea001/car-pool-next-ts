@@ -59,25 +59,27 @@ export default async function getPosts(
           let socketChat = "chat_user_" + sendToUserID;
           let sockPost = "user_" + sendToUserID;
           res?.socket?.server?.io?.emit(socketChat, "Update_UI");
-          res?.socket?.server?.io?.emit(sockPost, "Update_UI");
+          res?.socket?.server?.io?.emit(sockPost, "Update_Noti");
         }
       } else {
         const postMemerFinder = new PostMemberFinder();
-        let dataPostMemers = await postMemerFinder.findPostMembersByPostID(
-          dataBody.send_post_id
-        );
+        let dataPostMemers: [] =
+          await postMemerFinder.findPostMembersByPostIDAndNotOwner({
+            post_id: dataBody.send_post_id,
+            user_id: tokenVerify.id,
+          });
         if (dataPostMemers) {
           let dataChatUserLog = await chatUserLogUpdater.insertManyChatUserLog(
             dataBody.chat_id,
             dataPostMemers,
             tokenVerify.id
           );
-          if (dataChatUserLog) {
+          if (dataChatUserLog.count > 0) {
             dataPostMemers.forEach((dataPostMemer: any) => {
-              let socketChat = "chat_user_" + dataPostMemer.id;
-              let sockPost = "user_" + dataPostMemer.id;
+              let socketChat = "chat_user_" + dataPostMemer.user_id;
+              let sockPost = "user_" + dataPostMemer.user_id;
               res?.socket?.server?.io?.emit(socketChat, "Update_UI");
-              res?.socket?.server?.io?.emit(sockPost, "Update_UI");
+              res?.socket?.server?.io?.emit(sockPost, "Update_Noti");
             });
           }
         }

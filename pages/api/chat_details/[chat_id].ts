@@ -28,7 +28,8 @@ export default async function getPostDetails(
       chat_id: chatID,
     });
     if (dataChatUserLog > 0) {
-      res?.socket?.server?.io?.emit("user_" + tokenVerify.id, "Update_UI");
+      res?.socket?.server?.io?.emit("user_" + tokenVerify.id, "Update_Noti");
+      // res?.socket?.server?.io?.emit("chat_user_" + tokenVerify.id, "Update_UI");
     }
     let chatDetailData = await chatDetailFinder.getChatDetailByChatID(chatID);
     if (chatDetailData) {
