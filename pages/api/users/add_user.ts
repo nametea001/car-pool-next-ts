@@ -21,6 +21,7 @@ async function addUser(req: NextApiRequest, res: NextApiResponse) {
   } else {
     res.status(400).send("Bad request");
   }
+  res.end();
 }
 
 export default addUser;

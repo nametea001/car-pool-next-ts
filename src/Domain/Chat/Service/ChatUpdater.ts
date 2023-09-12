@@ -8,13 +8,18 @@ export class ChatUpdater {
     return await this.chatRepository.inserChat(row);
   }
 
-  async updateChat(data: any, chatID: number, updateBy: number) {
-    const row = this.MapToRow(data, updateBy);
-    return await this.chatRepository.updateChat(row, chatID);
+  async updateChatSendMsg(data: any, chatID: number, updateBy: number) {
+    const row = this.MapToRow(data, updateBy, false, true);
+    return await this.chatRepository.updateChatSendMsg(row, chatID);
   }
 
   // map to DB
-  private MapToRow(data: any, updateBy: number, create: boolean = false) {
+  private MapToRow(
+    data: any,
+    updateBy: number,
+    create: boolean = false,
+    updateDateTime: boolean = false
+  ) {
     let result: any = {};
 
     if ("chat_type" in data) {
@@ -27,7 +32,7 @@ export class ChatUpdater {
       result.send_post_id = data.send_post_id;
     }
 
-    if (Object.keys(result).length !== 0) {
+    if (Object.keys(result).length !== 0 || updateDateTime) {
       let dataTime = new Date();
       dataTime.setHours(dataTime.getHours() + 7);
       if (create) {

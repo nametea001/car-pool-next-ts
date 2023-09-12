@@ -45,7 +45,7 @@ export class ChatRepository {
     return chat;
   }
 
-  async updateChat(data: any, chatID: number) {
+  async updateChatSendMsg(data: any, chatID: number) {
     let chat: any = null;
     try {
       chat = await this.prisma.chats.update({

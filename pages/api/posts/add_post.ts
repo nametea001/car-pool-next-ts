@@ -30,4 +30,5 @@ export default async function addPost(
   } else {
     res.status(400).send("Bad request");
   }
+  res.end();
 }

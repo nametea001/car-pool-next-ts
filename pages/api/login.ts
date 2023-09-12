@@ -30,6 +30,7 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
   } else {
     res.status(400).send("error login");
   }
+  res.end();
 }
 
 export default Login;

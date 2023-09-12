@@ -26,4 +26,5 @@ export default async function getDistrictByName(
   } else {
     res.status(400).send("Bad requie");
   }
+  res.end();
 }

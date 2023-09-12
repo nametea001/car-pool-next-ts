@@ -20,6 +20,8 @@ function Users({ propDataUsers, propDataUsersRole }: any) {
   // datatable
   const [dataUsers, setDataUsers] = useState(propDataUsers);
   const [dataUsersRole, setDataUsersRole] = useState(propDataUsersRole);
+
+  // datatable
   function datatable(value: []) {
     // modal edit user
     const [showUserEdit, setShowUseredit] = useState(false); //show modal

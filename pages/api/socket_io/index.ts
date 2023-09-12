@@ -31,10 +31,9 @@ export default async function socketIO(
 
     corsMiddleware(req, res, () => {
       res.socket.server.io = io;
-      res.end();
     });
   } else {
     console.log("Socket is already running");
-    res.end();
   }
+  res.end();
 }

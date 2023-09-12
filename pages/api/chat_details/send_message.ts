@@ -5,6 +5,7 @@ import { NextApiResponseServerIO } from "../../../src/Domain/SocketIO/Type/Socke
 import { ChatDetailUpdater } from "../../../src/Domain/ChatDetail/Service/ChatDetailUpdater";
 import { ChatUserLogUpdater } from "../../../src/Domain/ChatUserLog/Service/ChatUserLogUpdater";
 import { PostMemberFinder } from "../../../src/Domain/PostMember/Service/PostMemberFinder";
+import { ChatUpdater } from "../../../src/Domain/Chat/Service/ChatUpdater";
 
 export default async function getPosts(
   req: NextApiRequest,
@@ -23,12 +24,12 @@ export default async function getPosts(
       tokenVerify.id
     );
     if (chatDetailData) {
-      // const chatUpdater = new ChatUpdater();
-      // let chatData = await chatUpdater.updateChat(
-      //   {},
-      //   chatDetailData.chat_id,
-      //   tokenVerify
-      // );
+      const chatUpdater = new ChatUpdater();
+      let chatData = await chatUpdater.updateChatSendMsg(
+        {},
+        chatDetailData.chat_id,
+        tokenVerify.id
+      );
 
       viewData.message = "Insert Chat Detail and Update Chat Successful";
       viewData.error = false;
@@ -44,8 +45,9 @@ export default async function getPosts(
         socketChatDetail,
         JSON.stringify(messageSocket)
       );
+      res?.socket?.server?.io?.emit("test", "0");
       const chatUserLogUpdater = new ChatUserLogUpdater();
-      if (dataBody.chat_type === "PRIVATE") {
+      if (chatData.chat_type === "PRIVATE") {
         let sendToUserID =
           dataBody.send_user_id !== tokenVerify.id
             ? dataBody.send_user_id
@@ -58,8 +60,8 @@ export default async function getPosts(
         if (dataChatUserLog) {
           let socketChat = "chat_user_" + sendToUserID;
           let sockPost = "user_" + sendToUserID;
-          res?.socket?.server?.io?.emit(socketChat, "Update_UI");
           res?.socket?.server?.io?.emit(sockPost, "Update_Noti");
+          res?.socket?.server?.io?.emit(socketChat, "Update_UI");
         }
       } else {
         const postMemerFinder = new PostMemberFinder();
@@ -90,4 +92,5 @@ export default async function getPosts(
   } else {
     res.status(400).send("Bad request");
   }
+  res.end();
 }

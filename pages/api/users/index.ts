@@ -26,4 +26,5 @@ export default async function Users(req: NextApiRequest, res: NextApiResponse) {
   }
 
   res.status(200).send(viewData);
+  res.end();
 }

@@ -26,4 +26,5 @@ export default async function getDistrictByProvinceName(
   } else {
     res.status(400).send("Bad requie");
   }
+  res.end();
 }

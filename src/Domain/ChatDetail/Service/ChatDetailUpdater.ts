@@ -8,9 +8,13 @@ export class ChatDetailUpdater {
     let chatDetailData = await this.chatDetailRepository.insertChatDetail(row);
     return chatDetailData;
   }
-
   // map to DB
-  private MapToRow(data: any, updateBy: number, create: boolean = false) {
+  private MapToRow(
+    data: any,
+    updateBy: number,
+    create: boolean = false,
+    updateChat: boolean = false
+  ) {
     let result: any = {};
 
     if ("chat_id" in data) {
