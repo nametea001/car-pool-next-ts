@@ -31,10 +31,6 @@ export default async function getPosts(
         tokenVerify.id
       );
 
-      viewData.message = "Insert Chat Detail and Update Chat Successful";
-      viewData.error = false;
-      viewData.chat_detail = chatDetailData;
-      res.status(200).send(viewData);
       let socketChatDetail = "active_chat_detail_" + chatDetailData.chat_id;
       let messageSocket = {
         user_id: tokenVerify.id,
@@ -45,7 +41,7 @@ export default async function getPosts(
         socketChatDetail,
         JSON.stringify(messageSocket)
       );
-      res?.socket?.server?.io?.emit("test", "0");
+      // res?.socket?.server?.io?.emit("test", "0");
       const chatUserLogUpdater = new ChatUserLogUpdater();
       if (chatData.chat_type === "PRIVATE") {
         let sendToUserID =
@@ -58,9 +54,10 @@ export default async function getPosts(
           tokenVerify.id
         );
         if (dataChatUserLog) {
+          res?.socket?.server?.io?.emit("test", "0");
+          let socketPost = "user_" + sendToUserID;
           let socketChat = "chat_user_" + sendToUserID;
-          let sockPost = "user_" + sendToUserID;
-          res?.socket?.server?.io?.emit(sockPost, "Update_Noti");
+          res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
           res?.socket?.server?.io?.emit(socketChat, "Update_UI");
         }
       } else {
@@ -79,13 +76,17 @@ export default async function getPosts(
           if (dataChatUserLog.count > 0) {
             dataPostMemers.forEach((dataPostMemer: any) => {
               let socketChat = "chat_user_" + dataPostMemer.user_id;
-              let sockPost = "user_" + dataPostMemer.user_id;
+              let socketPost = "user_" + dataPostMemer.user_id;
               res?.socket?.server?.io?.emit(socketChat, "Update_UI");
-              res?.socket?.server?.io?.emit(sockPost, "Update_Noti");
+              res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
             });
           }
         }
       }
+      viewData.message = "Insert Chat Detail and Update Chat Successful";
+      viewData.error = false;
+      viewData.chat_detail = chatDetailData;
+      res.status(200).send(viewData);
     } else {
       res.status(401).send("null data");
     }

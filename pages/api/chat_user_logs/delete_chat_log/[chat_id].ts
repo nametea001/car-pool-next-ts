@@ -12,9 +12,19 @@ export default async function getPosts(
   const jwt = new JWT();
   const token = req.headers["auth-token"];
   const tokenVerify: any = jwt.verifyToken(token);
+  let paramUpdate = null;
+  try {
+    paramUpdate = { chat_id: Number(chat_id), user_id: tokenVerify.id };
+  } catch (err) {
+    paramUpdate = null;
+  }
   if (req.method == "DELETE" && tokenVerify) {
-    if (true) {
-      viewData.message = "Get Car Successful";
+    const chatUserLogUpdater = new ChatUserLogUpdater();
+    let dataChatUserLog = await chatUserLogUpdater.DeleteByChatIDAndUserID(
+      paramUpdate
+    );
+    if (dataChatUserLog.count > 0) {
+      viewData.message = "Delete Chat User Log  Successful";
       viewData.error = false;
       res.status(200).send(viewData);
     } else {

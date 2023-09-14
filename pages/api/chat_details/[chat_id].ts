@@ -27,8 +27,9 @@ export default async function getPostDetails(
       user_id: tokenVerify.id,
       chat_id: chatID,
     });
-    if (dataChatUserLog > 0) {
-      res?.socket?.server?.io?.emit("user_" + tokenVerify.id, "Update_Noti");
+    if (dataChatUserLog.count > 0) {
+      let socketPost = "user_" + tokenVerify.id;
+      res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
       // res?.socket?.server?.io?.emit("chat_user_" + tokenVerify.id, "Update_UI");
     }
     let chatDetailData = await chatDetailFinder.getChatDetailByChatID(chatID);
