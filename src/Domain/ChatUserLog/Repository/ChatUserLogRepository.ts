@@ -56,9 +56,21 @@ export class ChatUserLogRepository {
 
   async getChatUserLogAndChatByUserUserID(userID: number) {
     let res: any = null;
+
     try {
-      res = await this.prisma.chat_user_logs.findMany({
+      let groupByForID = await this.prisma.chat_user_logs.groupBy({
+        by: ["chat_id"],
         where: { user_id: userID },
+        _max: { id: true },
+      });
+      let whereData: any[] = groupByForID.map((data) => {
+        return { id: data._max.id };
+      });
+      res = await this.prisma.chat_user_logs.findMany({
+        orderBy: {
+          chats: { updated_at: "desc" },
+        },
+        where: { OR: whereData },
         select: {
           id: true,
           user_id: true,

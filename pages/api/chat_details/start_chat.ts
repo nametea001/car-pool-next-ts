@@ -58,7 +58,8 @@ export default async function getPostDetails(
       viewData.message = "Insert Chat Successful";
       viewData.error = false;
       viewData.chat = chatDataCreated;
-      viewData.chat_details = {};
+      viewData.chat_details = [];
+      res.status(200).send(viewData);
     }
   } else {
     res.status(400).send("Bad request");

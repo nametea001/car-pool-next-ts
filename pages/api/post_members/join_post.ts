@@ -49,16 +49,6 @@ export default async function getPostDetails(
         viewData.post_members = {};
         res.status(200).send(viewData);
       }
-    } else if (getPostMemberForcheckJoin.length === 0) {
-      let dataInsert = {
-        post_id: dataBody.post_id,
-        user_id: tokenVerify.id,
-      };
-      let postMember = await postMemberUpdater.postMemberInsert(dataInsert);
-      viewData.message = "Insert Post Member Successful";
-      viewData.error = false;
-      viewData.post_members = postMember;
-      res.status(200).send(viewData);
     } else {
       res.status(401).send("Null data");
     }

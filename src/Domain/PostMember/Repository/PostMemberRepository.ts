@@ -61,6 +61,7 @@ export class PostMemberRepository {
           user_id: true,
           posts: {
             select: {
+              status: true,
               post_details: {
                 select: {
                   seat: true,

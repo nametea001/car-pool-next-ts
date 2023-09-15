@@ -23,8 +23,7 @@ export default async function addPost(
     );
     if (
       (dataCheckStatus.status === "IN_PROGRESS" &&
-        dataBody.status === "DONE" &&
-        dataCheckStatus.status === "DONE") ||
+        dataBody.status === "DONE") ||
       (dataCheckStatus.status !== "DONE" &&
         dataCheckStatus.status !== "CANCEL" &&
         dataBody.status === "CANCEL")

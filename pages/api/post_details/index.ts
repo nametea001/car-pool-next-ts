@@ -12,12 +12,11 @@ export default async function getPostDetails(
   let viewData: any = {};
   const jwt = new JWT();
   const token = req.headers["auth-token"];
-  const tokenVerify = jwt.verifyToken(token);
+  const tokenVerify: any = jwt.verifyToken(token);
   let data: any = null;
   try {
     data = {
       post_id: Number(dataParam.post_id),
-      user_id: Number(dataParam.user_id),
     };
   } catch (err) {
     data = null;

@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
 import { PostMemberFinder } from "../../../src/Domain/PostMember/Service/PostMemberFinder";
 import { JWT } from "../../../src/Auth/JWT";
 
@@ -13,9 +12,14 @@ export default async function getPostDetails(
   const jwt = new JWT();
   const token = req.headers["auth-token"];
   const tokenVerify = jwt.verifyToken(token);
-  if (req.method == "GET" && tokenVerify) {
+  let whereData = null;
+  try {
+    whereData = { post_id: Number(dataParam.post_id) };
+  } catch (err) {
+    whereData = null;
+  }
+  if (req.method == "GET" && tokenVerify && whereData) {
     const postFinder = new PostMemberFinder();
-    let whereData = { post_id: Number(dataParam.post_id) };
     const postMember = await postFinder.findPostMemberForCheckJoin(whereData);
     if (postMember) {
       viewData.message = "Get Post Member Successful";
