@@ -59,7 +59,7 @@ export class CarRepository {
     //  praram controll
     let param: any[] = [];
     if (data.user_id) {
-      param.push({ user_id: parseInt(data.user_id) });
+      param.push({ user_id: Number(data.user_id) });
     }
     // if (data.username) {
     //   param.push({ username: data.username.toString() });

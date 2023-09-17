@@ -20,7 +20,7 @@ export default async function getPosts(
     let reviews = await reviewFinder.findReviews(dataParam);
     if (reviews) {
       let avgRatingReview = await reviewFinder.avgReviews(
-        parseInt(dataParam.user_id)
+        Number(dataParam.user_id)
       );
       viewData.message = "Get Reveiw Successful";
       viewData.error = false;

@@ -20,7 +20,7 @@ export default async function getPosts(
     const carUpdater = new CarUpdater();
 
     let cars = await carUpdater.carDelete({
-      id: parseInt(dataBody.id),
+      id: Number(dataBody.id),
     });
     if (cars) {
       viewData.message = "Update Car Successful";

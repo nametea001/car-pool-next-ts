@@ -120,51 +120,56 @@ export class PostRepository {
       is_back: data.is_back === "true",
     });
 
-    param.push({
-      date_time_start: {
-        gte: new Date(data.date_time_start),
-      },
-    });
-
     if (data.date_time_back !== "" && data.is_back === "true") {
       param.push({
-        date_time_back: {
-          gte: new Date(data.date_time_back),
-        },
+        OR: [
+          {
+            date_time_back: {
+              lte: new Date(data.date_time_back),
+            },
+          },
+        ],
       });
     }
 
     // start all district or only district
-    if (parseInt(data.start_district_id) !== 0) {
+    if (Number(data.start_district_id) !== 0) {
       param.push({
         start_district_id: data.start_district_id,
       });
-    } else {
+    }
+    //  else if (Number(data.start_province_id) !== 0) {
+    //   param.push({
+    //     start_district: {
+    //       province_id: Number(data.start_province_id),
+    //     },
+    //   });
+    // }
+    else {
       param.push({
         start_district: {
-          province_id: parseInt(data.start_province_id),
+          province_id: Number(data.start_province_id),
         },
       });
     }
 
     // end all district or only district or region
-    if (parseInt(data.end_district_id) !== 0) {
+    if (Number(data.end_district_id) !== 0) {
       param.push({
         end_district_id: data.end_district_id,
       });
-    } else if (parseInt(data.end_province_id) !== 0) {
+    } else if (Number(data.end_province_id) !== 0) {
       param.push({
         end_district: {
-          end_district_id: parseInt(data.end_district_id),
+          end_district_id: Number(data.end_district_id),
         },
       });
     }
 
     // if (data.post_id) {
-    //   param.push({ id: parseInt(data.post_id) });
+    //   param.push({ id: Number(data.post_id) });
     // }
-    // let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
-    let whereData = {};
+    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let posts: any;
     try {
@@ -198,6 +203,53 @@ export class PostRepository {
           //     },
           //   },
           // },
+          is_back: true,
+          date_time_start: true,
+          date_time_back: true,
+          created_user_id: true,
+          status: true,
+          post_details: {
+            select: {
+              seat: true,
+              price: true,
+            },
+          },
+          users: {
+            select: {
+              img_path: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+              sex: true,
+            },
+          },
+          _count: {
+            select: {
+              post_members: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      posts = null;
+    }
+    this.prisma.$disconnect();
+    return posts;
+  }
+
+  async findPostByPostID(postID: number) {
+    let posts: any;
+    try {
+      posts = await this.prisma.posts.findMany({
+        where: {
+          id: postID,
+        },
+        select: {
+          id: true,
+          name_start: true,
+          name_end: true,
+          start_district_id: true,
+          end_district_id: true,
           is_back: true,
           date_time_start: true,
           date_time_back: true,

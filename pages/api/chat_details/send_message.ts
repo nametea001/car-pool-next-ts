@@ -54,7 +54,6 @@ export default async function getPosts(
           tokenVerify.id
         );
         if (dataChatUserLog) {
-          res?.socket?.server?.io?.emit("test", "0");
           let socketPost = "user_" + sendToUserID;
           let socketChat = "chat_user_" + sendToUserID;
           res?.socket?.server?.io?.emit(socketPost, "Update_Noti");

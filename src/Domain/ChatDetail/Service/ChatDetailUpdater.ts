@@ -9,12 +9,7 @@ export class ChatDetailUpdater {
     return chatDetailData;
   }
   // map to DB
-  private MapToRow(
-    data: any,
-    updateBy: number,
-    create: boolean = false,
-    updateChat: boolean = false
-  ) {
+  private MapToRow(data: any, updateBy: number, create: boolean = false) {
     let result: any = {};
 
     if ("chat_id" in data) {

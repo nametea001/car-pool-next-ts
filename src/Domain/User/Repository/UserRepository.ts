@@ -64,7 +64,7 @@ export class UserRepository {
     //  praram controll
     let param: any[] = [];
     if (data.user_id) {
-      param.push({ id: parseInt(data.user_id) });
+      param.push({ id: Number(data.user_id) });
     }
     if (data.username) {
       param.push({ username: data.username.toString() });
@@ -101,7 +101,7 @@ export class UserRepository {
     //  praram controll
     let param: any[] = [];
     if (data.user_id) {
-      param.push({ id: parseInt(data.user_id) });
+      param.push({ id: Number(data.user_id) });
     }
     if (data.username) {
       param.push({ username: data.username.toString() });

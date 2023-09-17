@@ -12,14 +12,14 @@ async function editUser(req: NextApiRequest, res: NextApiResponse) {
     secret: process.env.NEXTAUTH_SECRET,
   });
   if (session) {
-    updateById = parseInt(session.user?.id) ?? 0;
-  } else if (parseInt(dataQuery.user_id)) {
-    updateById = parseInt(dataQuery.user_id) ?? 0;
+    updateById = Number(session.user?.id) ?? 0;
+  } else if (Number(dataQuery.user_id)) {
+    updateById = Number(dataQuery.user_id) ?? 0;
   }
   if (req.method === "POST" && updateById !== 0) {
     const data = req.body;
     const userUpdater = new UserUpdater();
-    const userId = parseInt(data.id);
+    const userId = Number(data.id);
     const user = await userUpdater.userEdit(data, userId, updateById);
     if (user) {
       viewData.message = "Update Users Successful";

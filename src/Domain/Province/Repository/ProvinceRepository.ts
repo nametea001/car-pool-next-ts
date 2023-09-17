@@ -7,7 +7,7 @@ export class ProvinceRepository {
     //  praram controll
     let param: any[] = [];
     if (data.province_id) {
-      param.push({ id: parseInt(data.province_id) });
+      param.push({ id: Number(data.province_id) });
     }
     if (data.name_en) {
       param.push({ name_en: data.name_en });

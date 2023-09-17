@@ -7,19 +7,20 @@ export class ReviewRepository {
     //  praram controll
     let param: any[] = [];
     // if (data.review_id) {
-    //   param.push({ id: parseInt(data.review_id) });
+    //   param.push({ id: Number(data.review_id) });
     // }
     if (data.post_id) {
-      param.push({ post_id: parseInt(data.post_id) });
+      param.push({ post_id: Number(data.post_id) });
     }
     if (data.user_id) {
-      param.push({ user_id: parseInt(data.user_id) });
+      param.push({ user_id: Number(data.user_id) });
     }
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let review: any;
     try {
       review = await this.prisma.reviews.findMany({
+        orderBy: { created_at: "desc" },
         where: whereData,
         select: {
           id: true,
@@ -37,13 +38,16 @@ export class ReviewRepository {
           },
           posts: {
             select: {
-              end_district: {
-                select: {
-                  name_th: true,
-                },
-              },
+              // end_district: {
+              //   select: {
+              //     name_th: true,
+              //   },
+              // },
+              name_end: true,
+              date_time_start: true,
             },
           },
+          created_at: true,
         },
       });
     } catch (err) {

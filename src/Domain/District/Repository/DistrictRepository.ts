@@ -7,7 +7,7 @@ export class DistrictRepository {
     //  praram controll
     let param: any[] = [];
     if (data.district_id) {
-      param.push({ id: parseInt(data.district_id) });
+      param.push({ id: Number(data.district_id) });
     }
     if (data.name_en) {
       param.push({ name_en: data.name_en });
@@ -39,7 +39,7 @@ export class DistrictRepository {
     if (data.name_en) {
       param.push({ name_en: data.name_en });
     }
-   
+
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let district: any;

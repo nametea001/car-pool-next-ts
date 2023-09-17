@@ -29,7 +29,6 @@ model chat_details {
   chat_id         Int
   msg_type        chat_details_msg_type
   msg             String                @db.Text
-  lat_lng         Json?
   created_at      DateTime              @db.DateTime(0)
   created_user_id Int
   updated_at      DateTime              @db.DateTime(0)
@@ -268,5 +267,4 @@ enum users_sex {
 enum chat_details_msg_type {
   MSG
   IMG
-  LOCATION
 }

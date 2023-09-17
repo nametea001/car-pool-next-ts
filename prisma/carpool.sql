@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2023 at 02:18 PM
+-- Generation Time: Sep 16, 2023 at 03:23 PM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.10
 
@@ -40,15 +40,6 @@ CREATE TABLE `cars` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `cars`
---
-
-INSERT INTO `cars` (`id`, `user_id`, `brand`, `model`, `vehicle_registration`, `color`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
-(1, 1, 'B', 'A', 'C', 'D', 1, '2023-07-24 08:56:00', 1, '2023-07-24 08:56:00'),
-(2, 1, 'dd', 'ss', 'cc', 'ff', 1, '2023-07-25 16:22:08', 1, '2023-07-25 16:22:08'),
-(3, 1, 'Sqpp', 'Yamaha', 'ufod20', 'blue', 1, '2023-08-10 14:59:18', 1, '2023-08-10 14:59:18');
-
 -- --------------------------------------------------------
 
 --
@@ -75,9 +66,8 @@ CREATE TABLE `chats` (
 CREATE TABLE `chat_details` (
   `id` int NOT NULL,
   `chat_id` int NOT NULL,
-  `msg_type` enum('MSG','IMG','LOCATION') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `msg_type` enum('MSG','IMG') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lat_lng` json DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `created_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1073,6 +1063,29 @@ CREATE TABLE `posts` (
   `is_back` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Triggers `posts`
+--
+DELIMITER $$
+CREATE TRIGGER `update_chat_details_on_status_change` AFTER UPDATE ON `posts` FOR EACH ROW BEGIN
+    DECLARE chat_id INT;
+    IF NEW.status != 'IN_PROGRESS' THEN
+        SELECT id INTO chat_id FROM chats WHERE post_id = NEW.id;
+        INSERT INTO chat_details (chat_id, msg_type, msg, lat_lng, created_at, created_user_id, updated_at, updated_user_id)
+        VALUES (chat_id, 'MSG', 'Initial message', NULL, NOW(), NEW.created_user_id, NOW(), NEW.updated_user_id);
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_posts_status` BEFORE INSERT ON `posts` FOR EACH ROW BEGIN
+    IF NEW.date_time_start <= NOW() AND NEW.status = 'NEW' THEN
+        SET NEW.status = 'IN_PROGRESS';
+    END IF;  -- Add this line to close the IF condition
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -1298,8 +1311,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `sex`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
 (1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', 'non_img.png', 'Male', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
-(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 'Male', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1),
-(3, 'test1', '$2b$10$AjEH17H3DkDjajzmL3fJPOAWn5QXDYMI1u19LUYHycT8W9MBunAJG', 'test1', 'test1', 'test1@test1.com', 5, NULL, 'non_img.png', 'Male', 1, '2023-07-21 08:58:40', 1, '2023-07-21 08:58:40', 1);
+(2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 'Male', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1);
 
 -- --------------------------------------------------------
 
@@ -1447,7 +1459,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `chats`
@@ -1501,7 +1513,7 @@ ALTER TABLE `review_user_logs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_roles`

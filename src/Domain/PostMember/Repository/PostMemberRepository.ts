@@ -10,6 +10,7 @@ export class PostMemberRepository {
         data: data,
         select: {
           id: true,
+          post_id: true,
         },
       });
       return postMember;

@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 // fontasesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -183,9 +184,10 @@ function Layout({ children }: Props) {
                         <span className="me-2 text-profile">
                           {session?.user?.username}
                         </span>
-                        <img
+                        <Image
                           className="img-profile"
                           src={`profiles/${session?.user?.img_path}`}
+                          alt="profile"
                         />
                       </>
                     }

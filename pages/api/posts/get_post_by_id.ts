@@ -11,13 +11,19 @@ export default async function getPosts(
   res: NextApiResponse
 ) {
   const dataParam: any = req.query;
+  let postID: any = null;
+  try {
+    postID = Number(dataParam.post_id);
+  } catch (err) {
+    postID = null;
+  }
   let viewData: any = {};
   const jwt = new JWT();
   const token = req.headers["auth-token"];
   const tokenVerify = jwt.verifyToken(token);
-  if (req.method == "GET" && tokenVerify) {
+  if (req.method == "GET" && tokenVerify && postID) {
     const postFinder = new PostFinder();
-    const posts = await postFinder.findPosts(dataParam);
+    const posts = await postFinder.findPostByPostID(postID);
     if (posts) {
       viewData.message = "Get Post Successful";
       viewData.error = false;

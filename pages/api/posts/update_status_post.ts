@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponseServerIO } from "../../../src/Domain/SocketIO/Type/SocketIOType";
 
 import { PostFinder } from "../../../src/Domain/Post/Service/PostFinder";
 import { PostUpdater } from "../../../src/Domain/Post/Service/PostUpdater";
@@ -6,7 +7,7 @@ import { JWT } from "../../../src/Auth/JWT";
 
 export default async function addPost(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponseServerIO
 ) {
   const dataParam: any = req.query;
   const dataBody: any = req.body;
@@ -17,9 +18,8 @@ export default async function addPost(
   if (req.method == "POST" && tokenVerify) {
     const postFinder = new PostFinder();
     const postUpdater = new PostUpdater();
-
     let dataCheckStatus: any = await postFinder.findStatusPostByID(
-      parseInt(dataBody.post_id)
+      Number(dataBody.post_id)
     );
     if (
       (dataCheckStatus.status === "IN_PROGRESS" &&
@@ -28,13 +28,16 @@ export default async function addPost(
         dataCheckStatus.status !== "CANCEL" &&
         dataBody.status === "CANCEL")
     ) {
-      const userID = tokenVerify.id;
-      let whereData = { id: parseInt(dataBody.post_id) };
-      let posts = await postUpdater.updatePosts(whereData, dataBody, userID);
-      if (posts) {
+      let post = await postUpdater.updatePosts(
+        { id: Number(dataBody.post_id) },
+        dataBody,
+        tokenVerify.id
+      );
+      if (post) {
+        res?.socket?.server?.io?.emit("server_post", post.id);
         viewData.message = "Update Post Successful";
         viewData.error = false;
-        viewData.post = posts;
+        viewData.post = post;
         res.status(200).send(viewData);
       } else {
         res.status(401).send("Status err");

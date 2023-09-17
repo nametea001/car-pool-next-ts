@@ -24,7 +24,7 @@ export default async function getPosts(
       vehicle_registration: dataBody.vehicle_registration,
       color: dataBody.color,
     };
-    let whereData = { id: parseInt(dataBody.id) };
+    let whereData = { id: Number(dataBody.id) };
 
     let cars = await carUpdater.carUpdate(
       whereData,

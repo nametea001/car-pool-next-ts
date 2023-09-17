@@ -22,7 +22,7 @@ function Users({ propDataUsers, propDataUsersRole }: any) {
   const [dataUsersRole, setDataUsersRole] = useState(propDataUsersRole);
 
   // datatable
-  function datatable(value: []) {
+  function Datatable(value: []) {
     // modal edit user
     const [showUserEdit, setShowUseredit] = useState(false); //show modal
     // show modal user edit handle
@@ -256,7 +256,7 @@ function Users({ propDataUsers, propDataUsersRole }: any) {
           </h1>
           <hr />
           {/* <DataTables /> */}
-          {datatable(dataUsers)}
+          {Datatable(dataUsers)}
         </div>
       </div>
     </Container>
