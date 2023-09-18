@@ -22,6 +22,7 @@ model cars {
 
   @@index([user_id], map: "cars_ibfk_1")
   @@index([created_user_id], map: "created_user_id")
+  @@index([user_id], map: "idx_user_id")
 }
 
 model chat_details {
@@ -123,6 +124,7 @@ model post_members {
 
   @@index([post_id], map: "post_id")
   @@index([user_id], map: "user_id")
+  @@index([user_id], map: "idx_user_id")
 }
 
 model posts {
@@ -151,6 +153,8 @@ model posts {
   @@index([created_user_id], map: "created_user_id")
   @@index([end_district_id], map: "end_amphure_id")
   @@index([start_district_id], map: "start_amphure_id")
+  @@index([end_district_id], map: "idx_end_district_id")
+  @@index([start_district_id], map: "idx_start_district_id")
 }
 
 model provinces {
@@ -185,6 +189,8 @@ model review_user_logs {
 
   @@index([post_id], map: "post_id")
   @@index([user_id], map: "user_id")
+  @@index([post_id], map: "idx_post_id")
+  @@index([user_id], map: "idx_user_id")
 }
 
 model reviews {
@@ -204,6 +210,7 @@ model reviews {
   @@index([created_user_id], map: "created_user_id")
   @@index([post_id], map: "post_id")
   @@index([user_id], map: "user_id")
+  @@index([post_id], map: "idx_post_id")
 }
 
 model user_roles {
@@ -245,6 +252,7 @@ model users {
   user_roles                             user_roles         @relation(fields: [user_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
 
   @@index([user_role_id], map: "users_ibfk_1")
+  @@index([username], map: "idx_username")
 }
 
 enum chats_chat_type {

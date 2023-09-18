@@ -116,26 +116,39 @@ export class PostRepository {
       status: "NEW",
     });
 
-    param.push({
-      is_back: data.is_back === "true",
-    });
+    if (data.is_back != "null") {
+      param.push({
+        is_back: data.is_back === "true",
+      });
+    }
 
     if (data.date_time_back !== "" && data.is_back === "true") {
       param.push({
-        OR: [
-          {
-            date_time_back: {
-              lte: new Date(data.date_time_back),
-            },
-          },
-        ],
+        // OR: [
+        //   {
+        //     date_time_back: {
+        //       lte: this._timeBankokToDB(data.date_time_back),
+        //     },
+        //   },
+        // ],
+        date_time_back: {
+          lte: this._timeBankokToDB(data.date_time_back),
+        },
+      });
+    }
+
+    if ("date_time_start" in data) {
+      param.push({
+        date_time_start: {
+          gte: this._timeBankokToDB(data.date_time_start),
+        },
       });
     }
 
     // start all district or only district
     if (Number(data.start_district_id) !== 0) {
       param.push({
-        start_district_id: data.start_district_id,
+        start_district_id: Number(data.start_district_id),
       });
     }
     //  else if (Number(data.start_province_id) !== 0) {
@@ -147,22 +160,29 @@ export class PostRepository {
     // }
     else {
       param.push({
-        start_district: {
-          province_id: Number(data.start_province_id),
-        },
+        start_district: { province_id: Number(data.start_province_id) },
       });
     }
 
     // end all district or only district or region
     if (Number(data.end_district_id) !== 0) {
       param.push({
-        end_district_id: data.end_district_id,
+        // OR: [
+        //   {
+        //     end_district_id: Number(data.end_district_id),
+        //   },
+        //   { end_district: { province_id: Number(data.end_province_id) } },
+        // ],
+        end_district_id: Number(data.end_district_id),
       });
     } else if (Number(data.end_province_id) !== 0) {
       param.push({
-        end_district: {
-          end_district_id: Number(data.end_district_id),
-        },
+        // OR: [
+        //   {
+        //     end_district: { province_id: Number(data.end_province_id) },
+        //   },
+        // ],
+        end_district: { province_id: Number(data.end_province_id) },
       });
     }
 
@@ -170,11 +190,10 @@ export class PostRepository {
     //   param.push({ id: Number(data.post_id) });
     // }
     let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
-
     let posts: any;
     try {
       posts = await this.prisma.posts.findMany({
-        where: {},
+        where: whereData,
         select: {
           id: true,
           name_start: true,

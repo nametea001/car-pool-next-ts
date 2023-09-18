@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 18, 2023 at 03:03 AM
+-- Generation Time: Sep 18, 2023 at 03:47 AM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.10
 
@@ -1336,7 +1336,8 @@ INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`id`),
   ADD KEY `created_user_id` (`created_user_id`),
-  ADD KEY `cars_ibfk_1` (`user_id`);
+  ADD KEY `cars_ibfk_1` (`user_id`),
+  ADD KEY `idx_user_id` (`user_id`);
 
 --
 -- Indexes for table `chats`
@@ -1377,7 +1378,9 @@ ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `end_amphure_id` (`end_district_id`),
   ADD KEY `start_amphure_id` (`start_district_id`),
-  ADD KEY `created_user_id` (`created_user_id`);
+  ADD KEY `created_user_id` (`created_user_id`),
+  ADD KEY `idx_start_district_id` (`start_district_id`),
+  ADD KEY `idx_end_district_id` (`end_district_id`);
 
 --
 -- Indexes for table `post_details`
@@ -1392,7 +1395,8 @@ ALTER TABLE `post_details`
 ALTER TABLE `post_members`
   ADD PRIMARY KEY (`id`),
   ADD KEY `post_id` (`post_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `idx_user_id` (`user_id`);
 
 --
 -- Indexes for table `provinces`
@@ -1414,7 +1418,8 @@ ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `created_user_id` (`created_user_id`),
-  ADD KEY `post_id` (`post_id`);
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `idx_post_id` (`post_id`);
 
 --
 -- Indexes for table `review_user_logs`
@@ -1422,7 +1427,9 @@ ALTER TABLE `reviews`
 ALTER TABLE `review_user_logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `post_id` (`post_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_post_id` (`post_id`);
 
 --
 -- Indexes for table `users`
@@ -1430,7 +1437,8 @@ ALTER TABLE `review_user_logs`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `users_ibfk_1` (`user_role_id`);
+  ADD KEY `users_ibfk_1` (`user_role_id`),
+  ADD KEY `idx_username` (`username`);
 
 --
 -- Indexes for table `user_roles`
