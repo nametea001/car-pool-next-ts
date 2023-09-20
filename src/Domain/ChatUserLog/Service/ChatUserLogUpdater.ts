@@ -13,8 +13,8 @@ export class ChatUserLogUpdater {
     updateBy: number
   ) {
     let rows: any[] = [];
-    postMembers.forEach((user: any) => {
-      let data = { chat_id: chatID, user_id: user.user_id };
+    postMembers.forEach((postMember: any) => {
+      let data = { chat_id: chatID, user_id: postMember.user_id };
       let row = this.MapToRow(data, updateBy, true);
       rows.push(row);
     });

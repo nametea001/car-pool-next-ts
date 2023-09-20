@@ -8,9 +8,14 @@ export class ChatUpdater {
     return await this.chatRepository.inserChat(row);
   }
 
-  async updateChatSendMsg(data: any, chatID: number, updateBy: number) {
-    const row = this.MapToRow(data, updateBy, false, true);
+  async updateChatSendMsg(chatID: number, updateBy: number) {
+    const row = this.MapToRow({}, updateBy, false, true);
     return await this.chatRepository.updateChatSendMsg(row, chatID);
+  }
+
+  async updateChatByPostID(data: any, postID: number, updateBy: number) {
+    const row = this.MapToRow(data, updateBy, false, true);
+    return await this.chatRepository.updateChatByPostID(row, postID);
   }
 
   // map to DB

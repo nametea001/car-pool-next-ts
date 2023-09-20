@@ -60,6 +60,24 @@ export class ChatRepository {
     return chat;
   }
 
+  async updateChatByPostID(data: any, postID: number) {
+    let chat: any = null;
+    try {
+      chat = await this.prisma.chats.update({
+        where: { id: postID },
+        data: data,
+        select: {
+          id: true,
+          chat_type: true,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      chat = null;
+    }
+    return chat;
+  }
+
   async getChatForStart(data: any) {
     let chat: any = null;
     let whereData = {};

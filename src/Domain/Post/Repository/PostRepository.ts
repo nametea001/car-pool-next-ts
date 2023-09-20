@@ -101,6 +101,41 @@ export class PostRepository {
       resData = await this.prisma.posts.update({
         where: whereData,
         data: dataPost,
+        select: {
+          id: true,
+          name_start: true,
+          name_end: true,
+          start_district_id: true,
+          end_district_id: true,
+          is_back: true,
+          date_time_start: true,
+          date_time_back: true,
+          created_user_id: true,
+          status: true,
+          post_details: {
+            select: {
+              seat: true,
+              price: true,
+            },
+          },
+          users: {
+            select: {
+              img_path: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+              sex: true,
+            },
+          },
+          post_members: {
+            select: { user_id: true },
+          },
+          _count: {
+            select: {
+              post_members: true,
+            },
+          },
+        },
       });
     } catch (err) {
       resData = null;
@@ -222,6 +257,59 @@ export class PostRepository {
           //     },
           //   },
           // },
+          is_back: true,
+          date_time_start: true,
+          date_time_back: true,
+          created_user_id: true,
+          status: true,
+          post_details: {
+            select: {
+              seat: true,
+              price: true,
+            },
+          },
+          users: {
+            select: {
+              img_path: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+              sex: true,
+            },
+          },
+          _count: {
+            select: {
+              post_members: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      posts = null;
+    }
+    this.prisma.$disconnect();
+    return posts;
+  }
+
+  async findPostsHistory(user_id: number) {
+    let posts: any;
+    try {
+      posts = await this.prisma.posts.findMany({
+        orderBy: { id: "desc" },
+        where: {
+          OR: [
+            {
+              post_members: { every: { user_id: user_id } },
+            },
+            { created_user_id: user_id },
+          ],
+        },
+        select: {
+          id: true,
+          name_start: true,
+          name_end: true,
+          start_district_id: true,
+          end_district_id: true,
           is_back: true,
           date_time_start: true,
           date_time_back: true,

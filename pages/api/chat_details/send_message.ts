@@ -26,7 +26,6 @@ export default async function getPosts(
     if (chatDetailData) {
       const chatUpdater = new ChatUpdater();
       let chatData = await chatUpdater.updateChatSendMsg(
-        {},
         chatDetailData.chat_id,
         tokenVerify.id
       );
@@ -73,9 +72,9 @@ export default async function getPosts(
             tokenVerify.id
           );
           if (dataChatUserLog.count > 0) {
-            dataPostMemers.forEach((dataPostMemer: any) => {
-              let socketChat = "chat_user_" + dataPostMemer.user_id;
-              let socketPost = "user_" + dataPostMemer.user_id;
+            dataPostMemers.forEach((postMemer: any) => {
+              let socketChat = "chat_user_" + postMemer.user_id;
+              let socketPost = "user_" + postMemer.user_id;
               res?.socket?.server?.io?.emit(socketChat, "Update_UI");
               res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
             });

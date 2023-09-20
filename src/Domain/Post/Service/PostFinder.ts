@@ -7,6 +7,12 @@ export class PostFinder {
     const posts = await this.PostRepository.findPosts(data);
     return posts;
   }
+
+  async findPostsHistory(user_id: number) {
+    const posts = await this.PostRepository.findPostsHistory(user_id);
+    return posts;
+  }
+
   async findStatusPostByID(postID: number) {
     const post = await this.PostRepository.findStatusPostByID(postID);
     return post;

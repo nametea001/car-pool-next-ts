@@ -11,12 +11,12 @@ export default async function getPosts(
   let viewData: any = {};
   const jwt = new JWT();
   const token = req.headers["auth-token"];
-  const tokenVerify = jwt.verifyToken(token);
+  const tokenVerify: any = jwt.verifyToken(token);
   if (req.method == "GET" && tokenVerify) {
     const postFinder = new PostFinder();
-    const posts = await postFinder.findPosts(dataParam);
+    const posts = await postFinder.findPostsHistory(tokenVerify.id);
     if (posts) {
-      viewData.message = "Get Posts Successful";
+      viewData.message = "Get History Posts Successful";
       viewData.error = false;
       viewData.posts = posts;
       res.status(200).send(viewData);
