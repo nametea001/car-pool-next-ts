@@ -5,6 +5,7 @@ import { PostUpdater } from "../../../src/Domain/Post/Service/PostUpdater";
 import { ChatDetailUpdater } from "../../../src/Domain/ChatDetail/Service/ChatDetailUpdater";
 import { ChatUpdater } from "../../../src/Domain/Chat/Service/ChatUpdater";
 import { ChatUserLogUpdater } from "../../../src/Domain/ChatUserLog/Service/ChatUserLogUpdater";
+import { ReviewUserLogUpdater } from "../../../src/Domain/ReviewUserLog/Service/ReviewUserLogUpdater";
 import { JWT } from "../../../src/Auth/JWT";
 
 export default async function addPost(
@@ -55,7 +56,12 @@ export default async function addPost(
           if (chatUpdateData != null && chatUpdateData.length > 0) {
             let dataCreatedChatDetail = {};
             if (post.status === "DONE") {
-              
+              const reviewUserLogUpdater = new ReviewUserLogUpdater();
+              await reviewUserLogUpdater.insertManyReviewUserLog(
+                post.id,
+                post.post_members,
+                tokenVerify.id
+              );
               dataCreatedChatDetail = {
                 chat_id: chatUpdateData.id,
                 msg_type: "MSG",
@@ -88,9 +94,9 @@ export default async function addPost(
                 })
               );
               if (dataChatUserLog.count > 0) {
-                post.post_members.forEachforEach((postMemer: any) => {
-                  let socketChat = "chat_user_" + postMemer.user_id;
-                  let socketPost = "user_" + postMemer.user_id;
+                post.post_members.forEachforEach((user: any) => {
+                  let socketChat = "chat_user_" + user.user_id;
+                  let socketPost = "user_" + user.user_id;
                   res?.socket?.server?.io?.emit(socketChat, "Update_UI");
                   res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
                 });

@@ -7,16 +7,14 @@ export class ChatUserLogUpdater {
     const row = await this.MapToRow(data, updateBy, true);
     return this.chatUserLogRepository.insertChatUserLog(row);
   }
-  async insertManyChatUserLog(
-    chatID: number,
-    postMembers: [],
-    updateBy: number
-  ) {
+  async insertManyChatUserLog(chatID: number, users: [], updateBy: number) {
     let rows: any[] = [];
-    postMembers.forEach((postMember: any) => {
-      let data = { chat_id: chatID, user_id: postMember.user_id };
-      let row = this.MapToRow(data, updateBy, true);
-      rows.push(row);
+    users.forEach((user: any) => {
+      if (user.user_id !== updateBy) {
+        let data = { chat_id: chatID, user_id: user.user_id };
+        let row = this.MapToRow(data, updateBy, true);
+        rows.push(row);
+      }
     });
     return await this.chatUserLogRepository.insertManyChatUserLog(rows);
   }
