@@ -84,9 +84,8 @@ export default async function getPostDetails(
               tokenVerify.id
             );
           }
-          let socketChatDetail = "active_chat_detail_" + dataChatDetail.chat_id;
           res?.socket?.server?.io?.emit(
-            socketChatDetail,
+            "active_chat_detail_" + dataChatDetail.chat_id,
             JSON.stringify({
               user_id: tokenVerify.id,
               error: false,

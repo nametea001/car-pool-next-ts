@@ -46,6 +46,21 @@ export class PostDetailRepository {
           color: true,
           posts: {
             select: {
+              post_members: {
+                select: {
+                  id: true,
+                  user_id: true,
+                  users: {
+                    select: {
+                      img_path: true,
+                      first_name: true,
+                      last_name: true,
+                      email: true,
+                      sex: true,
+                    },
+                  },
+                },
+              },
               _count: {
                 select: {
                   // post_members: { where: { NOT: { user_id: data.user_id } } },
@@ -65,43 +80,6 @@ export class PostDetailRepository {
             },
           },
           // created_user_id: true,
-        },
-      });
-    } catch (err) {
-      post_detail = null;
-    }
-    this.prisma.$disconnect();
-    return post_detail;
-  }
-
-  async findPostDetailByPostIDAndFindPostMember(data: any) {
-    let post_detail: any;
-    try {
-      post_detail = await this.prisma.post_details.findFirst({
-        where: data,
-        select: {
-          id: true,
-          post_id: true,
-          lat_lng_start: true,
-          lat_lng_end: true,
-          seat: true,
-          price: true,
-          description: true,
-          brand: true,
-          model: true,
-          vehicle_registration: true,
-          color: true,
-          // created_user_id: true,
-
-          posts: {
-            select: {
-              post_members: {
-                select: {
-                  id: true,
-                },
-              },
-            },
-          },
         },
       });
     } catch (err) {

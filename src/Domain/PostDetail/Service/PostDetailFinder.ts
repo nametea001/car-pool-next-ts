@@ -8,9 +8,6 @@ export class PostDetailFinder {
     return postDetails;
   }
   async findPostDetailByPostID(data: any) {
-    const postDetails = await this.postDetailRepository.findPostDetailByPostID(
-      data
-    );
-    return postDetails;
+    return await this.postDetailRepository.findPostDetailByPostID(data);
   }
 }
