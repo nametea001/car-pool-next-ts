@@ -299,10 +299,11 @@ export class PostRepository {
         where: {
           OR: [
             {
-              post_members: { every: { user_id: user_id } },
+              post_members: { some: { user_id: user_id } },
             },
             { created_user_id: user_id },
           ],
+          // post_members: { some: { user_id: user_id } },
         },
         select: {
           id: true,

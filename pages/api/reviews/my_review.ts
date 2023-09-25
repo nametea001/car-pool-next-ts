@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
 import { JWT } from "../../../src/Auth/JWT";
 import { ReviewFinder } from "../../../src/Domain/Review/Service/ReviewFinder";
+import { ReviewUserLogFinder } from "../../../src/Domain/ReviewUserLog/Service/ReviewUserLogFinder";
 
 export default async function getPosts(
   req: NextApiRequest,
@@ -11,18 +11,19 @@ export default async function getPosts(
   let viewData: any = {};
   const jwt = new JWT();
   const token = req.headers["auth-token"];
-  const tokenVerify = jwt.verifyToken(token);
+  const tokenVerify: any = jwt.verifyToken(token);
   if (req.method == "GET" && tokenVerify) {
     const reviewFinder = new ReviewFinder();
-    let reviews = await reviewFinder.findReviews(dataParam);
-    if (reviews) {
-      let avgRatingReview = await reviewFinder.avgReviews(
-        Number(dataParam.user_id)
-      );
-      viewData.message = "Get Review Successful";
+    const reviewUserLogFinder = new ReviewUserLogFinder();
+    let reviews = await reviewFinder.findMyReviews(tokenVerify.id);
+    let reviewUserLogs = await reviewUserLogFinder.findReviewUserLogs(
+      tokenVerify.id
+    );
+    if (reviews || reviewUserLogs) {
+      viewData.message = "Get My Review Successful";
       viewData.error = false;
       viewData.reviews = reviews;
-      viewData.avg_review = avgRatingReview;
+      viewData.review_user_logs = reviewUserLogs;
       res.status(200).send(viewData);
     } else {
       res.status(401).send("err null data");

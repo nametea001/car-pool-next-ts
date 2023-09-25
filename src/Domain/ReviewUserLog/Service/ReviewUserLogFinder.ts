@@ -3,9 +3,7 @@ import { ReviewUserLogRepository } from "../Repository/ReviewUserLogRepository";
 export class ReviewUserLogFinder {
   private reviewUserLogRepository = new ReviewUserLogRepository();
 
-  async findReviewUserLogs(data: any) {
-    const reviewUserLogs =
-      await this.reviewUserLogRepository.findReviewUserLogs(data);
-    return reviewUserLogs;
+  async findReviewUserLogs(userID: number) {
+    return await this.reviewUserLogRepository.findReviewUserLogs(userID);
   }
 }

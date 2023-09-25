@@ -18,14 +18,18 @@ export default async function getPostDetails(
   const token = req.headers["auth-token"];
   const tokenVerify: any = jwt.verifyToken(token);
   // let tokenVerify = true;
-  if (req.method == "GET" && tokenVerify) {
+  let param = {
+    chat_type: dataParam.chat_type,
+    send_user_id: Number(dataParam.send_user_id),
+    send_post_id: Number(dataParam.send_post_id),
+    created_user_id: tokenVerify.id,
+  };
+  if (
+    req.method == "GET" &&
+    tokenVerify &&
+    (param.send_user_id !== null || param.send_post_id !== null)
+  ) {
     const chatFinder = new ChatFinder();
-    let param = {
-      chat_type: dataParam.chat_type,
-      send_user_id: Number(dataParam.send_user_id),
-      send_post_id: Number(dataParam.send_post_id),
-      created_user_id: tokenVerify.id,
-    };
     let chatData = await chatFinder.getChatForStart(param);
     if (chatData) {
       const chatDetail = new ChatDetailFinder();

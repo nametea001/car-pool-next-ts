@@ -166,7 +166,7 @@ export class ChatRepository {
             {
               posts: {
                 post_members: {
-                  every: {
+                  some: {
                     user_id: userID,
                   },
                 },
