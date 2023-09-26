@@ -188,7 +188,7 @@ export class ReviewRepository {
         where: { created_user_id: userID },
         select: {
           id: true,
-          post_id: true,
+          // post_id: true,
           score: true,
           description: true,
           posts: {

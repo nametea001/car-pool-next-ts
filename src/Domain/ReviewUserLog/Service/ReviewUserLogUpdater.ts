@@ -15,8 +15,10 @@ export class ReviewUserLogUpdater {
     return await this.reviewUserLogReposotory.insertManyReviewUserLog(rows);
   }
 
-  async deleteReviewUserLog(whereData: any) {
-    return await this.reviewUserLogReposotory.deleteReviewUserLog(whereData);
+  async deleteReviewUserLog(reviewUserLogID: number) {
+    return await this.reviewUserLogReposotory.deleteReviewUserLog(
+      reviewUserLogID
+    );
   }
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {

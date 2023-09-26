@@ -4,12 +4,12 @@ export class ReviewUpdater {
   private reviewReposotory = new ReviewRepository();
 
   async addReview(data: any, updateBy: number) {
-    const row = this.MapToRow(data, updateBy);
+    const row = this.MapToRow(data, updateBy, true);
     return await this.reviewReposotory.addReview(row);
   }
 
   async editReview(reviewID: number, data: any, updateBy: number) {
-    const row = this.MapToRow(data, updateBy, true);
+    const row = this.MapToRow(data, updateBy);
     return await this.reviewReposotory.editReview(reviewID, row);
   }
   // map to DB
@@ -24,6 +24,9 @@ export class ReviewUpdater {
     }
     if ("score" in data) {
       result.score = data.score;
+    }
+    if ("description" in data) {
+      result.description = data.description;
     }
 
     if (Object.keys(result).length !== 0) {

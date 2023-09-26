@@ -16,11 +16,11 @@ export class ReviewUserLogRepository {
     return res;
   }
 
-  async deleteReviewUserLog(whereData: any) {
+  async deleteReviewUserLog(reviewUserLogID: number) {
     let res: any = null;
     try {
       res = await this.prisma.review_user_logs.delete({
-        where: whereData,
+        where: { id: reviewUserLogID },
       });
     } catch (err) {
       res = null;
@@ -37,8 +37,8 @@ export class ReviewUserLogRepository {
         where: { user_id: userID },
         select: {
           id: true,
-          post_id: true,
-          user_id: true,
+          // post_id: true,
+          // user_id: true,
           posts: {
             select: {
               id: true,
