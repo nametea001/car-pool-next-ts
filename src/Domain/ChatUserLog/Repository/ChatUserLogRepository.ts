@@ -2,19 +2,6 @@ import { PrismaClient } from "@prisma/client";
 export class ChatUserLogRepository {
   private prisma = new PrismaClient();
 
-  // async inserChatUserLog(data: any) {
-  //   let chatUserLog: any = null;
-
-  //   try {
-  //     chatUserLog = await this.prisma.chatUserLogs.create({
-  //       data: data,
-  //       select: {},
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  //   return chatUserLog;
-  // }
   async insertChatUserLog(data: any) {
     let res: any = null;
     try {
@@ -25,6 +12,7 @@ export class ChatUserLogRepository {
     } catch (err) {
       res = null;
     }
+    this.prisma.$disconnect();
     return res;
   }
 
@@ -35,9 +23,9 @@ export class ChatUserLogRepository {
         data: data,
       });
     } catch (err) {
-      console.log(err);
       res = null;
     }
+    this.prisma.$disconnect();
     return res;
   }
 
@@ -48,15 +36,14 @@ export class ChatUserLogRepository {
         where: { AND: [{ user_id: data.user_id }, { chat_id: data.chat_id }] },
       });
     } catch (err) {
-      console.log(err);
       res = null;
     }
+    this.prisma.$disconnect();
     return res;
   }
 
   async getChatUserLogAndChatByUserUserID(userID: number) {
     let res: any = null;
-
     try {
       let groupByForID = await this.prisma.chat_user_logs.groupBy({
         by: ["chat_id"],
@@ -104,9 +91,9 @@ export class ChatUserLogRepository {
         },
       });
     } catch (err) {
-      console.log(err);
       res = null;
     }
+    this.prisma.$disconnect();
     return res;
   }
 
@@ -118,9 +105,9 @@ export class ChatUserLogRepository {
         _count: true,
       });
     } catch (err) {
-      console.log(err);
       chatUserLogs = null;
     }
+    this.prisma.$disconnect();
     return chatUserLogs;
   }
 }

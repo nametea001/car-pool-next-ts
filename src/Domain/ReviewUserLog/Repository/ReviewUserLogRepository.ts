@@ -10,9 +10,22 @@ export class ReviewUserLogRepository {
         data: data,
       });
     } catch (err) {
-      console.log(err);
       res = null;
     }
+    this.prisma.$disconnect();
+    return res;
+  }
+
+  async deleteReviewUserLog(whereData: any) {
+    let res: any = null;
+    try {
+      res = await this.prisma.review_user_logs.delete({
+        where: whereData,
+      });
+    } catch (err) {
+      res = null;
+    }
+    this.prisma.$disconnect();
     return res;
   }
 
@@ -60,6 +73,20 @@ export class ReviewUserLogRepository {
             },
           },
         },
+      });
+    } catch (err) {
+      reviewUserLog = null;
+    }
+    this.prisma.$disconnect();
+    return reviewUserLog;
+  }
+
+  async countReviewUserLogs(userID: number) {
+    let reviewUserLog: any = null;
+    try {
+      reviewUserLog = this.prisma.review_user_logs.aggregate({
+        where: { user_id: userID },
+        _count: true,
       });
     } catch (err) {
       reviewUserLog = null;

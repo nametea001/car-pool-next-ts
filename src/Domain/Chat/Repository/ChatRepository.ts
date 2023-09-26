@@ -40,8 +40,9 @@ export class ChatRepository {
         select: select,
       });
     } catch (err) {
-      console.log(err);
+      chat = null;
     }
+    this.prisma.$disconnect();
     return chat;
   }
 
@@ -57,6 +58,7 @@ export class ChatRepository {
       console.log(err);
       chat = null;
     }
+    this.prisma.$disconnect();
     return chat;
   }
 
@@ -72,9 +74,9 @@ export class ChatRepository {
         },
       });
     } catch (err) {
-      console.log(err);
       chat = null;
     }
+    this.prisma.$disconnect();
     return chat;
   }
 
@@ -204,6 +206,7 @@ export class ChatRepository {
       console.log(err);
       chats = null;
     }
+    this.prisma.$disconnect();
     return chats;
   }
 }

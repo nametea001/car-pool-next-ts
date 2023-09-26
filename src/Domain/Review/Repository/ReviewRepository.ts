@@ -3,6 +3,59 @@ import { PrismaClient } from "@prisma/client";
 export class ReviewRepository {
   private prisma = new PrismaClient();
 
+  async addReview(data: any) {
+    let review: any = null;
+    try {
+      review = await this.prisma.reviews.create({
+        data: data,
+        select: {
+          id: true,
+          post_id: true,
+          score: true,
+          description: true,
+          posts: {
+            select: {
+              id: true,
+              name_start: true,
+              name_end: true,
+              start_district_id: true,
+              end_district_id: true,
+              date_time_start: true,
+              date_time_back: true,
+              created_user_id: true,
+              status: true,
+              post_details: {
+                select: {
+                  seat: true,
+                  price: true,
+                },
+              },
+              users: {
+                select: {
+                  img_path: true,
+                  first_name: true,
+                  last_name: true,
+                  email: true,
+                  sex: true,
+                },
+              },
+              _count: {
+                select: {
+                  post_members: true,
+                },
+              },
+            },
+          },
+          created_at: true,
+        },
+      });
+    } catch (err) {
+      review = null;
+    }
+    this.prisma.$disconnect();
+    return review;
+  }
+
   async editReview(reviewID: number, data: any) {
     let review: any = null;
     try {
@@ -53,6 +106,7 @@ export class ReviewRepository {
     } catch (err) {
       review = null;
     }
+    this.prisma.$disconnect();
     return review;
   }
 

@@ -6,7 +6,6 @@ export class PostRepository {
   async addPostAndPostDetail(dataPost: any, dataPostdetail: any) {
     let posts: any = null;
     let dataInsert: any = null;
-
     dataInsert = {
       name_start: dataPost.name_start,
       name_end: dataPost.name_end,
@@ -47,12 +46,10 @@ export class PostRepository {
         },
       },
     };
-
     if (dataPost.is_back) {
       dataInsert.date_time_back = this._timeBankokToDB(dataPost.date_time_back);
       dataInsert.is_back = true;
     }
-
     try {
       posts = this.prisma.posts.create({
         data: dataInsert,
@@ -90,8 +87,9 @@ export class PostRepository {
         },
       });
     } catch (err) {
-      console.log(err);
+      posts = null;
     }
+    this.prisma.$disconnect();
     return posts;
   }
 
@@ -140,6 +138,7 @@ export class PostRepository {
     } catch (err) {
       resData = null;
     }
+    this.prisma.$disconnect();
     return resData;
   }
 
@@ -403,6 +402,7 @@ export class PostRepository {
     } catch (err) {
       resData = null;
     }
+    this.prisma.$disconnect();
     return resData;
   }
 

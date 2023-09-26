@@ -25,7 +25,7 @@ BEGIN
     DECLARE chat_id INT;
 
     -- Check if the status is not 'IN_PROGRESS'
-    IF NEW.status != 'IN_PROGRESS' THEN
+    IF NEW.status = 'IN_PROGRESS' THEN
         -- Attempt to select the chat_id from chats where post_id matches
         SELECT id INTO chat_id FROM chats WHERE post_id = NEW.id;
 

@@ -67,6 +67,13 @@ export default async function addPost(
                 msg_type: "MSG",
                 msg: "การเดินทางสำเร็จ โปรดให้คะแนน",
               };
+
+              post.post_members.forEach((user: any) => {
+                res?.socket?.server?.io?.emit(
+                  "user_" + user.user_id,
+                  "Update_Review"
+                );
+              });
             } else if (post.status === "CANCEL") {
               dataCreatedChatDetail = {
                 chat_id: chatUpdateData.id,

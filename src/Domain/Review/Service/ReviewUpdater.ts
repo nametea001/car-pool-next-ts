@@ -3,8 +3,13 @@ import { ReviewRepository } from "../Repository/ReviewRepository";
 export class ReviewUpdater {
   private reviewReposotory = new ReviewRepository();
 
-  async editReview(reviewID: number, data: any, updateBy: number) {
+  async addReview(data: any, updateBy: number) {
     const row = this.MapToRow(data, updateBy);
+    return await this.reviewReposotory.addReview(row);
+  }
+
+  async editReview(reviewID: number, data: any, updateBy: number) {
+    const row = this.MapToRow(data, updateBy, true);
     return await this.reviewReposotory.editReview(reviewID, row);
   }
   // map to DB

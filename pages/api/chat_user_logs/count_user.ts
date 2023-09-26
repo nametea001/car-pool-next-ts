@@ -18,7 +18,7 @@ export default async function getPosts(
       tokenVerify.id
     );
     if (chatUserLogData) {
-      viewData.message = "Get Car Successful";
+      viewData.message = "Get Count Chat User Log Successful";
       viewData.error = false;
       viewData.chat_user_log = chatUserLogData;
       res.status(200).send(viewData);

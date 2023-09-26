@@ -57,6 +57,7 @@ export class UserRepository {
     } catch (err) {
       resData = false;
     }
+    this.prisma.$disconnect();
     return resData;
   }
 

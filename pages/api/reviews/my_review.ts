@@ -20,7 +20,7 @@ export default async function getPosts(
       tokenVerify.id
     );
     if (reviews || reviewUserLogs) {
-      viewData.message = "Get My Review Successful";
+      viewData.message = "Edit My Review Successful";
       viewData.error = false;
       viewData.reviews = reviews;
       viewData.review_user_logs = reviewUserLogs;

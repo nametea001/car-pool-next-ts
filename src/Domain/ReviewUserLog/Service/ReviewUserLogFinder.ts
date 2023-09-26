@@ -6,4 +6,8 @@ export class ReviewUserLogFinder {
   async findReviewUserLogs(userID: number) {
     return await this.reviewUserLogRepository.findReviewUserLogs(userID);
   }
+
+  async countReviewUserLogs(userID: number) {
+    return await this.reviewUserLogRepository.countReviewUserLogs(userID);
+  }
 }

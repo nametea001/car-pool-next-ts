@@ -10,8 +10,8 @@ export class ChatUserLogFinder {
   }
 
   async countChatUserLogsByUserID(userID: number) {
-    const chatUserLogs =
-      await this.ChatUserLogUserLogRepository.countChatUserLogsByUserID(userID);
-    return chatUserLogs;
+    return await this.ChatUserLogUserLogRepository.countChatUserLogsByUserID(
+      userID
+    );
   }
 }

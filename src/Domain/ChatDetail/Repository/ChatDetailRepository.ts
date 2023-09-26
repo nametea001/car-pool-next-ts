@@ -20,9 +20,9 @@ export class ChatDetailRepository {
         },
       });
     } catch (err) {
-      console.log(err);
       chatDetail = null;
     }
+    this.prisma.$disconnect();
     return chatDetail;
   }
 

@@ -4,7 +4,6 @@ export class CarRepository {
 
   async carInsert(data: any) {
     let resData: any = null;
-
     try {
       resData = await this.prisma.cars.create({
         data: data,
@@ -17,9 +16,9 @@ export class CarRepository {
         },
       });
     } catch (err) {
-      console.log(err);
       resData = null;
     }
+    this.prisma.$disconnect();
     return resData;
   }
 
@@ -40,6 +39,7 @@ export class CarRepository {
     } catch (err) {
       resData = null;
     }
+    this.prisma.$disconnect();
     return resData;
   }
 

@@ -13,11 +13,11 @@ export class PostMemberRepository {
           post_id: true,
         },
       });
-      return postMember;
     } catch (err) {
-      console.log(err);
-      return null;
+      postMember = null;
     }
+    this.prisma.$disconnect();
+    return postMember;
   }
 
   async findPostMembersByPostIDAndNotOwner(data: any) {
