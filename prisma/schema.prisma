@@ -211,6 +211,7 @@ model reviews {
   @@index([post_id], map: "post_id")
   @@index([user_id], map: "user_id")
   @@index([post_id], map: "idx_post_id")
+  @@index([post_id, user_id], map: "post_id_2")
 }
 
 model user_roles {
@@ -246,13 +247,57 @@ model users {
   chats_chats_send_user_idTousers        chats[]            @relation("chats_send_user_idTousers")
   post_members                           post_members[]
   posts                                  posts[]
+  reports                                reports[]
   review_user_logs                       review_user_logs[]
   reviews_reviews_user_idTousers         reviews[]          @relation("reviews_user_idTousers")
   reviews_reviews_created_user_idTousers reviews[]          @relation("reviews_created_user_idTousers")
+  user_verify                            user_verify[]
   user_roles                             user_roles         @relation(fields: [user_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
 
   @@index([user_role_id], map: "users_ibfk_1")
   @@index([username], map: "idx_username")
+}
+
+model report_reasons {
+  id              Int                 @id @default(autoincrement())
+  type            report_reasons_type
+  reason          String              @db.Text
+  created_user_id Int
+  created_at      DateTime            @db.DateTime(0)
+  updated_user_id Int
+  updated_at      DateTime            @db.DateTime(0)
+  reports         reports[]
+}
+
+model reports {
+  id              Int            @id @default(autoincrement())
+  reson_id        Int
+  user_id         Int
+  description     String         @db.Text
+  created_user_id Int
+  created_at      DateTime       @db.DateTime(0)
+  updated_user_id Int
+  updated_at      DateTime       @db.DateTime(0)
+  report_reasons  report_reasons @relation(fields: [reson_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_1")
+  users           users          @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_2")
+
+  @@index([reson_id, user_id], map: "reson_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_verify {
+  id                  Int                @id @default(autoincrement())
+  user_id             Int
+  status              user_verify_status
+  id_card_path        String             @db.Text
+  driver_licence_path String             @db.Text
+  created_user_id     Int
+  created_at          DateTime           @db.DateTime(0)
+  updated_user_id     Int
+  updated_at          DateTime           @db.DateTime(0)
+  users               users              @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_verify_ibfk_1")
+
+  @@index([user_id], map: "user_id")
 }
 
 enum chats_chat_type {
@@ -275,4 +320,17 @@ enum users_sex {
 enum chat_details_msg_type {
   MSG
   IMG
+}
+
+enum report_reasons_type {
+  user
+  post
+  review
+}
+
+enum user_verify_status {
+  NEW
+  USER
+  DRIVER
+  NOT_VERIFY
 }

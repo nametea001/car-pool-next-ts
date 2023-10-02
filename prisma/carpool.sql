@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 18, 2023 at 03:03 AM
+-- Generation Time: Oct 02, 2023 at 08:58 AM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.10
 
@@ -39,15 +39,6 @@ CREATE TABLE `cars` (
   `updated_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cars`
---
-
-INSERT INTO `cars` (`id`, `user_id`, `brand`, `model`, `vehicle_registration`, `color`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
-(1, 1, 'B', 'A', 'C', 'D', 1, '2023-07-24 08:56:00', 1, '2023-07-24 08:56:00'),
-(2, 1, 'dd', 'ss', 'cc', 'ff', 1, '2023-07-25 16:22:08', 1, '2023-07-25 16:22:08'),
-(3, 1, 'Sqpp', 'Yamaha', 'ufod20', 'blue', 1, '2023-08-10 14:59:18', 1, '2023-08-10 14:59:18');
 
 -- --------------------------------------------------------
 
@@ -1236,6 +1227,39 @@ INSERT INTO `regions` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `id` int NOT NULL,
+  `reson_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_reasons`
+--
+
+CREATE TABLE `report_reasons` (
+  `id` int NOT NULL,
+  `type` enum('user','post','review') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reason` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `reviews`
 --
 
@@ -1315,16 +1339,23 @@ CREATE TABLE `user_roles` (
   `updated_user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `user_roles`
+-- Table structure for table `user_verify`
 --
 
-INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id`, `updated_at`, `updated_user_id`) VALUES
-(1, 'dev', '2022-08-18 09:18:04', 1, '2022-08-18 09:18:04', 1),
-(2, 'admin', '2022-08-18 09:18:04', 1, '2022-08-18 09:18:04', 1),
-(3, 'driver', '2023-03-12 16:43:22', 1, '2023-03-12 10:40:01', 1),
-(4, 'user', '2023-03-12 10:43:46', 1, '2023-03-12 10:43:46', 1),
-(5, 'non_verified', '2023-03-12 16:44:34', 1, '2023-03-12 16:44:34', 1);
+CREATE TABLE `user_verify` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `status` enum('NEW','USER','DRIVER','NOT_VERIFY') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_card_path` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `driver_licence_path` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_user_id` int NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -1336,7 +1367,8 @@ INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`id`),
   ADD KEY `created_user_id` (`created_user_id`),
-  ADD KEY `cars_ibfk_1` (`user_id`);
+  ADD KEY `cars_ibfk_1` (`user_id`),
+  ADD KEY `idx_user_id` (`user_id`);
 
 --
 -- Indexes for table `chats`
@@ -1377,7 +1409,9 @@ ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `end_amphure_id` (`end_district_id`),
   ADD KEY `start_amphure_id` (`start_district_id`),
-  ADD KEY `created_user_id` (`created_user_id`);
+  ADD KEY `created_user_id` (`created_user_id`),
+  ADD KEY `idx_start_district_id` (`start_district_id`),
+  ADD KEY `idx_end_district_id` (`end_district_id`);
 
 --
 -- Indexes for table `post_details`
@@ -1392,7 +1426,8 @@ ALTER TABLE `post_details`
 ALTER TABLE `post_members`
   ADD PRIMARY KEY (`id`),
   ADD KEY `post_id` (`post_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `idx_user_id` (`user_id`);
 
 --
 -- Indexes for table `provinces`
@@ -1408,13 +1443,29 @@ ALTER TABLE `regions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `reports`
+--
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `reson_id` (`reson_id`,`user_id`);
+
+--
+-- Indexes for table `report_reasons`
+--
+ALTER TABLE `report_reasons`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `reviews`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `created_user_id` (`created_user_id`),
-  ADD KEY `post_id` (`post_id`);
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `idx_post_id` (`post_id`),
+  ADD KEY `post_id_2` (`post_id`,`user_id`);
 
 --
 -- Indexes for table `review_user_logs`
@@ -1422,7 +1473,9 @@ ALTER TABLE `reviews`
 ALTER TABLE `review_user_logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `post_id` (`post_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_post_id` (`post_id`);
 
 --
 -- Indexes for table `users`
@@ -1430,13 +1483,21 @@ ALTER TABLE `review_user_logs`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `users_ibfk_1` (`user_role_id`);
+  ADD KEY `users_ibfk_1` (`user_role_id`),
+  ADD KEY `idx_username` (`username`);
 
 --
 -- Indexes for table `user_roles`
 --
 ALTER TABLE `user_roles`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_verify`
+--
+ALTER TABLE `user_verify`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -1446,7 +1507,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `chats`
@@ -1485,6 +1546,18 @@ ALTER TABLE `post_members`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `report_reasons`
+--
+ALTER TABLE `report_reasons`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
@@ -1506,7 +1579,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_verify`
+--
+ALTER TABLE `user_verify`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -1574,6 +1653,13 @@ ALTER TABLE `provinces`
   ADD CONSTRAINT `provinces_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`);
 
 --
+-- Constraints for table `reports`
+--
+ALTER TABLE `reports`
+  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reson_id`) REFERENCES `report_reasons` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Constraints for table `reviews`
 --
 ALTER TABLE `reviews`
@@ -1593,6 +1679,12 @@ ALTER TABLE `review_user_logs`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`user_role_id`) REFERENCES `user_roles` (`id`);
+
+--
+-- Constraints for table `user_verify`
+--
+ALTER TABLE `user_verify`
+  ADD CONSTRAINT `user_verify_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
