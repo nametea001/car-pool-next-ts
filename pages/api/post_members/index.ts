@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PostFinder } from "../../../src/Domain/Post/Service/PostFinder";
 import { JWT } from "../../../src/Auth/JWT";
 
-export default async function getPostDetails(
+export default async function getPostMember(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -16,11 +16,11 @@ export default async function getPostDetails(
   if (req.method == "GET" && tokenVerify) {
     if (true) {
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("Null data");
     }
   } else {
     res.status(400).send("Bad request");
   }
-  res.end();
 }

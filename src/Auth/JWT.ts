@@ -9,7 +9,7 @@ export class JWT {
       // delete user.last_name;
       return sign(user, process.env.NEXTAUTH_SECRET as Secret);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return null;
     }
   }

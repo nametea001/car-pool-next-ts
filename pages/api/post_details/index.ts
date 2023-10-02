@@ -30,11 +30,13 @@ export default async function getPostDetails(
       viewData.error = false;
       viewData.post_detail = postDetail;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { JWT } from "../../../../src/Auth/JWT";
 import { ChatUserLogUpdater } from "../../../../src/Domain/ChatUserLog/Service/ChatUserLogUpdater";
 
-export default async function getPosts(
+export default async function deleteByChatID(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

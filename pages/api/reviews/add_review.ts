@@ -4,7 +4,7 @@ import { JWT } from "../../../src/Auth/JWT";
 import { ReviewUpdater } from "../../../src/Domain/Review/Service/ReviewUpdater";
 import { ReviewUserLogUpdater } from "../../../src/Domain/ReviewUserLog/Service/ReviewUserLogUpdater";
 
-export default async function getPosts(
+export default async function addReview(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -26,10 +26,13 @@ export default async function getPosts(
       viewData.error = false;
       viewData.review = review;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("err null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
 }

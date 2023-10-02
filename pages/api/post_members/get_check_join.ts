@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PostMemberFinder } from "../../../src/Domain/PostMember/Service/PostMemberFinder";
 import { JWT } from "../../../src/Auth/JWT";
 
-export default async function getPostDetails(
+export default async function getpostMemberForCheckJoin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -26,11 +26,13 @@ export default async function getPostDetails(
       viewData.error = false;
       viewData.post_members = postMember;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

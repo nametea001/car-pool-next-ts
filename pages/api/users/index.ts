@@ -12,7 +12,7 @@ export default async function Users(req: NextApiRequest, res: NextApiResponse) {
       req: req,
       secret: process.env.NEXTAUTH_SECRET,
     });
-    if (req.method === "GET" && session.user.user_role_id == 1) {
+    if (req.method === "GET" && session.user.user_role_id <= 2) {
       const userFinder = new UserFinder();
       let users = await userFinder.findUsers(data);
       if (users) {

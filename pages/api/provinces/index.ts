@@ -19,8 +19,9 @@ export default async function getProvinces(
     viewData.error = false;
     viewData.provinces = provinces;
     res.status(200).send(viewData);
+    return;
   } else {
     res.status(400).send("Bad requie");
+    return;
   }
-  res.end();
 }

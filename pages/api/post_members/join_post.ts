@@ -9,7 +9,7 @@ import { ChatFinder } from "../../../src/Domain/Chat/Service/ChatFinder";
 import { JWT } from "../../../src/Auth/JWT";
 import { ChatUpdater } from "../../../src/Domain/Chat/Service/ChatUpdater";
 
-export default async function getPostDetails(
+export default async function joinPost(
   req: NextApiRequest,
   res: NextApiResponseServerIO
 ) {
@@ -104,16 +104,19 @@ export default async function getPostDetails(
         viewData.error = false;
         viewData.post_members = postMember;
         res.status(200).send(viewData);
+        return;
       } else {
         viewData.message = "Insert Post Member Fail";
         viewData.error = true;
         res.status(200).send(viewData);
+        return;
       }
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

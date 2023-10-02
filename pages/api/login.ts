@@ -24,13 +24,15 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
       viewData.token = token;
       viewData.user = user;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("error login");
+      return;
     }
   } else {
     res.status(400).send("error login");
+    return;
   }
-  res.end();
 }
 
 export default Login;

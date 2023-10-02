@@ -24,11 +24,13 @@ export default async function addPost(
       viewData.error = false;
       viewData.post = posts;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

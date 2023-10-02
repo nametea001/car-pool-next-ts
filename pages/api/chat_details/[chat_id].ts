@@ -4,7 +4,7 @@ import { JWT } from "../../../src/Auth/JWT";
 import { ChatDetailFinder } from "../../../src/Domain/ChatDetail/Service/ChatDetailFinder";
 import { ChatUserLogUpdater } from "../../../src/Domain/ChatUserLog/Service/ChatUserLogUpdater";
 
-export default async function getPostDetails(
+export default async function getChatDetailByChatID(
   req: NextApiRequest,
   res: NextApiResponseServerIO
 ) {
@@ -18,7 +18,7 @@ export default async function getPostDetails(
     chatID = Number(chat_id);
   } catch (err) {
     chatID = null;
-    console.log(err);
+    // console.log(err);
   }
   if (req.method == "GET" && tokenVerify && chatID) {
     const chatDetailFinder = new ChatDetailFinder();
@@ -38,11 +38,13 @@ export default async function getPostDetails(
       viewData.error = false;
       viewData.chat_details = chatDetailData;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

@@ -20,11 +20,13 @@ export default async function getDistrictByName(
       viewData.error = false;
       viewData.district = district;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("null data");
+      return;
     }
   } else {
     res.status(400).send("Bad requie");
+    return;
   }
-  res.end();
 }

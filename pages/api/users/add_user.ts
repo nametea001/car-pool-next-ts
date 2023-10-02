@@ -15,13 +15,15 @@ async function addUser(req: NextApiRequest, res: NextApiResponse) {
       viewData.error = false;
       viewData.user = user;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("err add user");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }
 
 export default addUser;

@@ -20,11 +20,13 @@ export default async function getPosts(
       viewData.error = false;
       viewData.posts = posts;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

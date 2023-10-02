@@ -200,6 +200,7 @@ export class ChatRepository {
             select: { chat_user_logs: { where: { user_id: userID } } },
           },
           created_at: true,
+          updated_at: true,
         },
       });
     } catch (err) {

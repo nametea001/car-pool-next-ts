@@ -7,7 +7,7 @@ import { ChatDetailUpdater } from "../../../src/Domain/ChatDetail/Service/ChatDe
 
 import { JWT } from "../../../src/Auth/JWT";
 
-export default async function getPostDetails(
+export default async function startChat(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

@@ -19,8 +19,9 @@ export default async function getDistrict(
     viewData.error = false;
     viewData.districts = districts;
     res.status(200).send(viewData);
+    return;
   } else {
     res.status(400).send("Bad requie");
+    return;
   }
-  res.end();
 }

@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { JWT } from "../../../src/Auth/JWT";
 import { ChatFinder } from "../../../src/Domain/Chat/Service/ChatFinder";
 
-export default async function getPosts(
+export default async function getChats(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -20,11 +20,13 @@ export default async function getPosts(
       viewData.error = false;
       viewData.chats = chatData;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

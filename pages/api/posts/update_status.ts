@@ -8,7 +8,7 @@ import { ChatUserLogUpdater } from "../../../src/Domain/ChatUserLog/Service/Chat
 import { ReviewUserLogUpdater } from "../../../src/Domain/ReviewUserLog/Service/ReviewUserLogUpdater";
 import { JWT } from "../../../src/Auth/JWT";
 
-export default async function addPost(
+export default async function updateStatusPost(
   req: NextApiRequest,
   res: NextApiResponseServerIO
 ) {
@@ -116,14 +116,17 @@ export default async function addPost(
         viewData.error = false;
         viewData.post = post;
         res.status(200).send(viewData);
+        return;
       } else {
         res.status(401).send("Status err");
+        return;
       }
     } else {
       res.status(401).send("Null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

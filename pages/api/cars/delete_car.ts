@@ -4,7 +4,7 @@ import { JWT } from "../../../src/Auth/JWT";
 // import { CarFinder } from "../../../src/Domain/Car/Service/CarFinder";
 import { CarUpdater } from "../../../src/Domain/Car/Service/CarUpdater";
 
-export default async function getPosts(
+export default async function deleteCar(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -27,11 +27,13 @@ export default async function getPosts(
       viewData.error = false;
       viewData.car = cars;
       res.status(200).send(viewData);
+      return;
     } else {
       res.status(401).send("null data");
+      return;
     }
   } else {
     res.status(400).send("Bad request");
+    return;
   }
-  res.end();
 }

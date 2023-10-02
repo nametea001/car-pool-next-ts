@@ -7,7 +7,7 @@ import { ChatUserLogUpdater } from "../../../src/Domain/ChatUserLog/Service/Chat
 import { PostMemberFinder } from "../../../src/Domain/PostMember/Service/PostMemberFinder";
 import { ChatUpdater } from "../../../src/Domain/Chat/Service/ChatUpdater";
 
-export default async function getPosts(
+export default async function sendMessage(
   req: NextApiRequest,
   res: NextApiResponseServerIO
 ) {
