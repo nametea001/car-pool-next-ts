@@ -1232,7 +1232,7 @@ INSERT INTO `regions` (`id`, `name`) VALUES
 
 CREATE TABLE `reports` (
   `id` int NOT NULL,
-  `reson_id` int NOT NULL,
+  `reason_id` int NOT NULL,
   `user_id` int NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_user_id` int NOT NULL,
@@ -1249,7 +1249,7 @@ CREATE TABLE `reports` (
 
 CREATE TABLE `report_reasons` (
   `id` int NOT NULL,
-  `type` enum('user','post','review') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('ALL','USER','POST','REVIEW') COLLATE utf8mb4_unicode_ci NOT NULL,
   `reason` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
