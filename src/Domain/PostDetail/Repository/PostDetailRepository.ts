@@ -46,6 +46,10 @@ export class PostDetailRepository {
           color: true,
           posts: {
             select: {
+              status: true,
+              date_time_start: true,
+              date_time_back: true,
+              is_back:true,
               post_members: {
                 select: {
                   id: true,
@@ -67,7 +71,6 @@ export class PostDetailRepository {
                   post_members: true,
                 },
               },
-              status: true,
               users: {
                 select: {
                   first_name: true,

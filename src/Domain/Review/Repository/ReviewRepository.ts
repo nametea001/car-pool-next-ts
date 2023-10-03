@@ -47,6 +47,7 @@ export class ReviewRepository {
             },
           },
           created_at: true,
+          created_user_id: true,
         },
       });
     } catch (err) {

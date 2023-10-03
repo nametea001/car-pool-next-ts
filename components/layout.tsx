@@ -140,6 +140,23 @@ function Layout({ children }: Props) {
                       <span className="ps-2">Users Roles</span>
                     </Link>
                   </Nav.Item>
+                  <Nav.Item className="sidebar-nav-chil-item">
+                    <Link
+                      href={"/"}
+                      className="sidebar-nav-chil-item-link"
+                      onClick={() => {
+                        setChillActiveIndex(3);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={IconSolid.faTriangleExclamation}
+                        // icon={IconSolid.faUserGear}
+                        className={`${chilActive === 3 ? "active" : ""}`}
+                        // style={{ fontSize: "1.5rem" }}
+                      />
+                      <span className="ps-2"> Report</span>
+                    </Link>
+                  </Nav.Item>
                 </Nav>
               </Nav.Item>
             </Nav>
