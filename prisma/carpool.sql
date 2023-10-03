@@ -1233,8 +1233,9 @@ INSERT INTO `regions` (`id`, `name`) VALUES
 CREATE TABLE `reports` (
   `id` int NOT NULL,
   `reason_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `post_id` int DEFAULT NULL,
+ `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,

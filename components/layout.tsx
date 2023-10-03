@@ -186,9 +186,20 @@ function Layout({ children }: Props) {
                         </span>
                         <Image
                           className="img-profile"
+                          src={
+                            session?.user?.img_path
+                              ? `/profiles/${session.user.img_path}`
+                              : "/profiles/non_img.png"
+                          }
+                          alt="profile"
+                          width={100} // Set the width as needed
+                          height={100} // Set the height as needed
+                        />
+                        {/* <img
+                          className="img-profile"
                           src={`profiles/${session?.user?.img_path}`}
                           alt="profile"
-                        />
+                        /> */}
                       </>
                     }
                   >

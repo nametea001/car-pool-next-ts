@@ -1,8 +1,12 @@
 import { ReportRepository } from "../Repository/ReportRepository";
 
 export class ReportUpdater {
-  private carRepository = new ReportRepository();
+  private reportRepository = new ReportRepository();
 
+  async addReport(data: any, userID: number) {
+    const row = this.MapToRow(data, userID, true);
+    return await this.reportRepository.addReport(row);
+  }
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
     let result: any = {};
@@ -12,6 +16,9 @@ export class ReportUpdater {
     }
     if ("user_id" in data) {
       result.user_id = data.user_id;
+    }
+    if ("post_id" in data) {
+      result.post_id = data.post_id;
     }
     if ("description" in data) {
       result.description = data.description;

@@ -147,6 +147,7 @@ model posts {
   start_district    districts          @relation("posts_start_district_idTodistricts", fields: [start_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
   end_district      districts          @relation("posts_end_district_idTodistricts", fields: [end_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_2")
   users             users              @relation(fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_3")
+  reports           reports[]
   review_user_logs  review_user_logs[]
   reviews           reviews[]
 
@@ -272,17 +273,20 @@ model report_reasons {
 model reports {
   id              Int            @id @default(autoincrement())
   reason_id       Int
-  user_id         Int
-  description     String         @db.Text
+  user_id         Int?
+  post_id         Int?
+  description     String?        @db.Text
   created_user_id Int
   created_at      DateTime       @db.DateTime(0)
   updated_user_id Int
   updated_at      DateTime       @db.DateTime(0)
   report_reasons  report_reasons @relation(fields: [reason_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_1")
-  users           users          @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_2")
+  users           users?         @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "reports_ibfk_2")
+  posts           posts?         @relation(fields: [post_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "reports_ibfk_3")
 
   @@index([reason_id, user_id], map: "reson_id")
   @@index([user_id], map: "user_id")
+  @@index([post_id], map: "post_id")
 }
 
 model user_verify {
