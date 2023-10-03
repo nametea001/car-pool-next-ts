@@ -3,9 +3,8 @@ import { PostRepository } from "../Repository/PostRepository";
 export class PostFinder {
   private PostRepository = new PostRepository();
 
-  async findPosts(data: any) {
-    const posts = await this.PostRepository.findPosts(data);
-    return posts;
+  async findPosts(data: any, userID: number) {
+    return await this.PostRepository.findPosts(data, userID);
   }
 
   async findPostsHistory(user_id: number) {

@@ -271,17 +271,17 @@ model report_reasons {
 
 model reports {
   id              Int            @id @default(autoincrement())
-  reson_id        Int
+  reason_id       Int
   user_id         Int
   description     String         @db.Text
   created_user_id Int
   created_at      DateTime       @db.DateTime(0)
   updated_user_id Int
   updated_at      DateTime       @db.DateTime(0)
-  report_reasons  report_reasons @relation(fields: [reson_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_1")
+  report_reasons  report_reasons @relation(fields: [reason_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_1")
   users           users          @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_2")
 
-  @@index([reson_id, user_id], map: "reson_id")
+  @@index([reason_id, user_id], map: "reson_id")
   @@index([user_id], map: "user_id")
 }
 
@@ -322,15 +322,16 @@ enum chat_details_msg_type {
   IMG
 }
 
-enum report_reasons_type {
-  user
-  post
-  review
-}
-
 enum user_verify_status {
   NEW
   USER
   DRIVER
   NOT_VERIFY
+}
+
+enum report_reasons_type {
+  USER
+  POST
+  REVIEW
+  ALL
 }

@@ -142,7 +142,7 @@ export class PostRepository {
     return resData;
   }
 
-  async findPosts(data: any) {
+  async findPosts(data: any, userID: number) {
     //  praram controll
     let param: any[] = [];
 
@@ -223,7 +223,30 @@ export class PostRepository {
     // if (data.post_id) {
     //   param.push({ id: Number(data.post_id) });
     // }
-    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
+    // let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
+    let whereData = {};
+    if (param.length > 0) {
+      whereData = {
+        OR: [
+          {
+            AND: param,
+          },
+          {
+            AND: [
+              { created_user_id: userID },
+              { OR: [{ status: "NEW" }, { status: "IN_PROGRESS" }] },
+            ],
+          },
+        ],
+      };
+    } else {
+      whereData = {
+        AND: [
+          { created_user_id: userID },
+          { OR: [{ status: "NEW" }, { status: "IN_PROGRESS" }] },
+        ],
+      };
+    }
     let posts: any;
     try {
       posts = await this.prisma.posts.findMany({
