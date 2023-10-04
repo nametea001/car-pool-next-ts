@@ -145,18 +145,33 @@ export class PostRepository {
   async findPosts(data: any, userID: number) {
     //  praram controll
     let param: any[] = [];
-
     param.push({
       status: "NEW",
     });
 
-    if (data.is_back != "null") {
+    if ("date_time_start" in data) {
+      const tempDateTime: any[] = this._timeBankokToDBForSearch(
+        data.date_time_start
+      );
+
       param.push({
-        is_back: data.is_back === "true",
+        date_time_start: {
+          gte: tempDateTime[0],
+          lte: tempDateTime[1],
+        },
       });
     }
 
+    // if (data.is_back != "null") {
+    //   param.push({
+    //     is_back: data.is_back === "true",
+    //   });
+    // }
+
     if (data.date_time_back !== "" && data.is_back === "true") {
+      const tempDateTime: any[] = this._timeBankokToDBForSearch(
+        data.date_time_back
+      );
       param.push({
         // OR: [
         //   {
@@ -166,15 +181,8 @@ export class PostRepository {
         //   },
         // ],
         date_time_back: {
-          lte: this._timeBankokToDB(data.date_time_back),
-        },
-      });
-    }
-
-    if ("date_time_start" in data) {
-      param.push({
-        date_time_start: {
-          gte: this._timeBankokToDB(data.date_time_start),
+          gte: tempDateTime[0],
+          lte: tempDateTime[1],
         },
       });
     }
@@ -433,5 +441,29 @@ export class PostRepository {
     let dateTimeFormat = new Date(dateTime);
     dateTimeFormat.setHours(dateTimeFormat.getHours() + 7);
     return dateTimeFormat;
+  }
+
+  private _timeBankokToDBForSearch(dateTime: any) {
+    let date = new Date(dateTime);
+    const datetime1 = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      0,
+      0,
+      0
+    );
+    const datetime2 = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      23,
+      59,
+      59
+    );
+    datetime1.setHours(datetime1.getHours() + 7);
+    datetime2.setHours(datetime2.getHours() + 7);
+
+    return [datetime1, datetime2];
   }
 }

@@ -46,10 +46,12 @@ export class PostDetailRepository {
           color: true,
           posts: {
             select: {
+              name_start: true,
+              name_end: true,
               status: true,
               date_time_start: true,
               date_time_back: true,
-              is_back:true,
+              is_back: true,
               post_members: {
                 select: {
                   id: true,
