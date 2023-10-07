@@ -1,4 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type {
+  NextApiRequest,
+  NextApiResponse,
+} from "../../../node_modules/next/";
 
 import { UserFinder } from "../../../src/Domain/User/Service/UserFinder";
 import { getToken } from "next-auth/jwt";

@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
 import { UserUpdater } from "../../../src/Domain/User/Service/UserUpdater";
 
 async function addUser(req: NextApiRequest, res: NextApiResponse) {

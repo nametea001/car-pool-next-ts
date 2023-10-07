@@ -28,6 +28,7 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+bun.lockb
 # local env files
 .env*.local
 
@@ -44,3 +45,5 @@ next-env.d.ts
 /.env
 
 public/profiles/
+public/profiles/drivers/
+public/profiles/users/

@@ -20,8 +20,11 @@ export class UserUpdater {
 
   async userEdit(data: any, userId: number, updateBy: number) {
     let row = this.MapToRow(data, updateBy);
-    const user = await this.userReposotory.UserEdit(row, userId);
-    return user;
+    return await this.userReposotory.userEdit(row, userId);
+  }
+
+  async userUpdateProfile(imgPath: string, userID: number) {
+    return await this.userReposotory.userUpdateProfile(imgPath, userID);
   }
 
   // map to DB

@@ -1,35 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
+import { JWT } from "../../../src/Auth/JWT";
 import { UserUpdater } from "../../../src/Domain/User/Service/UserUpdater";
 
 async function editUser(req: NextApiRequest, res: NextApiResponse) {
-  const dataQuery: any = req.query;
   let viewData: any = {};
-  var updateById: number = 0;
-
-  const session: any = await getToken({
-    req: req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-  if (session) {
-    updateById = Number(session.user?.id) ?? 0;
-  } else if (Number(dataQuery.user_id)) {
-    updateById = Number(dataQuery.user_id) ?? 0;
-  }
-  if (req.method === "POST" && updateById !== 0) {
-    const data = req.body;
+  const data = req.body;
+  const jwt = new JWT();
+  const token = req.headers["auth-token"];
+  const tokenVerify: any = jwt.verifyToken(token);
+  if (req.method === "POST" && tokenVerify) {
     const userUpdater = new UserUpdater();
-    const userId = Number(data.id);
-    const user = await userUpdater.userEdit(data, userId, updateById);
+    const user = await userUpdater.userEdit(
+      data,
+      tokenVerify.id,
+      tokenVerify.id
+    );
     if (user) {
       viewData.message = "Update Users Successful";
       viewData.error = false;
       viewData.users = user;
+      return res.status(200).send(viewData);
+    } else {
+      return res.status(400);
     }
+  } else {
+    return res.status(401);
   }
-  // res.status(200).json({ name: "John Doe" });
-  res.status(200).send(viewData);
-  res.end();
 }
 
 export default editUser;

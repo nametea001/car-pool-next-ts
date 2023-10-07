@@ -52,6 +52,7 @@ export class PostDetailRepository {
               date_time_start: true,
               date_time_back: true,
               is_back: true,
+              created_user_id: true,
               post_members: {
                 select: {
                   id: true,

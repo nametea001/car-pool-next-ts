@@ -32,7 +32,7 @@ export class UserRepository {
     return resData;
   }
 
-  async UserEdit(data: any, userId: number) {
+  async userEdit(data: any, userId: number) {
     let resData: any = null;
     try {
       resData = await this.prisma.users.update({
@@ -52,6 +52,23 @@ export class UserRepository {
               user_role_name: true,
             },
           },
+        },
+      });
+    } catch (err) {
+      resData = false;
+    }
+    this.prisma.$disconnect();
+    return resData;
+  }
+
+  async userUpdateProfile(imgPath: string, userID: number) {
+    let resData: any = null;
+    try {
+      resData = await this.prisma.users.update({
+        where: { id: userID },
+        data: { img_path: imgPath },
+        select: {
+          img_path: true,
         },
       });
     } catch (err) {
@@ -141,6 +158,7 @@ export class UserRepository {
             user_role_id: true,
             locale: true,
             img_path: true,
+            sex: true,
             user_roles: {
               select: {
                 user_role_name: true,
