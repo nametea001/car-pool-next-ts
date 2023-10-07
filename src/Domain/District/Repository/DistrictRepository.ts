@@ -32,20 +32,13 @@ export class DistrictRepository {
     return district;
   }
 
-  async findDistrictByName(data: any) {
+  async findDistrictByName(name: string) {
     //  praram controll
-    let param: any[] = [];
-
-    if (data.name_en) {
-      param.push({ name_en: data.name_en });
-    }
-
-    let whereData = param.length !== 0 ? { AND: param } : {}; //check param is empty
 
     let district: any;
     try {
       district = await this.prisma.districts.findFirst({
-        where: whereData,
+        where: { OR: [{ name_en: name }, { name_th: name }] },
         select: {
           id: true,
           name_th: true,
@@ -60,14 +53,15 @@ export class DistrictRepository {
     return district;
   }
 
-  async findDistrictByProvinceName(data: any) {
+  async findDistrictByProvinceName(name: string) {
     let district: any;
     try {
       district = await this.prisma.districts.findFirst({
         where: {
-          provinces: {
-            name_en: data.name_en,
-          },
+          OR: [
+            { provinces: { name_en: name } },
+            { provinces: { name_th: name } },
+          ],
         },
         select: {
           id: true,

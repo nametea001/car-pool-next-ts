@@ -8,13 +8,13 @@ export default async function getDistrictByName(
   res: NextApiResponse
 ) {
   let viewData: any = {};
-  const data = req.query;
+  const data: any = req.query;
   const jwt = new JWT();
   const token = req.headers["auth-token"];
   const tokenVerify = jwt.verifyToken(token);
   if (req.method === "GET" && tokenVerify) {
     const districtFinders = new DistrictFinder();
-    const district = await districtFinders.findDistrictByName(data);
+    const district = await districtFinders.findDistrictByName(data.name);
     if (district) {
       viewData.message = "Get Districts Successful";
       viewData.error = false;

@@ -7,14 +7,14 @@ export class DistrictFinder {
     const provences = await this.districtRepository.findDistricts(data);
     return provences;
   }
-  async findDistrictByName(data: any) {
-    const provences = await this.districtRepository.findDistrictByName(data);
+  async findDistrictByName(name: string) {
+    const provences = await this.districtRepository.findDistrictByName(name);
     return provences;
   }
 
-  async findDistrictByProvinceName(data: any) {
+  async findDistrictByProvinceName(name: string) {
     const provences = await this.districtRepository.findDistrictByProvinceName(
-      data
+      name
     );
     return provences;
   }
