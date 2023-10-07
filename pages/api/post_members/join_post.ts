@@ -29,7 +29,7 @@ export default async function joinPost(
     if (getPostMemberForcheckJoin.length !== 0) {
       let countMember = 0;
       let isMember = false;
-      let seat = getPostMemberForcheckJoin[0].posts.post_details.seat;
+      let seat = getPostMemberForcheckJoin[0].posts.post_details[0].seat;
       getPostMemberForcheckJoin.forEach((data: any) => {
         countMember++;
         if (Number(tokenVerify.id) === data.user_id) {
