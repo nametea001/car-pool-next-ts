@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 02, 2023 at 08:58 AM
+-- Generation Time: Oct 07, 2023 at 09:01 AM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.10
 
@@ -1235,7 +1235,8 @@ CREATE TABLE `reports` (
   `reason_id` int NOT NULL,
   `user_id` int DEFAULT NULL,
   `post_id` int DEFAULT NULL,
- `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `review_id` int DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
@@ -1250,13 +1251,21 @@ CREATE TABLE `reports` (
 
 CREATE TABLE `report_reasons` (
   `id` int NOT NULL,
-  `type` enum('ALL','USER','POST','REVIEW') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reason` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('USER','POST','REVIEW','ALL') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reason` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `report_reasons`
+--
+
+INSERT INTO `report_reasons` (`id`, `type`, `reason`, `created_user_id`, `created_at`, `updated_user_id`, `updated_at`) VALUES
+(1, 'ALL', 'อิ่นๆ', 1, '2023-10-02 17:30:01', 1, '2023-10-02 17:30:01'),
+(2, 'ALL', 'การหลอกลวง', 1, '2023-10-03 09:48:57', 1, '2023-10-03 09:48:57');
 
 -- --------------------------------------------------------
 
@@ -1321,7 +1330,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `user_role_id`, `locale`, `img_path`, `sex`, `enabled`, `created_at`, `created_user_id`, `updated_at`, `updated_user_id`) VALUES
-(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', 'non_img.png', 'Male', 1, '2022-12-12 10:28:55', 1, '2022-12-12 10:28:55', 1),
+(1, 'dev', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'dev', 'dev', 'dev@dev.com', 1, 'dev', '1.jpg', 'Male', 1, '2022-12-12 10:28:55', 1, '2023-10-07 02:04:12', 1),
 (2, 'admin', '$2b$10$f1Ehd75oI512u3fNGNwifeMRGzVQwwARWXagtdBVfcS1QMcaaf9VC', 'admin', 'admin', 'admin@gg.com', 1, 'admin', 'non_img.png', 'Male', 1, '2023-01-08 14:19:22', 1, '2023-01-08 23:26:25', 1),
 (3, 'test1', '$2b$10$AjEH17H3DkDjajzmL3fJPOAWn5QXDYMI1u19LUYHycT8W9MBunAJG', 'test1', 'test1', 'test1@test1.com', 5, NULL, 'non_img.png', 'Male', 1, '2023-07-21 08:58:40', 1, '2023-07-21 08:58:40', 1);
 
@@ -1340,6 +1349,17 @@ CREATE TABLE `user_roles` (
   `updated_user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
+--
+-- Dumping data for table `user_roles`
+--
+
+INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id`, `updated_at`, `updated_user_id`) VALUES
+(1, 'dev', '2022-08-18 09:18:04', 1, '2022-08-18 09:18:04', 1),
+(2, 'admin', '2022-08-18 09:18:04', 1, '2022-08-18 09:18:04', 1),
+(3, 'driver', '2023-03-12 16:43:22', 1, '2023-03-12 10:40:01', 1),
+(4, 'user', '2023-03-12 10:43:46', 1, '2023-03-12 10:43:46', 1),
+(5, 'non_verified', '2023-03-12 16:44:34', 1, '2023-03-12 16:44:34', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -1349,9 +1369,10 @@ CREATE TABLE `user_roles` (
 CREATE TABLE `user_verify` (
   `id` int NOT NULL,
   `user_id` int NOT NULL,
-  `status` enum('NEW','USER','DRIVER','NOT_VERIFY') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_card_path` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `driver_licence_path` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('NEW','USER','DRIVER','NOT_VERIFY') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_card_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `driver_licence_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
@@ -1449,7 +1470,9 @@ ALTER TABLE `regions`
 ALTER TABLE `reports`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `reson_id` (`reson_id`,`user_id`);
+  ADD KEY `reson_id` (`reason_id`,`user_id`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `review_id` (`review_id`);
 
 --
 -- Indexes for table `report_reasons`
@@ -1556,7 +1579,7 @@ ALTER TABLE `reports`
 -- AUTO_INCREMENT for table `report_reasons`
 --
 ALTER TABLE `report_reasons`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -1580,7 +1603,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user_verify`
@@ -1657,8 +1680,10 @@ ALTER TABLE `provinces`
 -- Constraints for table `reports`
 --
 ALTER TABLE `reports`
-  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reson_id`) REFERENCES `report_reasons` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reason_id`) REFERENCES `report_reasons` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `reports_ibfk_3` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `reports_ibfk_4` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `reviews`

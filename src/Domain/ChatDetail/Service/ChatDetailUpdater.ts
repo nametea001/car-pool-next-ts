@@ -5,8 +5,7 @@ export class ChatDetailUpdater {
 
   async insertChatDetail(data: any, updateBy: number) {
     const row = this.MapToRow(data, updateBy, true);
-    let chatDetailData = await this.chatDetailRepository.insertChatDetail(row);
-    return chatDetailData;
+    return await this.chatDetailRepository.insertChatDetail(row);
   }
   // map to DB
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
@@ -20,9 +19,6 @@ export class ChatDetailUpdater {
     }
     if ("msg" in data) {
       result.msg = data.msg;
-    }
-    if ("lat_lng" in data) {
-      result.lat_lng = data.lat_lng;
     }
 
     if (Object.keys(result).length !== 0) {

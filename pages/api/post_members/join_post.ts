@@ -50,14 +50,13 @@ export default async function joinPost(
             send_post_id: postMember.post_id,
           });
           let dataChatDetail: any;
+          let dataUpdateChatDetail = {
+            chat_id: chatData.id,
+            msg_type: "MSG",
+            msg: `${tokenVerify.first_name} ได้เข้ารวมการเดินทาง`,
+          };
           const chatDetailUpdater = new ChatDetailUpdater();
           if (chatData) {
-            let dataUpdateChatDetail = {
-              chat_id: chatData.id,
-              msg_type: "MSG",
-              MSG: `${tokenVerify.first_name} ได้เข้ารวมการเดินทาง`,
-              lat_lng: null,
-            };
             dataChatDetail = await chatDetailUpdater.insertChatDetail(
               dataUpdateChatDetail,
               tokenVerify.id
@@ -73,17 +72,13 @@ export default async function joinPost(
               dataInsertChat,
               tokenVerify.id
             );
-            let dataUpdateChatDetail = {
-              chat_id: chatDataCreated.id,
-              msg_type: "MSG",
-              MSG: `${tokenVerify.first_name} ได้เข้ารวมการเดินทาง`,
-              lat_lng: null,
-            };
+
             dataChatDetail = await chatDetailUpdater.insertChatDetail(
               dataUpdateChatDetail,
               tokenVerify.id
             );
           }
+          res?.socket?.server?.io?.emit("server_post", postMember.post_id);
           res?.socket?.server?.io?.emit(
             "active_chat_detail_" + dataChatDetail.chat_id,
             JSON.stringify({
@@ -99,24 +94,20 @@ export default async function joinPost(
             res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
           });
         }
-        res?.socket?.server?.io?.emit("server_post", postMember.post_id);
         viewData.message = "Insert Post Member Successful";
         viewData.error = false;
         viewData.post_members = postMember;
-        res.status(200).send(viewData);
-        return;
+
+        return res.status(200).send(viewData);
       } else {
         viewData.message = "Insert Post Member Fail";
         viewData.error = true;
-        res.status(200).send(viewData);
-        return;
+        return res.status(200).send(viewData);
       }
     } else {
-      res.status(401).send("Null data");
-      return;
+      return res.status(401).send("Null data");
     }
   } else {
-    res.status(400).send("Bad request");
-    return;
+    return res.status(400).send("Bad request");
   }
 }

@@ -195,18 +195,19 @@ model review_user_logs {
 }
 
 model reviews {
-  id                    Int      @id @default(autoincrement())
+  id                    Int       @id @default(autoincrement())
   post_id               Int
   user_id               Int
   score                 Int
-  description           String   @db.Text
+  description           String    @db.Text
   created_user_id       Int
-  created_at            DateTime @db.DateTime(0)
+  created_at            DateTime  @db.DateTime(0)
   updated_user_id       Int
-  updated_at            DateTime @db.DateTime(0)
-  users_reviews         users    @relation("reviews_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_1")
-  users_reviews_created users    @relation("reviews_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_2")
-  posts                 posts    @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "reviews_ibfk_3")
+  updated_at            DateTime  @db.DateTime(0)
+  reports               reports[]
+  users_reviews         users     @relation("reviews_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_1")
+  users_reviews_created users     @relation("reviews_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_ibfk_2")
+  posts                 posts     @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "reviews_ibfk_3")
 
   @@index([created_user_id], map: "created_user_id")
   @@index([post_id], map: "post_id")
@@ -275,6 +276,7 @@ model reports {
   reason_id       Int
   user_id         Int?
   post_id         Int?
+  review_id       Int?
   description     String?        @db.Text
   created_user_id Int
   created_at      DateTime       @db.DateTime(0)
@@ -283,10 +285,12 @@ model reports {
   report_reasons  report_reasons @relation(fields: [reason_id], references: [id], onUpdate: Restrict, map: "reports_ibfk_1")
   users           users?         @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "reports_ibfk_2")
   posts           posts?         @relation(fields: [post_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "reports_ibfk_3")
+  reviews         reviews?       @relation(fields: [review_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "reports_ibfk_4")
 
   @@index([reason_id, user_id], map: "reson_id")
   @@index([user_id], map: "user_id")
   @@index([post_id], map: "post_id")
+  @@index([review_id], map: "review_id")
 }
 
 model user_verify {
@@ -295,6 +299,7 @@ model user_verify {
   status              user_verify_status
   id_card_path        String             @db.Text
   driver_licence_path String             @db.Text
+  description         String             @db.Text
   created_user_id     Int
   created_at          DateTime           @db.DateTime(0)
   updated_user_id     Int
