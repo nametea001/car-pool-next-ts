@@ -253,8 +253,8 @@ model users {
   review_user_logs                       review_user_logs[]
   reviews_reviews_user_idTousers         reviews[]          @relation("reviews_user_idTousers")
   reviews_reviews_created_user_idTousers reviews[]          @relation("reviews_created_user_idTousers")
-  user_verify                            user_verify[]
   user_roles                             user_roles         @relation(fields: [user_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  verify_users                           verify_users[]
 
   @@index([user_role_id], map: "users_ibfk_1")
   @@index([username], map: "idx_username")
@@ -293,18 +293,18 @@ model reports {
   @@index([review_id], map: "review_id")
 }
 
-model user_verify {
-  id                  Int                @id @default(autoincrement())
+model verify_users {
+  id                  Int                 @id @default(autoincrement())
   user_id             Int
-  status              user_verify_status
-  id_card_path        String             @db.Text
-  driver_licence_path String             @db.Text
-  description         String             @db.Text
+  status              verify_users_status
+  id_card_path        String?             @db.Text
+  driver_licence_path String?             @db.Text
+  description         String?             @db.Text
   created_user_id     Int
-  created_at          DateTime           @db.DateTime(0)
+  created_at          DateTime            @db.DateTime(0)
   updated_user_id     Int
-  updated_at          DateTime           @db.DateTime(0)
-  users               users              @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_verify_ibfk_1")
+  updated_at          DateTime            @db.DateTime(0)
+  users               users               @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "verify_users_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }
@@ -331,16 +331,16 @@ enum chat_details_msg_type {
   IMG
 }
 
-enum user_verify_status {
-  NEW
-  USER
-  DRIVER
-  NOT_VERIFY
-}
-
 enum report_reasons_type {
   USER
   POST
   REVIEW
   ALL
+}
+
+enum verify_users_status {
+  NEW
+  USER
+  DRIVER
+  NOT_VERIFY
 }

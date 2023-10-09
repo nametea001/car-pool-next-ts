@@ -30,8 +30,11 @@ export default async function uploadImage(
     options.uploadDir = path.join(process.cwd(), "/public/profiles");
     options.filename = (name, ext, path, form) => {
       // return Date.now().toString() + "_" + path.originalFilename;
-      let extFile = path.originalFilename!.split(".");
-      return tokenVerify.id + "." + extFile[1];
+      let extFile = path.originalFilename!.split(".")[1];
+      if (!["jpg", "jpeg", "png"].includes(extFile)) {
+        throw new Error("Invalid file extension");
+      }
+      return tokenVerify.id + "." + extFile;
     };
     options.maxFileSize = 4000 * 1024 * 1024;
     const form = formidable(options);

@@ -45,5 +45,6 @@ next-env.d.ts
 /.env
 
 public/profiles/
-public/profiles/drivers/
-public/profiles/users/
+public/verify_users/
+public/verify_users/drivers/
+public/verify_users/users/
