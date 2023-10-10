@@ -54,6 +54,7 @@ export class PostRepository {
       posts = this.prisma.posts.create({
         data: dataInsert,
         select: {
+          id: true,
           name_start: true,
           name_end: true,
           is_back: true,
@@ -378,7 +379,7 @@ export class PostRepository {
   async findPostByPostID(postID: number) {
     let posts: any;
     try {
-      posts = await this.prisma.posts.findMany({
+      posts = await this.prisma.posts.findFirst({
         where: {
           id: postID,
         },

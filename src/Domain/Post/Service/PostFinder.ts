@@ -18,7 +18,6 @@ export class PostFinder {
   }
 
   async findPostByPostID(postID: number) {
-    const post = await this.PostRepository.findPostByPostID(postID);
-    return post;
+    return await this.PostRepository.findPostByPostID(postID);
   }
 }
