@@ -61,6 +61,31 @@ export class UserRepository {
     return resData;
   }
 
+  async changePassword(data: any, userId: number) {
+    let resData: any = null;
+    try {
+      if ("password" in data) {
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(data.password, salt);
+        data.password = hash;
+        resData = await this.prisma.users.update({
+          where: { id: userId },
+          data: data,
+          select: {
+            id: true,
+          },
+        });
+      } else {
+        resData = null;
+      }
+    } catch (err) {
+      resData = false;
+    }
+    this.prisma.$disconnect();
+    return resData;
+  }
+
   async userUpdateProfile(imgPath: string, userID: number) {
     let resData: any = null;
     try {

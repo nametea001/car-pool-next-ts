@@ -23,6 +23,14 @@ export class UserUpdater {
     return await this.userReposotory.userEdit(row, userId);
   }
 
+  async changePassword(data: any, updateBy: number) {
+    if (data.password === data.confirm_password) {
+      let row = this.MapToRow(data, updateBy);
+      return await this.userReposotory.changePassword(row, updateBy);
+    }
+    return null;
+  }
+
   async userUpdateProfile(imgPath: string, userID: number) {
     return await this.userReposotory.userUpdateProfile(imgPath, userID);
   }
