@@ -16,12 +16,9 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 
-function userRole({ propDataUsersRole }: any) {
-  const router = useRouter();
-
+function UserRole({ propDataUsersRole }: any) {
   // datatable
   const [dataUsersRole, setDataUsersRole]: any[] = useState(propDataUsersRole);
-
   // datatable
   function Datatable() {
     const [globalFilterValue, setGlobalFilterValue] = useState<string>("");
@@ -129,7 +126,7 @@ function userRole({ propDataUsersRole }: any) {
   );
 }
 
-userRole.auth = true;
+UserRole.auth = true;
 
 import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";
 
@@ -141,4 +138,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default userRole;
+export default UserRole;

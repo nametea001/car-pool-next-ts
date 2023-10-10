@@ -16,13 +16,10 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 
-function users({ propDataUsers, propDataUsersRole }: any) {
-  const router = useRouter();
-
+function Users({ propDataUsers, propDataUsersRole }: any) {
   // datatable
-  const [dataUsers, setDataUsers]: any[] = useState(propDataUsers);
-  const [dataUsersRole, setDataUsersRole]: any[] = useState(propDataUsersRole);
-
+  const [dataUsers, setDataUsers] = useState(propDataUsers);
+  const [dataUsersRole, setDataUsersRole] = useState(propDataUsersRole);
   // datatable
   function Datatable() {
     // modal edit user
@@ -314,7 +311,7 @@ function users({ propDataUsers, propDataUsersRole }: any) {
   );
 }
 
-users.auth = true;
+Users.auth = true;
 
 import { UserFinder } from "../src/Domain/User/Service/UserFinder";
 import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";
@@ -329,4 +326,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default users;
+export default Users;

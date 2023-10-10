@@ -18,27 +18,39 @@ import { FilterMatchMode } from "primereact/api";
 import { Calendar } from "primereact/calendar";
 import { Nullable } from "primereact/ts-helpers";
 
-export default function verifyUsers({ propData, propDataUsersRole }: any) {
-  const router = useRouter();
-  // model for update
-  const [showVerifyUser, setShowVerifyUser] = useState(false); //show modal
-  const [verifyUserData, setVerifyUserData] = useState<any>({});
-
-  // model for search
-  const now = new Date();
-  const [startDate, setStartDate] = useState<Nullable<Date>>(
-    new Date(now.getFullYear(), now.getMonth(), now.getDate() + 30, 23, 59, 59)
-  );
-  const [endDate, setEndDate] = useState<Nullable<Date>>(
-    new Date(now.getFullYear(), now.getMonth(), now.getDate() + 30, 23, 59, 59)
-  );
-
+export default function VerifyUsers({ propData, propDataUsersRole }: any) {
   // datatable
-  const [data, setData]: any[] = useState(propData);
-  const [dataUsersRole, setDataUsersRole]: any[] = useState(propDataUsersRole);
+  const [dataVerifyUser, setDataVerifyUser] = useState(propData);
+  const [dataUsersRole, setDataUsersRole] = useState(propDataUsersRole);
 
   // datatable
   function Datatable() {
+    const [showVerifyUser, setShowVerifyUser] = useState<boolean>(false); //show modal
+    const [verifyUserData, setVerifyUserData] = useState<any>({});
+
+    // model for search
+    const now = new Date();
+    const [startDate, setStartDate] = useState<Nullable<Date>>(
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 30,
+        23,
+        59,
+        59
+      )
+    );
+    const [endDate, setEndDate] = useState<Nullable<Date>>(
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 30,
+        23,
+        59,
+        59
+      )
+    );
+
     const [globalFilterValue, setGlobalFilterValue] = useState<string>("");
     const [filters, setFilters] = useState<DataTableFilterMeta>({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -62,6 +74,8 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
       // status: { value: null, matchMode: FilterMatchMode.EQUALS },
       // verified: { value: null, matchMode: FilterMatchMode.EQUALS },
     });
+
+    // dateupdate
 
     const renderHeader = () => {
       return (
@@ -95,11 +109,12 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
       setGlobalFilterValue(value);
     };
     // table
+    let dataUpdateVerifyUser: any = null;
     return (
       <>
         <div className="data-table">
           <DataTable
-            value={data}
+            value={dataVerifyUser}
             responsiveLayout="scroll"
             showGridlines
             stripedRows
@@ -141,23 +156,20 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
             <Column field="status" header="Status" sortable />
             <Column
               header="Actions"
-              body={
-                (data, props) => (
-                  <div>
-                    <Button
-                      variant="success"
-                      size="sm"
-                      onClick={() => {
-                        setVerifyUserData(data);
-                        setShowVerifyUser(true);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={IconSolid.faIdBadge} />
-                    </Button>
-                  </div>
-                )
-                // data.username
-              }
+              body={(data, props) => (
+                <div>
+                  <Button
+                    variant="success"
+                    size="sm"
+                    onClick={() => {
+                      setVerifyUserData(data);
+                      setShowVerifyUser(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={IconSolid.faIdBadge} />
+                  </Button>
+                </div>
+              )}
             />
           </DataTable>
         </div>
@@ -169,7 +181,7 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
           }}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Edit User</Modal.Title>
+            <Modal.Title>Verify User</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -181,10 +193,10 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
                   placeholder="Name"
                   autoComplete="off"
                   disabled
+                  onChange={() => {}}
                   // autoFocus
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
@@ -197,6 +209,15 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>User Role</Form.Label>
+                <Form.Select defaultValue={verifyUserData.status}>
+                  <option value={"NEW"}>NEW</option>
+                  <option value={"USER"}>USER</option>
+                  <option value={"DRIVER"}>DRIVER</option>
+                  <option value={"NOT_VERIFY"}>NOT VERIFY</option>
+                </Form.Select>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Status</Form.Label>
                 <Form.Select defaultValue={verifyUserData.users?.user_role_id}>
                   {dataUsersRole.map((data: any) => {
                     if (data.id >= 3) {
@@ -241,7 +262,13 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="success" onClick={() => {}} disabled={false}>
+            <Button
+              variant="success"
+              onClick={() => {
+                // UpdateVerfifyUser();
+              }}
+              // disabled={false}
+            >
               Save
             </Button>
             <Button
@@ -276,9 +303,13 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
       </div>
     </Container>
   );
+
+  function UpdateVerfifyUser(data: any) {
+    console.log(data);
+  }
 }
 
-verifyUsers.auth = true;
+VerifyUsers.auth = true;
 
 import { VerifyUserFinder } from "../src/Domain/VerifyUser/Service/VerifyUserFinder";
 import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";

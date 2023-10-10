@@ -46,17 +46,19 @@ export default async function joinPost(
         if (postMember) {
           const chatFinder = new ChatFinder();
           let chatData = await chatFinder.getChatForStart({
-            chat_tyoe: "PRIVATE",
+            chat_tyoe: "GROUP",
             send_post_id: postMember.post_id,
           });
+
           let dataChatDetail: any;
-          let dataUpdateChatDetail = {
-            chat_id: chatData.id,
-            msg_type: "MSG",
-            msg: `${tokenVerify.first_name} ได้เข้ารวมการเดินทาง`,
-          };
+          let dataUpdateChatDetail = {};
           const chatDetailUpdater = new ChatDetailUpdater();
           if (chatData) {
+            dataUpdateChatDetail = {
+              chat_id: chatData.id,
+              msg_type: "MSG",
+              msg: `${tokenVerify.first_name} ได้เข้ารวมการเดินทาง`,
+            };
             dataChatDetail = await chatDetailUpdater.insertChatDetail(
               dataUpdateChatDetail,
               tokenVerify.id
@@ -68,11 +70,15 @@ export default async function joinPost(
               send_user_id: null,
               send_post_id: postMember.post_id,
             };
-            let chatDataCreated = await chatUpdater.inserChat(
+            let chatData = await chatUpdater.inserChat(
               dataInsertChat,
               tokenVerify.id
             );
-
+            dataUpdateChatDetail = {
+              chat_id: chatData.id,
+              msg_type: "MSG",
+              msg: `${tokenVerify.first_name} ได้เข้ารวมการเดินทาง`,
+            };
             dataChatDetail = await chatDetailUpdater.insertChatDetail(
               dataUpdateChatDetail,
               tokenVerify.id

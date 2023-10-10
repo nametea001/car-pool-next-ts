@@ -48,15 +48,11 @@ export default function MyApp({
     <>
       <SessionProvider session={session} refetchInterval={5 * 60}>
         {Component.auth ? (
-          <SSRProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </SSRProvider>
-        ) : (
-          <SSRProvider>
+          <Layout>
             <Component {...pageProps} />
-          </SSRProvider>
+          </Layout>
+        ) : (
+          <Component {...pageProps} />
         )}
       </SessionProvider>
     </>
