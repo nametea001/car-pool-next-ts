@@ -162,19 +162,9 @@ model provinces {
   id         Int         @id
   name_th    String      @db.VarChar(150)
   name_en    String      @db.VarChar(150)
-  region_id  Int
   created_at DateTime?   @db.DateTime(0)
   updated_at DateTime?   @db.DateTime(0)
   districts  districts[]
-  regions    regions     @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "provinces_ibfk_1")
-
-  @@index([region_id], map: "geography_id")
-}
-
-model regions {
-  id        Int         @id
-  name      String      @db.VarChar(255)
-  provinces provinces[]
 }
 
 model review_user_logs {
@@ -234,7 +224,6 @@ model users {
   last_name                              String?            @db.VarChar(100)
   email                                  String             @db.VarChar(30)
   user_role_id                           Int                @default(5)
-  locale                                 String?            @db.Text
   img_path                               String?            @default("non_img.png") @db.VarChar(30)
   sex                                    users_sex
   enabled                                Int                @default(1) @db.TinyInt
