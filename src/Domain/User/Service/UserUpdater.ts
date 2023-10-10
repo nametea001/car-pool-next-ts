@@ -60,9 +60,6 @@ export class UserUpdater {
     if ("img_path" in data) {
       result.img_path = data.img_path;
     }
-    if ("locale" in data) {
-      result.locale = data.locale;
-    }
     if ("sex" in data) {
       result.sex = data.sex;
     }

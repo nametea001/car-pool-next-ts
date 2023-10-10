@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { JWT } from "../../../src/Auth/JWT";
 import { VerifyUserFinder } from "../../../src/Domain/VerifyUser/Service/VerifyUserFinder";
 
-export default async function getReviews(
+export default async function getVerifyUser(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

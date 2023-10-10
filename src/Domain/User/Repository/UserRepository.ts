@@ -55,7 +55,7 @@ export class UserRepository {
         },
       });
     } catch (err) {
-      resData = false;
+      resData = null;
     }
     this.prisma.$disconnect();
     return resData;
@@ -198,7 +198,36 @@ export class UserRepository {
         delete user.password;
         return user;
       }
-      return null;
+      return user;
     }
+  }
+
+  async getUpdateByID(userID: number) {
+    let user: any;
+    try {
+      user = await this.prisma.users.findFirst({
+        where: { id: userID },
+        select: {
+          id: true,
+          username: true,
+          password: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          user_role_id: true,
+          img_path: true,
+          sex: true,
+          user_roles: {
+            select: {
+              user_role_name: true,
+            },
+          },
+        },
+      });
+    } catch {
+      user = null;
+    }
+    this.prisma.$disconnect();
+    return user;
   }
 }

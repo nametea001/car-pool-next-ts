@@ -32,7 +32,7 @@ export class VerifyUserUpdater {
     if ("driver_licence_path" in data) {
       result.driver_licence_path = data.driver_licence_path;
     }
-    if ("description " in data) {
+    if ("description" in data) {
       result.description = data.description;
     }
 

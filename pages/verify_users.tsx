@@ -28,6 +28,8 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
     const [showVerifyUser, setShowVerifyUser] = useState<boolean>(false); //show modal
     const [verifyUserData, setVerifyUserData] = useState<any>({});
 
+    const [verifyUserDataUpdate, setVerifyUserDataUpdate] = useState<any>({});
+
     // model for search
     const now = new Date();
     const [startDate, setStartDate] = useState<Nullable<Date>>(
@@ -164,6 +166,12 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
                     onClick={() => {
                       setVerifyUserData(data);
                       setShowVerifyUser(true);
+                      setVerifyUserDataUpdate({
+                        id: data.id,
+                        status: data.status,
+                        user_role_id: data.users.user_role_id,
+                        description: data.description,
+                      });
                     }}
                   >
                     <FontAwesomeIcon icon={IconSolid.faIdBadge} />
@@ -193,7 +201,6 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
                   placeholder="Name"
                   autoComplete="off"
                   disabled
-                  onChange={() => {}}
                   // autoFocus
                 />
               </Form.Group>
@@ -209,20 +216,17 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>User Role</Form.Label>
-                <Form.Select defaultValue={verifyUserData.status}>
-                  <option value={"NEW"}>NEW</option>
-                  <option value={"USER"}>USER</option>
-                  <option value={"DRIVER"}>DRIVER</option>
-                  <option value={"NOT_VERIFY"}>NOT VERIFY</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Status</Form.Label>
-                <Form.Select defaultValue={verifyUserData.users?.user_role_id}>
+                <Form.Select
+                  defaultValue={verifyUserData.users?.user_role_id}
+                  onChange={(e) => {
+                    verifyUserDataUpdate.user_role_id = Number(e.target.value);
+                    setVerifyUserDataUpdate(verifyUserDataUpdate);
+                  }}
+                >
                   {dataUsersRole.map((data: any) => {
                     if (data.id >= 3) {
                       return (
-                        <option key={data.id} value={data.id.toString()}>
+                        <option key={data.id} value={data.id}>
                           {data.user_role_name}
                         </option>
                       );
@@ -231,14 +235,33 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
                 </Form.Select>
               </Form.Group>
               <Form.Group className="mb-3">
+                <Form.Label>Status</Form.Label>
+                <Form.Select
+                  defaultValue={verifyUserData.status}
+                  onChange={(e) => {
+                    verifyUserDataUpdate.status = e.target.value;
+                    setVerifyUserDataUpdate(verifyUserDataUpdate);
+                  }}
+                >
+                  <option value={"NEW"}>NEW</option>
+                  <option value={"USER"}>USER</option>
+                  <option value={"DRIVER"}>DRIVER</option>
+                  <option value={"NOT_VERIFY"}>NOT VERIFY</option>
+                </Form.Select>
+              </Form.Group>
+              <Form.Group className="mb-3">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   type="text"
-                  defaultValue={verifyUserData.Description}
+                  defaultValue={verifyUserData.description}
                   // placeholder="name@example.com"
                   as="textarea"
                   aria-label="With textarea"
                   autoComplete="off"
+                  onChange={(e) => {
+                    verifyUserDataUpdate.description = e.target.value;
+                    setVerifyUserDataUpdate(verifyUserDataUpdate);
+                  }}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -265,11 +288,12 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
             <Button
               variant="success"
               onClick={() => {
-                // UpdateVerfifyUser();
+                setShowVerifyUser(false);
+                UpdateVerfifyUser(verifyUserDataUpdate);
               }}
               // disabled={false}
             >
-              Save
+              Verify
             </Button>
             <Button
               variant="danger"
@@ -304,8 +328,32 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
     </Container>
   );
 
-  function UpdateVerfifyUser(data: any) {
-    console.log(data);
+  async function UpdateVerfifyUser(data: any) {
+    const url = `http://localhost:3000/api/verify_users/update_verify`;
+    try {
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data), // Convert your data to JSON
+      });
+
+      if (res.ok) {
+        const updatedData = await res.json();
+        const verifiedData = updatedData.verify_user;
+        const updatedList = [...dataVerifyUser];
+        const index = updatedList.findIndex(
+          (item) => item.id === verifiedData.id
+        );
+        if (index !== -1) {
+          updatedList[index] = verifiedData;
+          setDataVerifyUser(updatedList);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+    // Example usage:
   }
 }
 
@@ -313,7 +361,6 @@ VerifyUsers.auth = true;
 
 import { VerifyUserFinder } from "../src/Domain/VerifyUser/Service/VerifyUserFinder";
 import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";
-import Link from "next/link";
 
 export async function getServerSideProps() {
   let now = new Date();

@@ -4,12 +4,14 @@ export class UserFinder {
   private userRepository = new UserRepository();
 
   async checkLogin(username: string, password: string) {
-    const user = await this.userRepository.checkLogin(username, password);
-    return user;
+    return await this.userRepository.checkLogin(username, password);
+  }
+
+  async getUpdateByID(userID: number) {
+    return await this.userRepository.getUpdateByID(userID);
   }
 
   async findUsers(data: any) {
-    const user = await this.userRepository.findUsers(data);
-    return user;
+    return await this.userRepository.findUsers(data);
   }
 }

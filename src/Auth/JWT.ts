@@ -19,7 +19,7 @@ export class JWT {
       const verifyToken = verify(token, process.env.NEXTAUTH_SECRET as Secret);
       return verifyToken;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return null;
     }
   }
