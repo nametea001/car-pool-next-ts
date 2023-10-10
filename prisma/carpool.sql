@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2023 at 09:01 AM
+-- Generation Time: Oct 10, 2023 at 06:00 AM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.10
 
@@ -1363,16 +1363,15 @@ INSERT INTO `user_roles` (`id`, `user_role_name`, `created_at`, `cerated_user_id
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_verify`
+-- Table structure for table `verify_users`
 --
 
-CREATE TABLE `user_verify` (
+CREATE TABLE `verify_users` (
   `id` int NOT NULL,
-  `user_id` int NOT NULL,
   `status` enum('NEW','USER','DRIVER','NOT_VERIFY') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_card_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `driver_licence_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_card_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `driver_licence_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_user_id` int NOT NULL,
@@ -1517,11 +1516,11 @@ ALTER TABLE `user_roles`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user_verify`
+-- Indexes for table `verify_users`
 --
-ALTER TABLE `user_verify`
+ALTER TABLE `verify_users`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `created_user_id` (`created_user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -1606,9 +1605,9 @@ ALTER TABLE `user_roles`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `user_verify`
+-- AUTO_INCREMENT for table `verify_users`
 --
-ALTER TABLE `user_verify`
+ALTER TABLE `verify_users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -1707,10 +1706,10 @@ ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`user_role_id`) REFERENCES `user_roles` (`id`);
 
 --
--- Constraints for table `user_verify`
+-- Constraints for table `verify_users`
 --
-ALTER TABLE `user_verify`
-  ADD CONSTRAINT `user_verify_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `verify_users`
+  ADD CONSTRAINT `verify_users_ibfk_1` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

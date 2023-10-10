@@ -9,7 +9,6 @@ export class VerifyUserRepository {
         data: data,
         select: {
           id: true,
-          user_id: true,
           status: true,
           id_card_path: true,
           driver_licence_path: true,
@@ -30,7 +29,6 @@ export class VerifyUserRepository {
         data: data,
         select: {
           id: true,
-          user_id: true,
           status: true,
           id_card_path: true,
           driver_licence_path: true,
@@ -43,17 +41,32 @@ export class VerifyUserRepository {
     return userVerify;
   }
 
-  async findUserVerifys(data: any) {
+  async findUserVerifys(whereData: any) {
     //  praram controll
     let userVerify: any = null;
     try {
       userVerify = await this.prisma.verify_users.findMany({
+        where: whereData,
         select: {
           id: true,
-          user_id: true,
           status: true,
           id_card_path: true,
           driver_licence_path: true,
+          users: {
+            select: {
+              username: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+              sex: true,
+              user_role_id: true,
+              user_roles: {
+                select: {
+                  user_role_name: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (err) {
@@ -67,10 +80,9 @@ export class VerifyUserRepository {
     let userVerify: any = null;
     try {
       userVerify = await this.prisma.verify_users.findFirst({
-        where: { user_id: userID },
+        where: { created_user_id: userID },
         select: {
           id: true,
-          user_id: true,
           status: true,
           id_card_path: true,
           driver_licence_path: true,

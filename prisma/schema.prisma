@@ -295,7 +295,6 @@ model reports {
 
 model verify_users {
   id                  Int                 @id @default(autoincrement())
-  user_id             Int
   status              verify_users_status
   id_card_path        String?             @db.Text
   driver_licence_path String?             @db.Text
@@ -304,9 +303,9 @@ model verify_users {
   created_at          DateTime            @db.DateTime(0)
   updated_user_id     Int
   updated_at          DateTime            @db.DateTime(0)
-  users               users               @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "verify_users_ibfk_1")
+  users               users               @relation(fields: [created_user_id], references: [id], onUpdate: Restrict, map: "verify_users_ibfk_1")
 
-  @@index([user_id], map: "user_id")
+  @@index([created_user_id], map: "created_user_id")
 }
 
 enum chats_chat_type {

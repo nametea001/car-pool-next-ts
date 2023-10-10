@@ -11,18 +11,20 @@ import * as IconRegular from "@fortawesome/free-regular-svg-icons";
 import { Container } from "react-bootstrap";
 
 // datatable
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableFilterMeta } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { InputText } from "primereact/inputtext";
+import { FilterMatchMode } from "primereact/api";
 
-function Users({ propDataUsers, propDataUsersRole }: any) {
+function users({ propDataUsers, propDataUsersRole }: any) {
   const router = useRouter();
 
   // datatable
-  const [dataUsers, setDataUsers] = useState(propDataUsers);
-  const [dataUsersRole, setDataUsersRole] = useState(propDataUsersRole);
+  const [dataUsers, setDataUsers]: any[] = useState(propDataUsers);
+  const [dataUsersRole, setDataUsersRole]: any[] = useState(propDataUsersRole);
 
   // datatable
-  function Datatable(value: []) {
+  function Datatable() {
     // modal edit user
     const [showUserEdit, setShowUseredit] = useState(false); //show modal
     // show modal user edit handle
@@ -74,49 +76,98 @@ function Users({ propDataUsers, propDataUsersRole }: any) {
       console.log(e);
     }
 
+    const [globalFilterValue, setGlobalFilterValue] = useState<string>("");
+    const [filters, setFilters] = useState<DataTableFilterMeta>({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      username: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      first_name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      "user_roles.user_role_name": {
+        value: null,
+        matchMode: FilterMatchMode.STARTS_WITH,
+      },
+      // status: { value: null, matchMode: FilterMatchMode.EQUALS },
+      // status: { value: null, matchMode: FilterMatchMode.EQUALS },
+      // verified: { value: null, matchMode: FilterMatchMode.EQUALS },
+    });
+
+    const renderHeader = () => {
+      return (
+        <div className="d-flex justify-content-end">
+          {/* <Button
+            type="button"
+            // variant="warning"
+            size="sm"
+          >
+            <FontAwesomeIcon icon={IconSolid.faPenToSquare} />
+            Clear
+          </Button> */}
+          <span className="p-input-icon-left">
+            <i className="pi pi-search" />
+            <InputText
+              value={globalFilterValue}
+              onChange={onGlobalFilterChange}
+              placeholder="Keyword Search"
+            />
+          </span>
+        </div>
+      );
+    };
+
+    const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      let _filters = { ...filters };
+
+      // @ts-ignore
+      _filters["global"].value = value;
+
+      setFilters(_filters);
+      setGlobalFilterValue(value);
+    };
+
     // table
     return (
       <>
         <div className="data-table ">
           <DataTable
-            value={value}
+            value={dataUsers}
             responsiveLayout="scroll"
-            // header footer
-            // header="Header"
-            // footer="Footer"
-            // grid
             showGridlines
-            // color row
             stripedRows
-            // page and next page
             paginator
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
             rows={10}
             rowsPerPageOptions={[10, 20, 50]}
-            // sort
             removableSort
-            // scroll
             scrollable
             scrollHeight="flex"
-            // scrollDirection="both"
-            // collum
             resizableColumns
-            // columnResizeMode="fit"
             columnResizeMode="expand"
+            emptyMessage="No data found."
+            header={renderHeader}
+            filters={filters}
+            globalFilterFields={[
+              "username",
+              "first_name",
+              "email",
+              "user_roles.user_role_name",
+            ]}
           >
-            <Column field="username" header="Username"></Column>
-            {/* <Column field={fullName} header="Name"></Column> */}
+            <Column field="username" header="Username" sortable />
             <Column
               header="Name"
+              field="first_name"
+              sortable
               body={(data, prop) => `${data.first_name} ${data.last_name}`}
-            ></Column>
-            <Column field="email" header="Email"></Column>
-            <Column field="locale" header="Locale"></Column>
+            />
+            <Column field="email" header="Email" sortable />
+            {/* <Column field="locale" header="Locale" sortable></Column> */}
             <Column
               field="user_roles.user_role_name"
               header="User Role"
-            ></Column>
+              sortable
+            />
             <Column
               header="Actions"
               body={
@@ -135,7 +186,7 @@ function Users({ propDataUsers, propDataUsersRole }: any) {
                 )
                 // data.username
               }
-            ></Column>
+            />
           </DataTable>
         </div>
 
@@ -256,14 +307,14 @@ function Users({ propDataUsers, propDataUsersRole }: any) {
           </h1>
           <hr />
           {/* <DataTables /> */}
-          {Datatable(dataUsers)}
+          {Datatable()}
         </div>
       </div>
     </Container>
   );
 }
 
-Users.auth = true;
+users.auth = true;
 
 import { UserFinder } from "../src/Domain/User/Service/UserFinder";
 import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";
@@ -278,4 +329,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default Users;
+export default users;

@@ -105,6 +105,7 @@ function Layout({ children }: Props) {
                     size="lg"
                   />
                 </a>
+                {/* master */}
                 <Nav
                   className={`sidebar-nav-chill ${
                     masterActive === true ? "show" : ""
@@ -127,7 +128,7 @@ function Layout({ children }: Props) {
                   </Nav.Item>
                   <Nav.Item className="sidebar-nav-chil-item">
                     <Link
-                      href={"/"}
+                      href={"/users_roles"}
                       className="sidebar-nav-chil-item-link"
                       onClick={() => {
                         setChillActiveIndex(2);
@@ -157,10 +158,81 @@ function Layout({ children }: Props) {
                       <span className="ps-2"> Report</span>
                     </Link>
                   </Nav.Item>
+                  <Nav.Item className="sidebar-nav-chil-item">
+                    <Link
+                      href={"/"}
+                      className="sidebar-nav-chil-item-link"
+                      onClick={() => {
+                        setChillActiveIndex(4);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={IconSolid.faMap}
+                        // icon={IconSolid.faUserGear}
+                        className={`${chilActive === 4 ? "active" : ""}`}
+                        // style={{ fontSize: "1.5rem" }}
+                      />
+                      <span className="ps-2"> Regions</span>
+                    </Link>
+                  </Nav.Item>
+                  <Nav.Item className="sidebar-nav-chil-item">
+                    <Link
+                      href={"/"}
+                      className="sidebar-nav-chil-item-link"
+                      onClick={() => {
+                        setChillActiveIndex(5);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={IconSolid.faMapLocation}
+                        // icon={IconSolid.faUserGear}
+                        className={`${chilActive === 5 ? "active" : ""}`}
+                        // style={{ fontSize: "1.5rem" }}
+                      />
+                      <span className="ps-2"> Provinces</span>
+                    </Link>
+                  </Nav.Item>
+                  <Nav.Item className="sidebar-nav-chil-item">
+                    <Link
+                      href={"/"}
+                      className="sidebar-nav-chil-item-link"
+                      onClick={() => {
+                        setChillActiveIndex(6);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={IconSolid.faLocation}
+                        // icon={IconSolid.faUserGear}
+                        className={`${chilActive === 6 ? "active" : ""}`}
+                        // style={{ fontSize: "1.5rem" }}
+                      />
+                      <span className="ps-2"> Disteicts</span>
+                    </Link>
+                  </Nav.Item>
                 </Nav>
               </Nav.Item>
             </Nav>
-
+            <hr />
+            {/* verify users */}
+            <Nav className="sidebar-nav">
+              <Nav.Item className="sidebar-nav-item">
+                <Link
+                  href={"/verify_users"}
+                  className={`sidebar-nav-item-link`}
+                  onClick={() => {
+                    setChillActiveIndex(7);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    // className={"active"}
+                    className={`${chilActive === 7 ? "active" : ""}`}
+                    icon={IconSolid.faIdBadge}
+                    size="lg"
+                  />
+                  <span className="text">Verify</span>
+                </Link>
+              </Nav.Item>
+            </Nav>
             <hr />
           </div>
         </Navbar>
