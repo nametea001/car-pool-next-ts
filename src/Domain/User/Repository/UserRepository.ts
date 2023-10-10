@@ -46,6 +46,7 @@ export class UserRepository {
           email: true,
           user_role_id: true,
           locale: true,
+          sex: true,
           img_path: true,
           user_roles: {
             select: {
