@@ -5,7 +5,7 @@ export class VerifyUserUpdater {
 
   async insertUserVerify(data: any, updateBy: number) {
     const row = this.MapToRow(data, updateBy, true);
-    await this.verifyUserRepository.insertUserVerify(row);
+    return await this.verifyUserRepository.insertUserVerify(row);
   }
 
   async updateUserVerifyByID(
@@ -23,9 +23,6 @@ export class VerifyUserUpdater {
   private MapToRow(data: any, updateBy: number, create: boolean = false) {
     let result: any = {};
 
-    if ("user_id" in data) {
-      result.user_id = data.user_id;
-    }
     if ("status" in data) {
       result.status = data.status;
     }
