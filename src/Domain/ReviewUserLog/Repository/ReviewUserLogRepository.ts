@@ -6,7 +6,7 @@ export class ReviewUserLogRepository {
   async insertManyReviewUserLog(data: any) {
     let res: any = null;
     try {
-      res = await this.prisma.chat_user_logs.createMany({
+      res = await this.prisma.review_user_logs.createMany({
         data: data,
       });
     } catch (err) {

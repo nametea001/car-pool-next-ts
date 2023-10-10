@@ -7,7 +7,7 @@ export class ReviewUserLogUpdater {
     let rows: any[] = [];
     users.forEach((user: any) => {
       if (user.user_id !== updateBy) {
-        let data = { chat_id: postID, user_id: user.user_id };
+        let data = { post_id: postID, user_id: user.user_id };
         let row = this.MapToRow(data, updateBy, true);
         rows.push(row);
       }

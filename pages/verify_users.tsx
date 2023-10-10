@@ -16,12 +16,22 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import { Calendar } from "primereact/calendar";
+import { Nullable } from "primereact/ts-helpers";
 
 export default function verifyUsers({ propData, propDataUsersRole }: any) {
   const router = useRouter();
   // model for update
   const [showVerifyUser, setShowVerifyUser] = useState(false); //show modal
   const [verifyUserData, setVerifyUserData] = useState<any>({});
+
+  // model for search
+  const now = new Date();
+  const [startDate, setStartDate] = useState<Nullable<Date>>(
+    new Date(now.getFullYear(), now.getMonth(), now.getDate() + 30, 23, 59, 59)
+  );
+  const [endDate, setEndDate] = useState<Nullable<Date>>(
+    new Date(now.getFullYear(), now.getMonth(), now.getDate() + 30, 23, 59, 59)
+  );
 
   // datatable
   const [data, setData]: any[] = useState(propData);
@@ -55,7 +65,15 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
 
     const renderHeader = () => {
       return (
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-between">
+          <pBt.Button
+            type="button"
+            icon="pi pi-bars"
+            label="Search"
+            outlined
+            className="teal-500"
+            onClick={() => {}}
+          />
           <span className="p-input-icon-left">
             <i className="pi pi-search" />
             <InputText
@@ -143,6 +161,7 @@ export default function verifyUsers({ propData, propDataUsersRole }: any) {
             />
           </DataTable>
         </div>
+        {/* verify */}
         <Modal
           show={showVerifyUser}
           onHide={() => {

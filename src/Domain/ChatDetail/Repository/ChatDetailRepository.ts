@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 export class ChatDetailRepository {
   private prisma = new PrismaClient();
 
-  async insertChatDetail(data: any) {
+  async   insertChatDetail(data: any) {
     let chatDetail = null;
     try {
       chatDetail = await this.prisma.chat_details.create({

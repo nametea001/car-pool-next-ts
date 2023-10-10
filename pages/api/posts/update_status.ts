@@ -48,66 +48,70 @@ export default async function updateStatusPost(
           const chatDetailUpdater = new ChatDetailUpdater();
           const chatUserLogUpdater = new ChatUserLogUpdater();
 
-          let chatUpdateData: any = await chatUpdater.updateChatByPostID(
+          let chat: any = await chatUpdater.updateChatByPostID(
             {},
             post.id,
             tokenVerify.id
           );
-          if (chatUpdateData != null && chatUpdateData.length > 0) {
-            let dataCreatedChatDetail = {};
-            if (post.status === "DONE") {
-              const reviewUserLogUpdater = new ReviewUserLogUpdater();
-              await reviewUserLogUpdater.insertManyReviewUserLog(
-                post.id,
+          if (chat == null) {
+            chat = await chatUpdater.inserChat(
+              { chat_type: "GROUP", send_post_id: post.id, send_user_id: null },
+              post.created_user_id
+            );
+          }
+          let dataCreatedChatDetail = {};
+          if (post.status === "DONE") {
+            const reviewUserLogUpdater = new ReviewUserLogUpdater();
+            await reviewUserLogUpdater.insertManyReviewUserLog(
+              post.id,
+              post.post_members,
+              tokenVerify.id
+            );
+            dataCreatedChatDetail = {
+              chat_id: chat.id,
+              msg_type: "MSG",
+              msg: "การเดินทางสำเร็จ โปรดให้คะแนน",
+            };
+
+            post.post_members.forEach((user: any) => {
+              res?.socket?.server?.io?.emit(
+                "user_" + user.user_id,
+                "Update_Review"
+              );
+            });
+          } else if (post.status === "CANCEL") {
+            dataCreatedChatDetail = {
+              chat_id: chat.id,
+              msg_type: "MSG",
+              msg: "การเดินทาถูกยกเลิก",
+            };
+          }
+          let chatDetailData = await chatDetailUpdater.insertChatDetail(
+            dataCreatedChatDetail,
+            tokenVerify.id
+          );
+          if (chatDetailData) {
+            let dataChatUserLog =
+              await chatUserLogUpdater.insertManyChatUserLog(
+                chat.id,
                 post.post_members,
                 tokenVerify.id
               );
-              dataCreatedChatDetail = {
-                chat_id: chatUpdateData.id,
-                msg_type: "MSG",
-                msg: "การเดินทางสำเร็จ โปรดให้คะแนน",
-              };
-
-              post.post_members.forEach((user: any) => {
-                res?.socket?.server?.io?.emit(
-                  "user_" + user.user_id,
-                  "Update_Review"
-                );
-              });
-            } else if (post.status === "CANCEL") {
-              dataCreatedChatDetail = {
-                chat_id: chatUpdateData.id,
-                msg_type: "MSG",
-                msg: "การเดินทาถูกยกเลิก",
-              };
-            }
-            let chatDetailData = await chatDetailUpdater.insertChatDetail(
-              dataCreatedChatDetail,
-              tokenVerify.id
+            res?.socket?.server?.io?.emit(
+              "active_chat_detail_" + chatDetailData.chat_id,
+              JSON.stringify({
+                user_id: tokenVerify.id,
+                error: false,
+                chat_detail: chatDetailData,
+              })
             );
-            if (chatDetailData) {
-              let dataChatUserLog =
-                await chatUserLogUpdater.insertManyChatUserLog(
-                  chatUpdateData.id,
-                  post.post_members,
-                  tokenVerify.id
-                );
-              res?.socket?.server?.io?.emit(
-                "active_chat_detail_" + chatDetailData.chat_id,
-                JSON.stringify({
-                  user_id: tokenVerify.id,
-                  error: false,
-                  chat_detail: chatDetailData,
-                })
-              );
-              if (dataChatUserLog.count > 0) {
-                post.post_members.forEachforEach((user: any) => {
-                  let socketChat = "chat_user_" + user.user_id;
-                  let socketPost = "user_" + user.user_id;
-                  res?.socket?.server?.io?.emit(socketChat, "Update_UI");
-                  res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
-                });
-              }
+            if (dataChatUserLog.count > 0) {
+              post.post_members.forEach((user: any) => {
+                let socketChat = "chat_user_" + user.user_id;
+                let socketPost = "user_" + user.user_id;
+                res?.socket?.server?.io?.emit(socketChat, "Update_UI");
+                res?.socket?.server?.io?.emit(socketPost, "Update_Noti");
+              });
             }
           }
         }
