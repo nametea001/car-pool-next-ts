@@ -32,6 +32,7 @@ export class VerifyUserRepository {
           status: true,
           id_card_path: true,
           driver_licence_path: true,
+          description: true,
           created_user_id: true,
         },
       });

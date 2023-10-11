@@ -352,7 +352,6 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
     } catch (error) {
       console.error("Error:", error);
     }
-
     // Example usage:
   }
 }

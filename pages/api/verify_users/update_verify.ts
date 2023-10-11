@@ -41,11 +41,14 @@ export default async function updateVerify(
         userVerify.created_user_id,
         tokenVerify.id
       );
-      res?.socket?.server?.io?.emit("user_" + dataBody.user_id, "Update_User");
       userVerify.users = user;
       viewData.message = "Update User Verify Successful";
       viewData.error = false;
       viewData.verify_user = userVerify;
+      res?.socket?.server?.io?.emit(
+        "user_" + userVerify.created_user_id,
+        "Update_User"
+      );
       return res.status(200).send(viewData);
     } else {
       return res.status(401).send("err null data");
