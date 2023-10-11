@@ -14,7 +14,6 @@ export class UserRepository {
         data.user_role_id = 5;
         data.img_path = "non_img.png";
         data.enabled = 1;
-        data.locale = null;
         resData = await this.prisma.users.create({
           data: data,
           select: {
