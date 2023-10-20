@@ -48,7 +48,7 @@ export class VerifyUserRepository {
     let userVerify: any = null;
     try {
       userVerify = await this.prisma.verify_users.findMany({
-        where: whereData,
+        // where: whereData,
         select: {
           id: true,
           status: true,

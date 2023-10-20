@@ -244,9 +244,9 @@ export default function VerifyUsers({ propData, propDataUsersRole }: any) {
                   }}
                 >
                   <option value={"NEW"}>NEW</option>
-                  <option value={"USER"}>USER</option>
-                  <option value={"DRIVER"}>DRIVER</option>
-                  <option value={"NOT_VERIFY"}>NOT VERIFY</option>
+                  <option value={"PASS_USER"}>PASS USER</option>
+                  <option value={"PASS"}>PASS</option>
+                  <option value={"FAIL"}>FAIL</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group className="mb-3">
@@ -363,29 +363,31 @@ import { UserRoleFinder } from "../src/Domain/UserRole/Service/UserRoleFinder";
 
 export async function getServerSideProps() {
   let now = new Date();
-  let datetimeStart = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0,
-    0
-  );
-  let datetimeEnd = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 30,
-    23,
-    59,
-    59
-  );
-  datetimeStart.setHours(datetimeStart.getHours());
-  datetimeEnd.setHours(datetimeEnd.getHours());
+  // let datetimeStart = new Date(
+  //   now.getFullYear(),
+  //   now.getMonth(),
+  //   now.getDate(),
+  //   0,
+  //   0,
+  //   0
+  // );
+  // let datetimeEnd = new Date(
+  //   now.getFullYear(),
+  //   now.getMonth(),
+  //   now.getDate() + 30,
+  //   23,
+  //   59,
+  //   59
+  // );
+  // datetimeStart.setHours(datetimeStart.getHours());
+  // datetimeEnd.setHours(datetimeEnd.getHours());
   const userRoleFinder = new UserRoleFinder();
   const verifyUserFinder = new VerifyUserFinder();
-  const propData = await verifyUserFinder.findUserVerifys({
-    updated_at: { gte: datetimeStart, lte: datetimeEnd },
-  });
+  // const propData = await verifyUserFinder.findUserVerifys({
+  //   updated_at: { gte: datetimeStart, lte: datetimeEnd },
+  // });
+  const propData = await verifyUserFinder.findUserVerifys({});
+
   const propDataUsersRole = await userRoleFinder.findUsersRoles({});
   return {
     props: { propData, propDataUsersRole }, // will be passed to the page component as props
