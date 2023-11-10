@@ -14,6 +14,7 @@ export class VerifyUserUpdater {
     verifyUserID: number
   ) {
     const row = this.MapToRow(data, updateBy);
+    
     return await this.verifyUserRepository.updateUserVerifyByID(
       row,
       verifyUserID

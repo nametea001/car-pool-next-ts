@@ -31,8 +31,8 @@ export default async function updateVerify(
     const verifyUserUpdater = new VerifyUserUpdater();
     let userVerify = await verifyUserUpdater.updateUserVerifyByID(
       dataBody,
-      dataBody.id,
-      tokenVerify.id
+      tokenVerify.id,
+      dataBody.id
     );
     if (userVerify) {
       const userUpdater = new UserUpdater();

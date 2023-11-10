@@ -328,7 +328,7 @@ enum report_reasons_type {
 
 enum verify_users_status {
   NEW
-  USER
-  DRIVER
-  NOT_VERIFY
+  PASS_USER
+  PASS
+  FAIL
 }
